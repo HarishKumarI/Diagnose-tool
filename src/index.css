@@ -1,0 +1,48 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
+.App {
+  text-align: center;
+  background-color: #282c34;
+  min-height: 100vh;    
+}
+
+
+.Title{
+  color:#767a82;
+  display:flex;
+  border-bottom: 2px solid #4e5b79;
+  font-size: 38px;
+  padding: 15px;
+  flex-direction: column;
+  background-color:#171b23aa;
+  filter:invert();
+}  
+
+.Title .tagline{
+  margin: 0;
+  margin-top: 0px;
+  font-size: 18px;
+}
+
+
+.title_container{
+  font-family: 'Do Hyeon'  !important;
+  color:#767a82;
+  font-size: 34px;
+  background-image: url(bg_tile.png);
+  filter:invert();
+  z-index:1;
+}

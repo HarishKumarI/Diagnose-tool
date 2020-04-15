@@ -1,0 +1,89 @@
+.App {
+  text-align: center;
+  background-color: #282c34;
+  min-height: 100vh;    
+}
+
+
+.Title{
+  color:#767a82;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px solid #4e5b79;
+  font-size: 38px;
+  padding: 15px;
+  height: 100px;
+  background-color:#171b23aa;
+  filter:invert();
+}  
+
+.Title .tagline{
+  margin: 0;
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+.userInfo{
+  position: absolute;
+  top:0;
+  right:0;
+  padding: 15px;
+  color: white;
+  font-size: 20px;
+}
+
+.userInfo:hover{
+  background-color: #4b4949;
+  border-bottom-left-radius: 8px;
+}
+
+.title_container{
+  font-family: 'Do Hyeon'  !important;
+  color:#767a82;
+  font-size: 34px;
+  background-image: url(bg_tile.png);
+  filter:invert();
+  z-index:1;
+}
+
+
+#main_container{
+  height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+
+.dataTable{
+  clear: both;
+  margin-top: 0px;
+  width: 80vw;
+  border: 1px solid rgb(151, 148, 148);
+  border-radius: 4px;
+}
+
+.dataTable .ui.accordion .title,.dataTable .ui.accordion .content{
+  color: white;
+}
+
+.controls{
+  width: 80vw;
+}
+
+.controls .ui.secondary.menu{
+  width: fit-content;
+  float: right;
+  margin-right: 2px;
+}
+
+.controls .ui.secondary.menu .item,
+.controls .ui.secondary.menu .item.dropdown:hover{
+  border-radius: 0;
+  margin: 0;
+  background-color: rgb(78, 74, 74);
+  color: white;
+} 

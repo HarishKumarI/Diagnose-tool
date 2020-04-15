@@ -1,0 +1,80 @@
+[
+    {
+        "answer": [
+            "California state university, fullerton has the facility irvine center library. Pollak library can be accessed through pollak library telephone number - 657-278-2721. Pollak library can be accessed through email of pollak library - libcirc@fullerton.edu. Pollak library can be accessed through pollak library location - 800 n state college blvd, fullerton, ca 92831, united states.",
+            "Pollak Library is the main library situated in the center of the Fullerton campus near the Quad Center"
+        ],
+        "cmt": "noice",
+        "email": "yash@cognirel.com",
+        "failed_assoc_prob_list": "[]",
+        "id": 1,
+        "node_doc_results": [],
+        "pred_tuples": [],
+        "question": "library",
+        "ref_exp_nodes": [
+            "library (\t library , 0.9987564 )"
+        ],
+        "relevant": false,
+        "res_dict": "{'trigger_info': []}",
+        "response": [],
+        "results": [],
+        "state": "Closed",
+        "status": "SUCCESS",
+        "submitted": false,
+        "timestamp": "2020-04-14 15:07:37.486426",
+        "user_id": 12134,
+        "username": "Yash"
+    },
+    {
+        "answer": [
+            "1509 east campus drive, fullerton, ca  92834 can be accessed through housing office email id - housing@fullerton.edu. 1509 east campus drive, fullerton, ca  92834 can be accessed through housing office fax number - (657) 278-3994. 1509 east campus drive, fullerton, ca  92834 can be accessed through housing front office telephone - (657) 278-2168. Take a tour can be accessed through take a tour webpage - http://www.fullerton.edu/housing/future_residents/housingtours.php.",
+            ""
+        ],
+        "cmt": "wow",
+        "email": "yash@cognirel.com",
+        "failed_assoc_prob_list": "[]",
+        "id": 2,
+        "node_doc_results": [],
+        "pred_tuples": [],
+        "question": "house",
+        "ref_exp_nodes": [
+            "housing_service (\t house , 0.97636694 )"
+        ],
+        "relevant": true,
+        "res_dict": "{'trigger_info': []}",
+        "response": [],
+        "results": [],
+        "state": "Won't Fix",
+        "status": "SUCCESS",
+        "submitted": false,
+        "timestamp": "2020-04-14 15:07:49.321338",
+        "user_id": 12134,
+        "username": "Yash"
+    },
+    {
+        "answer": [
+            "1509 east campus drive, fullerton, ca  92834 can be accessed through housing office email id - housing@fullerton.edu. 1509 east campus drive, fullerton, ca  92834 can be accessed through housing office fax number - (657) 278-3994. 1509 east campus drive, fullerton, ca  92834 can be accessed through housing front office telephone - (657) 278-2168. Take a tour can be accessed through take a tour webpage - http://www.fullerton.edu/housing/future_residents/housingtours.php.",
+            ""
+        ],
+        "cmt": "wow",
+        "email": "yash@cognirel.com",
+        "failed_assoc_prob_list": "[]",
+        "id": 2,
+        "node_doc_results": [],
+        "pred_tuples": [],
+        "question": "house",
+        "ref_exp_nodes": [
+            "housing_service (\t house , 0.97636694 )"
+        ],
+        "relevant": true,
+        "res_dict": "{'trigger_info': []}",
+        "response": [],
+        "results": [],
+        "state": "Closed",
+        "status": "SUCCESS",
+        "submitted": false,
+        "timestamp": "2020-04-14 15:07:49.321338",
+        "user_id": 12134,
+        "username": "Yash"
+    }
+]
