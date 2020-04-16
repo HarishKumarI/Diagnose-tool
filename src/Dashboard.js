@@ -31,7 +31,7 @@ class Dashboard extends React.Component{
                 { ( this.state.isvalid) ? 
                     <DbComponent user_id={this.state.user_id} />
                 :
-                <div style={{ margin: 20+'%', fontSize: 30+'px',color: 'white' }}>
+                <div style={{ marginTop: 20+'%', fontSize: 30+'px',color: 'white', width: 'max-content' }}>
                         { ( this.state.username !== "" ) ?
                             `Not a Registered User`
                         : 

@@ -243,8 +243,18 @@ class DbData extends React.Component{
                                     <Pagination inverted
                                         defaultActivePage={1}
                                         firstItem={null}
+                                        prevItem={'<'}
+                                        nextItem={'>'}
                                         lastItem={null}
-                                        onPageChange={(event) => {  this.setState({ activePage: event.target.innerText}) }}
+                                        onPageChange={(event) => { 
+                                             let pageno = event.target.innerText
+                                             if( pageno === '>' ) 
+                                                pageno = this.state.activePage + 1
+                                             if( pageno === '<' )
+                                                pageno = this.state.activePage - 1
+                                            
+                                             this.setState({ activePage: pageno}) 
+                                            }}
                                         pointing
                                         secondary
                                         totalPages={ Math.ceil(rowsData.length / this.state.maxrows) }
