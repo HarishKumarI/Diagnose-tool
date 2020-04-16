@@ -50,12 +50,15 @@
 
 
 #main_container{
-  height: calc(100vh - 100px);
+  position: relative;
+  /* height: calc(100vh - 150px); */
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 90vw;
+  margin: 0 5vw;
+  padding-bottom: 30px;
 }
-
 
 
 .dataTable{
@@ -63,6 +66,7 @@
   margin-top: 0px;
   width: 80vw;
   border: 1px solid rgb(151, 148, 148);
+  word-break: break-all;
   border-radius: 4px;
 }
 

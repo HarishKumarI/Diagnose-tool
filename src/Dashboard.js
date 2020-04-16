@@ -27,13 +27,19 @@ class Dashboard extends React.Component{
 
     render(){
         return(
-            <div style={{ minWidth: '500px' }}>
+            <div >
                 { ( this.state.isvalid) ? 
                     <DbComponent user_id={this.state.user_id} />
                 :
                 <div style={{ margin: 20+'%', fontSize: 30+'px',color: 'white' }}>
-                        Not a Registered User
-                    </div>
+                        { ( this.state.username !== "" ) ?
+                            `Not a Registered User`
+                        : 
+                           `Not a Registered User for Team`
+                        }
+                        <br/> <br />
+                    <a href="/" style={{ fontSize:'18px' }}>HomePage</a>
+                </div>
                 }
             </div>
         )

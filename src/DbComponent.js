@@ -32,26 +32,26 @@ class ReviewForm extends React.Component{
                 <Table fluid="true" inverted>
                     <Table.Body>
                         <tr>
-                            <td> User Id: </td>
-                            <td> {this.state.user_id} </td>
-                            <td style={{ textAlign: 'right' }}> UserName : </td>
-                            <td style={{ textAlign: 'left' }}> { this.state.username } </td>
-                            <td style={{ textAlign: 'right' }}> Email : </td>
-                            <td> { this.state.email } </td>
+                            <td > User Id: </td>
+                            <td > {this.state.user_id} </td>
+                            <td  style={{ textAlign: 'right' }}> UserName : </td>
+                            <td  style={{ textAlign: 'left' }}> { this.state.username } </td>
+                            <td  style={{ textAlign: 'right' }}> Email : </td>
+                            <td > { this.state.email } </td>
                         </tr>
                         <tr>    
-                            <td>Question: </td>
+                            <td style={{ width: '100px' }} >Question: </td>
                             <td colSpan="5"> {this.state.question} </td>
                         </tr>
                         <tr>    
-                            <td>Answer: </td>
+                            <td style={{ width: '100px' }}>Answer: </td>
                             <td colSpan="5"> {this.state.answer} </td>
                         </tr>
                         <tr>    
-                            <td>Comment: </td>
+                            <td >Comment: </td>
                             <td colSpan="5"> {this.state.cmt} </td>
                         </tr>
-                        <tr>    
+                        {/* <tr>    
                             <td>State: </td>
                             <td colSpan="2">
                                 { ( isAdmin ) ?
@@ -76,7 +76,7 @@ class ReviewForm extends React.Component{
                                 <Button content=" Update State " primary onClick={ this.requestServer} />
                                 : null}
                             </td> 
-                        </tr>
+                        </tr> */}
                     </Table.Body>
                 </Table> 
 
@@ -96,7 +96,7 @@ class DbData extends React.Component{
             relevant: undefined,
             relevantData: [],
             maxrows: 20,
-            starrtIndex: 0,
+            startIndex: 0,
             activePage: 1
         }
 
@@ -107,7 +107,7 @@ class DbData extends React.Component{
     componentDidMount(){
 
         $.get('/dbData',(response,status) =>{
-            let reldata = []
+        let reldata = []
 
         response.forEach(element => {
             if (element.relevant) {
@@ -134,7 +134,7 @@ class DbData extends React.Component{
     getrows(rowsData){
         let rows = []
 
-        for( let index = this.state.starrtIndex; 
+        for( let index = (this.state.activePage -1) * this.state.maxrows; 
              rows.length < this.state.maxrows && index < rowsData.length  ;
              index++ ){
 
@@ -151,13 +151,13 @@ class DbData extends React.Component{
                                 <Table.Cell width='1'> { index + 1 } </Table.Cell>
                                 <Table.Cell width='6'> { que_object.question } </Table.Cell>
                                 <Table.Cell width='3'> { ( que_object.relevant ) ? '' : 'Not ' } Relevant </Table.Cell>
-                                <Table.Cell width='2' id={`${index}_state`}> { que_object.state } </Table.Cell>
+                                {/* <Table.Cell width='2' id={`${index}_state`}> { que_object.state } </Table.Cell> */}
                         </Table.Row>
                         
                         {
                             ( this.state.activeIndex === index ) ? 
                                 <Table.Row  >
-                                    <Table.Cell colSpan='4'>
+                                    <Table.Cell colSpan='3'>
                                         <ReviewForm answerData={que_object} updateansData={this.updateQue_obj} user_id={this.props.user_id} />
                                     </Table.Cell>
                                 </Table.Row>
@@ -181,16 +181,16 @@ class DbData extends React.Component{
             <Fragment>
                 
                 <div className="controls" >
-                    <Menu secondary>
+                    <Menu secondary stackable>
                         <Menu.Item
-                        name={ `Accuracy ` }
+                        content={ `Accuracy ${ Math.floor( this.state.relevantData.length*100/( this.state.data.length ) *100)/100 }%` }
                         />
                         <Menu.Item
-                        name={ `Relevant ${ this.state.relevantData.length }` }
+                        content={ `Relevant - ${ this.state.relevantData.length }` }
                         style={{ backgroundColor: '#365436' }}
                         />
                         <Menu.Item
-                        name={ `Not Relevant ${ this.state.data.length - this.state.relevantData.length }`}
+                        content={ `Not Relevant - ${ this.state.data.length - this.state.relevantData.length }`}
                         style={{ backgroundColor: '#c1383838' }}
                         />
 
@@ -199,6 +199,8 @@ class DbData extends React.Component{
                             className='icon'
                         >
                             <Dropdown.Menu  onClick={(event) => this.setState({ maxrows: event.target.innerText}) }>
+                                <Dropdown.Item text='10' />
+                                <Dropdown.Item text='20' />
                                 <Dropdown.Item text='30' />
                                 <Dropdown.Item text='50' />
                                 <Dropdown.Item text='100' />
@@ -226,7 +228,7 @@ class DbData extends React.Component{
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </Table.HeaderCell>
-                            <Table.HeaderCell width='1'> State </Table.HeaderCell>
+                            {/* <Table.HeaderCell width='1'> State </Table.HeaderCell> */}
                         </Table.Row>
                         </Table.Header>
                         
@@ -236,13 +238,13 @@ class DbData extends React.Component{
 
                         <Table.Footer>
                         <Table.Row>
-                            <Table.Cell colSpan='4'style={{ padding: 0,textAlign: 'center' }} >
+                            <Table.Cell colSpan='3'style={{ padding: 0,textAlign: 'center' }} >
                                 { ( rowsData.length > this.state.maxrows ) ?
                                     <Pagination inverted
                                         defaultActivePage={1}
                                         firstItem={null}
                                         lastItem={null}
-                                        onPageChange={(event) => { this.setState({ activePage: event.target.value}) }}
+                                        onPageChange={(event) => {  this.setState({ activePage: event.target.innerText}) }}
                                         pointing
                                         secondary
                                         totalPages={ Math.ceil(rowsData.length / this.state.maxrows) }
@@ -263,7 +265,7 @@ class DbData extends React.Component{
 export default function DbComponent(props){
 
     return(
-    <div style={{ width: '80vw', maxWidth: '800px' }}>            
+    <div >            
             
             <h3 style={{ marginTop: 20+'px',color: 'white' }}> Dashboard </h3>
             <DbData user_id={ props.user_id}/>
