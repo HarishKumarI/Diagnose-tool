@@ -51,7 +51,7 @@ class ReviewForm extends React.Component{
                             <td >Comment: </td>
                             <td colSpan="5"> {this.state.cmt} </td>
                         </tr>
-                        {/* <tr>    
+                        <tr>    
                             <td>State: </td>
                             <td colSpan="2">
                                 { ( isAdmin ) ?
@@ -76,7 +76,7 @@ class ReviewForm extends React.Component{
                                 <Button content=" Update State " primary onClick={ this.requestServer} />
                                 : null}
                             </td> 
-                        </tr> */}
+                        </tr>
                     </Table.Body>
                 </Table> 
 
@@ -198,7 +198,7 @@ class DbData extends React.Component{
                                 <Table.Cell width='1'> { index + 1 } </Table.Cell>
                                 <Table.Cell width='6'> { que_object.question } </Table.Cell>
                                 <Table.Cell width='3'> { ( que_object.relevant ) ? '' : 'Not ' } Relevant </Table.Cell>
-                                {/* <Table.Cell width='2' id={`${index}_state`}> { que_object.state } </Table.Cell> */}
+                                <Table.Cell width='2' > { que_object.state } </Table.Cell>
                         </Table.Row>
                         
                         {
@@ -249,7 +249,7 @@ class DbData extends React.Component{
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 </Table.HeaderCell>
-                                {/* <Table.HeaderCell width='1'> State </Table.HeaderCell> */}
+                                <Table.HeaderCell width='1'> State </Table.HeaderCell>
                             </Table.Row>
                             </Table.Header>
                             
@@ -259,7 +259,7 @@ class DbData extends React.Component{
 
                             <Table.Footer>
                             <Table.Row>
-                                <Table.Cell colSpan='3'style={{ padding: 0,textAlign: 'center' }} >
+                                <Table.Cell colSpan='4'style={{ padding: 0,textAlign: 'center' }} >
                                     { ( rowsData.length > this.state.maxrows ) ?
                                         <Pagination inverted
                                             defaultActivePage={1}
