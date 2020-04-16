@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react'
-import { Table, Dropdown,Menu,Pagination, Button } from 'semantic-ui-react'
+import { Table, Dropdown,Menu,Pagination, Button,Loader } from 'semantic-ui-react'
 import $ from 'jquery'
 
-const AdminIds = [103,106]
+const AdminIds = [103]
 
 class ReviewForm extends React.Component{
     constructor(props){
@@ -85,6 +85,39 @@ class ReviewForm extends React.Component{
     }
 }
 
+function DataInsights(props){
+    return(
+        <div className="controls" >
+            <Menu secondary stackable>
+                <Menu.Item
+                content={ `Accuracy ${ Math.floor( props.stateObj.relevantData.length*100/( props.stateObj.data.length ) *100)/100 }%` }
+                />
+                <Menu.Item
+                content={ `Relevant - ${ props.stateObj.relevantData.length }` }
+                style={{ backgroundColor: '#365436' }}
+                />
+                <Menu.Item
+                content={ `Not Relevant - ${ props.stateObj.data.length - props.stateObj.relevantData.length }`}
+                style={{ backgroundColor: '#c1383838' }}
+                />
+
+                <Dropdown 
+                    item text={`Maximum Rows ${props.stateObj.maxrows}`}
+                    className='icon'
+                >
+                    <Dropdown.Menu  onClick={(event) => props.updatemaxRows(event.target.innerText) }>
+                        <Dropdown.Item text='10' />
+                        <Dropdown.Item text='20' />
+                        <Dropdown.Item text='30' />
+                        <Dropdown.Item text='50' />
+                        <Dropdown.Item text='100' />
+                    </Dropdown.Menu>
+                </Dropdown>
+            </Menu>   
+        </div>
+    )
+}
+
 class DbData extends React.Component{
 
     constructor(props){
@@ -97,15 +130,18 @@ class DbData extends React.Component{
             relevantData: [],
             maxrows: 20,
             startIndex: 0,
-            activePage: 1
+            activePage: 1,
+            loading: false
         }
 
         this.getrows = this.getrows.bind(this)
         this.updateQue_obj = this.updateQue_obj.bind(this)
+        this.handlepagination = this.handlepagination.bind(this)
     }
 
     componentDidMount(){
 
+        this.setState({loading: true})
         $.get('/dbData',(response,status) =>{
         let reldata = []
 
@@ -117,7 +153,8 @@ class DbData extends React.Component{
 
         this.setState({
             data: response,
-            relevantData: reldata
+            relevantData: reldata,
+            loading: false
         })
         })
     }
@@ -129,6 +166,16 @@ class DbData extends React.Component{
         console.log(temp_data)
         this.setState({data: temp_data})
     }
+
+    handlepagination(event) { 
+            let pageno = event.target.innerText
+            if( pageno === '>' ) 
+                pageno = this.state.activePage + 1
+            if( pageno === '<' )
+                pageno = this.state.activePage - 1
+            
+            this.setState({ activePage: pageno}) 
+        }
 
 
     getrows(rowsData){
@@ -179,93 +226,63 @@ class DbData extends React.Component{
         
         return(
             <Fragment>
-                
-                <div className="controls" >
-                    <Menu secondary stackable>
-                        <Menu.Item
-                        content={ `Accuracy ${ Math.floor( this.state.relevantData.length*100/( this.state.data.length ) *100)/100 }%` }
-                        />
-                        <Menu.Item
-                        content={ `Relevant - ${ this.state.relevantData.length }` }
-                        style={{ backgroundColor: '#365436' }}
-                        />
-                        <Menu.Item
-                        content={ `Not Relevant - ${ this.state.data.length - this.state.relevantData.length }`}
-                        style={{ backgroundColor: '#c1383838' }}
-                        />
+                { ( !this.state.loading ) ?
+                <div>
+                    <DataInsights stateObj={this.state} updatemaxRows={(latestmaxrows) => this.setState({maxrows : latestmaxrows})} />
+                    
+                    <div className="dataTable">
+                        <Table inverted>
+                            <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell>#</Table.HeaderCell>
+                                <Table.HeaderCell>Question</Table.HeaderCell>
+                                <Table.HeaderCell>
+                                    
+                                    <Dropdown
+                                        text={ relventtext }  
+                                        icon='filter'
+                                    >
+                                        <Dropdown.Menu >
+                                            <Dropdown.Item onClick={() => {this.setState({ relevant: true})} } text='Relevant' />
+                                            <Dropdown.Item onClick={() => {this.setState({ relevant: false})} } text='Not Relevant' />
+                                            <Dropdown.Item onClick={() => {this.setState({ relevant: undefined})} } text='Show All' />
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </Table.HeaderCell>
+                                {/* <Table.HeaderCell width='1'> State </Table.HeaderCell> */}
+                            </Table.Row>
+                            </Table.Header>
+                            
+                            <Table.Body>
+                                {rows}
+                            </Table.Body>
 
-                        <Dropdown 
-                            item text={`Maximum Rows ${this.state.maxrows}`}
-                            className='icon'
-                        >
-                            <Dropdown.Menu  onClick={(event) => this.setState({ maxrows: event.target.innerText}) }>
-                                <Dropdown.Item text='10' />
-                                <Dropdown.Item text='20' />
-                                <Dropdown.Item text='30' />
-                                <Dropdown.Item text='50' />
-                                <Dropdown.Item text='100' />
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </Menu>   
+                            <Table.Footer>
+                            <Table.Row>
+                                <Table.Cell colSpan='3'style={{ padding: 0,textAlign: 'center' }} >
+                                    { ( rowsData.length > this.state.maxrows ) ?
+                                        <Pagination inverted
+                                            defaultActivePage={1}
+                                            firstItem={null}
+                                            prevItem={'<'}
+                                            nextItem={'>'}
+                                            lastItem={null}
+                                            onPageChange={this.handlepagination}
+                                            pointing
+                                            secondary
+                                            totalPages={ Math.ceil(rowsData.length / this.state.maxrows) }
+                                        />
+                                    : null } 
+                                </Table.Cell>
+                            </Table.Row>
+                            </Table.Footer>
+                        </Table>
+
+                    </div>
                 </div>
-
-                <div className="dataTable">
-                    <Table inverted>
-                        <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell>#</Table.HeaderCell>
-                            <Table.HeaderCell>Question</Table.HeaderCell>
-                            <Table.HeaderCell>
-                                
-                                <Dropdown
-                                    text={ relventtext }  
-                                    icon='filter'
-                                >
-                                    <Dropdown.Menu >
-                                        <Dropdown.Item onClick={() => {this.setState({ relevant: true})} } text='Relevant' />
-                                        <Dropdown.Item onClick={() => {this.setState({ relevant: false})} } text='Not Relevant' />
-                                        <Dropdown.Item onClick={() => {this.setState({ relevant: undefined})} } text='Show All' />
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </Table.HeaderCell>
-                            {/* <Table.HeaderCell width='1'> State </Table.HeaderCell> */}
-                        </Table.Row>
-                        </Table.Header>
-                        
-                        <Table.Body>
-                            {rows}
-                        </Table.Body>
-
-                        <Table.Footer>
-                        <Table.Row>
-                            <Table.Cell colSpan='3'style={{ padding: 0,textAlign: 'center' }} >
-                                { ( rowsData.length > this.state.maxrows ) ?
-                                    <Pagination inverted
-                                        defaultActivePage={1}
-                                        firstItem={null}
-                                        prevItem={'<'}
-                                        nextItem={'>'}
-                                        lastItem={null}
-                                        onPageChange={(event) => { 
-                                             let pageno = event.target.innerText
-                                             if( pageno === '>' ) 
-                                                pageno = this.state.activePage + 1
-                                             if( pageno === '<' )
-                                                pageno = this.state.activePage - 1
-                                            
-                                             this.setState({ activePage: pageno}) 
-                                            }}
-                                        pointing
-                                        secondary
-                                        totalPages={ Math.ceil(rowsData.length / this.state.maxrows) }
-                                    />
-                                : null } 
-                            </Table.Cell>
-                        </Table.Row>
-                        </Table.Footer>
-                    </Table>
-
-                </div>
+            : 
+            <Loader style={{ marginTop: '50px' }} active inline size="massive" inverted > Fetching Data </Loader>
+            }
             </Fragment>
         )
     }
