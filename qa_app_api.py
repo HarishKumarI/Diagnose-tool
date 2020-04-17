@@ -136,10 +136,10 @@ def fetch_dbdata():
 	if(request.method == 'GET'):
 		return qa_agent.fetch_dbdata()
 
-# @app.route('/updateRow',methods=['POST'])
-# def updateRow():
-# 	if(request.method == 'POST'):
-# 		return qa_agent.updateRow(request)
+@app.route('/updateRow',methods=['POST'])
+def updateRow():
+	if(request.method == 'POST'):
+		return qa_agent.updateRow(request)
 
 
 if __name__ == '__main__':

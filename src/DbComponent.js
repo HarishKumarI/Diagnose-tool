@@ -204,7 +204,7 @@ class DbData extends React.Component{
                         {
                             ( this.state.activeIndex === index ) ? 
                                 <Table.Row  >
-                                    <Table.Cell colSpan='3'>
+                                    <Table.Cell colSpan='4'>
                                         <ReviewForm answerData={que_object} updateansData={this.updateQue_obj} user_id={this.props.user_id} />
                                     </Table.Cell>
                                 </Table.Row>
