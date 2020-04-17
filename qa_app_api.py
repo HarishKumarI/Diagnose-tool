@@ -143,4 +143,4 @@ def fetch_dbdata():
 
 
 if __name__ == '__main__':
-	app.run(debug=False, port=7230,threaded=False,processes=1)
+	app.run('0.0.0.0',debug=False, port=7230,threaded=False,processes=1)

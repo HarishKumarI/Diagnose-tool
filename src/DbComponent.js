@@ -142,7 +142,7 @@ class DbData extends React.Component{
     componentDidMount(){
 
         this.setState({loading: true})
-        $.get('/dbData',(response,status) =>{
+        $.get('/api/dbData',(response,status) =>{
         let reldata = []
 
         response.forEach(element => {
