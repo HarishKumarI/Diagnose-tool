@@ -18,7 +18,7 @@ class ReviewForm extends React.Component{
 
     requestServer(){
         this.props.updateansData(this.state)
-        $.post('/updateRow',JSON.stringify(this.state),(response,status) => {
+        $.post('/api/updateRow',JSON.stringify(this.state),(response,status) => {
             console.log(response)
         })
     }

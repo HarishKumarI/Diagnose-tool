@@ -17,7 +17,7 @@ class Dashboard extends React.Component{
         const userid = this.props.match.params.id
         this.setState({user_id:userid})
         
-        $.post('/verify', JSON.stringify( {'userid': userid }),response =>{
+        $.post('/api/verify', JSON.stringify( {'userid': userid }),response =>{
             this.setState({ ...response})
             this.props.changeuserName( response.username )
         }).fail(()=>{

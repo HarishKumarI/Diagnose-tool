@@ -44,7 +44,7 @@ class User(db.Model):
 	email = db.Column(db.String(20000), unique=False, nullable=True)
 	state = db.Column(db.String(1024), unique=False, nullable=True)
 	owner = db.Column(db.String(1024), unique=False, nullable=True)
-	notes = db.Column(db.String(20000), unique=False, nullable=True)
+	notes = db.Column(db.String(1024), unique=False, nullable=True)
 
 	def __repr__(self):
 		return '<User %r>' % self.username
@@ -113,9 +113,9 @@ class QaAgent(object):
 				user_id = int(data['user_id']) ,
 				username = data['username'],
 				email = data['email'],
-				state = data['state'],
-				owner = data['owner'],
-				notes = data['notes']
+				# state = data['state'],
+				# owner = data['owner'],
+				# notes = data['notes']
 				)
 		db.session.add(record)
 		db.session.commit()
@@ -125,22 +125,22 @@ class QaAgent(object):
 
 qa_agent = QaAgent()
 
-@app.route('/verify',methods=['POST'])
+@app.route('/api/verify',methods=['POST'])
 def verify_user():
 	if(request.method == 'POST'):
 		return qa_agent.verify_user(request)
 
 
-@app.route('/dbData',methods=['GET'])
+@app.route('/api/dbData',methods=['GET'])
 def fetch_dbdata():
 	if(request.method == 'GET'):
 		return qa_agent.fetch_dbdata()
 
-@app.route('/updateRow',methods=['POST'])
-def updateRow():
-	if(request.method == 'POST'):
-		return qa_agent.updateRow(request)
+# @app.route('/updateRow',methods=['POST'])
+# def updateRow():
+# 	if(request.method == 'POST'):
+# 		return qa_agent.updateRow(request)
 
 
 if __name__ == '__main__':
-	app.run('0.0.0.0',debug=False, port=7230,threaded=False,processes=1)
+	app.run(debug=False, port=7230,threaded=False,processes=1)
