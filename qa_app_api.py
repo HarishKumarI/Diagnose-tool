@@ -113,9 +113,9 @@ class QaAgent(object):
 				user_id = int(data['user_id']) ,
 				username = data['username'],
 				email = data['email'],
-				# state = data['state'],
-				# owner = data['owner'],
-				# notes = data['notes']
+				state = data['state'],
+				owner = data['owner'],
+				notes = data['notes']
 				)
 		db.session.add(record)
 		db.session.commit()
@@ -136,7 +136,7 @@ def fetch_dbdata():
 	if(request.method == 'GET'):
 		return qa_agent.fetch_dbdata()
 
-@app.route('/updateRow',methods=['POST'])
+@app.route('/api/updateRow',methods=['POST'])
 def updateRow():
 	if(request.method == 'POST'):
 		return qa_agent.updateRow(request)
