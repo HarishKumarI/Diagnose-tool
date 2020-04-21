@@ -26,17 +26,46 @@
 }
 
 .userInfo{
-  position: absolute;
+  z-index: 100;
+  position: fixed;
   top:0;
   right:0;
-  padding: 15px;
   color: white;
   font-size: 20px;
-}
-
-.userInfo:hover{
+  height: max-content;
+  width: 160px;
   background-color: #4b4949;
   border-bottom-left-radius: 8px;
+  user-select: none;
+}
+
+.userInfo .ui.dropdown{
+    width: 160px;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.userInfo .ui.dropdown .text{
+  padding: 0 10px;
+}
+
+.userInfo .ui.dropdown .menu{
+  clear: both;
+  border: 1px solid rgb(75, 65, 65);
+  border-right: none;
+  background-color: #4b4949;
+  color: white;
+}
+
+.userInfo .ui.dropdown .menu .item{
+  width: 160px;
+  color: white;
+  border-bottom: 1px solid rgb(46, 42, 42);
+}
+
+.userInfo .ui.dropdown .menu .item:hover{
+  color: rgb(0, 0, 0);
+  background-color: rgb(59, 56, 56);
 }
 
 .title_container{
@@ -70,7 +99,16 @@
   border-radius: 4px;
 }
 
-.dataTable .ui.accordion .title,.dataTable .ui.accordion .content{
+.dataTable textarea{
+  width: 100%;
+  height: 100px;
+  border-radius: 5px;
+  background-color: #696969;
+  color: whitesmoke;
+  padding: 8px;
+}
+
+.dataTable textarea::placeholder{
   color: white;
 }
 
@@ -91,3 +129,61 @@
   background-color: rgb(78, 74, 74);
   color: white;
 } 
+
+.settingsTab{
+  margin-top: 30px;
+  color: white;
+  width: 90vw;
+  padding: 15px;
+}
+
+.settingsTab h4{
+  text-align: start;
+}
+
+.settingsTab table{
+  text-align: left;
+  width: 100%;
+}
+
+.settingsTab table tr{
+  height: max-content;
+}
+
+.settingsTab table th{
+  width: 150px;
+  text-transform: capitalize;
+}
+
+
+.settingsTab table td{
+  text-align: center;
+}
+
+
+.settingsTab table .ui.dropdown,.settingsTab table .ui.dropdown:hover {
+  background-color: transparent;
+  border: 1px solid white;
+  /* width: 80%; */
+  color: wheat;
+}
+
+.settingsTab table .label,.settingsTab table .ui.dropdown .label{
+  background-color: #767a82;
+  color: white;
+  width: max-content;
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.settingsTab table .ui.button{
+  padding: 6px;
+}
+
+.settingsTab table .label .delete{
+ display: none;
+}
+
+.settingsTab table .label:hover > .delete{
+  display: inline-block;
+ }

@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react'
-import { Table, Dropdown,Menu,Pagination, Button,Loader } from 'semantic-ui-react'
+import { Table, Dropdown,Menu,Pagination, Button,Loader, TextArea } from 'semantic-ui-react'
 import $ from 'jquery'
+import uiSettings from './uiSettings.json'
+
 
 const AdminIds = [103]
 
@@ -8,12 +10,16 @@ class ReviewForm extends React.Component{
     constructor(props){
         super(props)
         this.state = this.props.answerData
+        
         this.updateState = this.updateState.bind(this)
         this.requestServer = this.requestServer.bind(this)
+        this.getrows = this.getrows.bind(this)
     }
 
-    updateState(event){
-        this.setState({ state: event.target.innerText})
+    updateState(event,data){
+        const { name, value } = data
+
+        this.setState({ [name]: value})
     }
 
     requestServer(){
@@ -23,8 +29,75 @@ class ReviewForm extends React.Component{
         })
     }
 
+    getrows(isAdmin){
+        const rows = Object.keys(this.state).map(( field, index) =>{
+            if( Object.keys(uiSettings.list).includes(field) ) {
+                   let selectedIndex = 0
+                   const options = uiSettings.list[field].map((option,index)=>{
+                        if (this.state[field] === option) selectedIndex = index
+                        return {
+                            key: option,
+                            text: option,
+                            value: option
+                        }
+                   })
+
+                return (
+                    <tr key={index}>    
+                        <td style={{ width: '120px',wordBreak:'break-word' }}>{field.replace(/_/g,' ')}: </td>
+                        <td colSpan="5">
+                            { ( isAdmin ) ?
+                                <Dropdown 
+                                    // text={`${this.state[field]}`}
+                                    className='icon'
+                                    name={ field }  
+                                    onChange={ this.updateState }
+                                    options={options}
+                                    defaultValue={options[selectedIndex].value}
+                                />
+                            :  this.state[field]  } 
+                        </td>
+                    </tr>
+                )
+
+               }
+            else 
+               if ( uiSettings.editable.includes(field) ){
+                    return (
+                        <tr key={index}>    
+                            <td style={{ width: '120px',wordBreak:'break-word' }} > {field.replace(/_/g,' ')} : </td>
+                            <td colSpan="5"> 
+                            { ( isAdmin ) ?
+                                    <TextArea 
+                                        name={ field }
+                                        placeholder={ `Type your ${field.replace(/_/g,' ')} ...` } 
+                                        value={ (this.state[field] !== null ) ? this.state[field] : `Type your ${field.replace(/_/g,' ')} ...`  }
+                                        onChange={ this.updateState }
+                                    />
+                                : this.state[field] }
+                            </td>
+                        </tr>
+                    )
+               }
+            else 
+                if( uiSettings.fields.show.includes(field) )
+                return (
+                    <tr key={index}>    
+                        <td style={{ width: '120px',wordBreak:'break-word' }} > {field.replace(/_/g,' ')} : </td>
+                        <td colSpan="5"> {this.state[field]} </td>
+                    </tr>
+                    )
+            else
+                return null
+        })
+    
+        return rows
+    }
+
     render(){    
     const isAdmin = ( AdminIds.includes( parseInt(this.props.user_id) ) ) ? true : false
+
+    let otherrows = this.getrows(isAdmin)
 
     return (
             <Fragment>
@@ -39,44 +112,15 @@ class ReviewForm extends React.Component{
                             <td  style={{ textAlign: 'right' }}> Email : </td>
                             <td > { this.state.email } </td>
                         </tr>
-                        <tr>    
-                            <td style={{ width: '100px' }} >Question: </td>
-                            <td colSpan="5"> {this.state.question} </td>
-                        </tr>
-                        <tr>    
-                            <td style={{ width: '100px' }}>Answer: </td>
-                            <td colSpan="5"> {this.state.answer} </td>
-                        </tr>
-                        <tr>    
-                            <td >Comment: </td>
-                            <td colSpan="5"> {this.state.cmt} </td>
-                        </tr>
-                        <tr>    
-                            <td>State: </td>
-                            <td colSpan="2">
+
+                        { otherrows }     
+                        <tr>
+                            <td colSpan="6" style={{ textAlign: 'center' }} >
                                 { ( isAdmin ) ?
-                                    <Dropdown 
-                                    item text={`${this.state.state}`}
-                                    className='icon'
-                                    >
-                                        <Dropdown.Menu  onClick={ this.updateState }>
-                                            <Dropdown.Item text='Open' />
-                                            <Dropdown.Item text='In Analysis' />
-                                            <Dropdown.Item text='Fix Planned' />
-                                            <Dropdown.Item text='Fixed' />
-                                            <Dropdown.Item text='Closed' />
-                                            <Dropdown.Item text='Deferred' />
-                                            <Dropdown.Item text="Won't Fix" />
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                :  this.state.state  } 
-                                </td>
-                            <td colSpan="3"> 
-                                { ( isAdmin ) ?
-                                <Button content=" Update State " primary onClick={ this.requestServer} />
+                                <Button content=" Update Row " primary onClick={ this.requestServer} />
                                 : null}
                             </td> 
-                        </tr>
+                        </tr>                   
                     </Table.Body>
                 </Table> 
 
@@ -162,8 +206,15 @@ class DbData extends React.Component{
 
     updateQue_obj(obj){ 
         let temp_data = this.state.data
-        temp_data[obj.id-1] = obj 
-        console.log(temp_data)
+        
+        temp_data = temp_data.map((row) => {
+            if( row.id === obj.id ){
+                return obj
+            }
+            else 
+                return row
+        })
+
         this.setState({data: temp_data})
     }
 
@@ -291,10 +342,12 @@ class DbData extends React.Component{
 
 export default function DbComponent(props){
 
+    document.title = 'Dashboard | CogniQA'
+
     return(
     <div >            
             
-            <h3 style={{ marginTop: 20+'px',color: 'white' }}> Dashboard </h3>
+            <h3 style={{ marginTop: 30+'px',color: 'white' }}> Dashboard </h3>
             <DbData user_id={ props.user_id}/>
 
     </div>

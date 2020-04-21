@@ -18,7 +18,7 @@ import sys
 
 id_data = pd.read_csv('user_ids.csv')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db?move=rw'
 db = SQLAlchemy(app)
 
 
@@ -72,7 +72,7 @@ class QaAgent(object):
 			isvalid_user = False
 
 
-		return jsonify({ 'isvalid': isvalid_user, 'username': username })    
+		return jsonify({ 'isvalid': isvalid_user, 'username': username,"userid": int(userid) })    
 
 	def fetch_dbdata(self):
 

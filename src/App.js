@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './App.css';
 import { Route,  BrowserRouter as Router, useHistory } from 'react-router-dom';
-import { Form, Button, Icon} from 'semantic-ui-react'
+import { Form, Button} from 'semantic-ui-react'
 import $ from 'jquery'
 import DashBoard from './Dashboard'
 
@@ -34,14 +34,11 @@ function Login( ){
   
 
 function Title( props){
+
   return(
     <div className="Title">
      <div className="main_title" >CogniQA</div>
      <div className="tagline">University QA</div>
-
-    { ( props.username !== "" && props.username !== undefined ) ?
-        <div className="userInfo"> <Icon name='user' /> { props.username } </div>
-      : null }
   </div>
   )
 }
@@ -52,7 +49,7 @@ class App extends React.Component{
   constructor(props){
     super(props)
 
-    this.state = {username : undefined }
+    this.state = {username : undefined,userid: undefined }
 
     const styleLink = document.createElement("link")
     styleLink.rel = "stylesheet"
@@ -71,7 +68,7 @@ class App extends React.Component{
       <Router>
           <div>
               <Route exact path="/" component={ Login } />
-     <Route path="/:id" component={(props) => <DashBoard {...props} changeuserName={(username) =>{ this.setState({ username: username }) }} /> } />
+              <Route path="/:id" component={(props) => <DashBoard {...props} changeuserName={(stateobj) =>{ this.setState({ ...stateobj }) }} /> } />
           </div>
       </Router>
       )
@@ -84,7 +81,7 @@ class App extends React.Component{
   return (
       <div className="App">
         <div className="title_container">
-            <Title username={ this.state.username } />
+            <Title />
         </div>
 
         <div id="main_container" ></div>
