@@ -11,7 +11,23 @@
         "issue_type" : ["INFO_REPEATED"],
         "owner":["Komal","Rahul"]
     },
-    "editable":["notes"]
+    "editable":["notes"],
+    "rerunlink": "http://univ.cogniqa.ai"
+    },
+    "Covid":{
+        "fields": {
+            "show": ["failed_assoc_prob_list", "node_doc",  "predicate_tuples",  "ref_exp_nodes",
+                        "response", "results","state", "owner", "notes" ,"answer","comment","source","source_link"],
+            "hide": ["res_dict"],
+            "default": ["user_id","username","email","relevant"]
+        },
+        "list": {
+            "state" : ["Open", "In Analysis", "Fix Planned", "Fixed", "Closed", "Deferred", "Won't Fix" ],
+            "issue_type" : ["INFO_REPEATED"],
+            "owner":["Komal","Rahul"]
+        },
+        "editable":["notes"],
+        "rerunlink": "http://covid.cogniqa.ai"
     },
     "Admin":{ "103": { "name": "Komal"},"104":{"name": "Rahul"} }
 }

@@ -125,26 +125,39 @@ class QaAgent(object):
 
 	def updateRow(self,request):
 		data = request.get_json(force=True)
-		domain = data['domain']
-
-		del data['domain']
-		id = int(data['id'])
-		row = classObj[domain].query.filter_by(id = id).first()
-
-		# db.session.delete(row)
-		# db.session.commit()
-
-		# # ans = data
-		# record = classObj[domain]
-		# setattr(record,"_sa_instance_state",_sa_instance_state)
-		for key,value in data.items():
-			print(key,type(value))
-			if key in ["user_id","id"] :
-				setattr(row,key,int(value))
-			else :
-				setattr(row,key,value)
-
-		# db.session.add(record)
+		id_no = data['id']
+		# print(data)
+				
+		row = User.query.filter_by(id = id_no).first()
+		db.session.delete(row)
+		db.session.commit()
+		
+		ans = data
+		record = User(
+				id = id_no,
+				question = data["question"],
+				answer = str(ans["answer"]),
+				failed_assoc_prob_list = str(ans["failed_assoc_prob_list"]),
+				node_doc = str(ans["node_doc"]) ,
+				predicate_tuples = str(ans["predicate_tuples"]) ,
+				ref_exp_nodes = str(ans["ref_exp_nodes"]),
+				res_dict = ans["res_dict"],
+				response = str(ans["response"]),
+				results = str(ans["results"]),
+				relevant = data["relevant"],
+				comment = data["comment"],
+				submitted = data["submitted"],
+				status = data["status"],
+				timestamp = data["timestamp"],
+				user_id = int(data['user_id']) ,
+				username = data['username'],
+				email = data['email'],
+				state = data['state'],
+				issue_type = data['issue_type'],
+				owner = data['owner'],
+				notes = data['notes']
+				)
+		db.session.add(record)
 		db.session.commit()
 		
 		return jsonify('success')

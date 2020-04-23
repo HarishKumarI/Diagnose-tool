@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { Table, Dropdown,Menu,Pagination, Button,Loader, TextArea } from 'semantic-ui-react'
+import { Table, Dropdown,Menu,Pagination, Button,Loader, TextArea, Divider, Label } from 'semantic-ui-react'
 import $ from 'jquery'
 
 
@@ -23,13 +23,21 @@ class ReviewForm extends React.Component{
 
     requestServer(){
         this.props.updateansData(this.state)
-        $.post('/api/updateRow',JSON.stringify(this.state),(response,status) => {
-            console.log(response)
+        $.post('/api/updateRow',JSON.stringify({...this.state,domain: this.props.domain}),(response,status) => {
+            $('#successlabel').css({'visibility':'visible'})
+            setTimeout(()=>{ $('#successlabel').css({'visibility':'hidden'})} ,3000)
         })
     }
 
     getrows(isAdmin){
-        const rows = Object.keys(this.state).map(( field, index) =>{
+
+        let debugData = []
+        let changebleFields = [] 
+        
+        Object.keys(this.state).forEach(( field, index) =>{
+
+            const rowTitle = ( field === "answer") ? "Original Answer" : field.replace(/_/g,' ')
+
             if( Object.keys(this.props.uiSettings.list).includes(field) ) {
                    let selectedIndex = 0
                    const options = this.props.uiSettings.list[field].map((option,index)=>{
@@ -41,9 +49,9 @@ class ReviewForm extends React.Component{
                         }
                    })
 
-                return (
+                changebleFields.push(
                     <tr key={index}>    
-                        <td style={{ width: '120px',wordBreak:'break-word' }}>{field.replace(/_/g,' ')}: </td>
+                        <td style={{ width: '120px',wordBreak:'break-word',fontWeight: 'bold' }}>{ rowTitle }: </td>
                         <td colSpan="5">
                             { ( isAdmin || field === 'issue_type' ) ?
                                 <Dropdown 
@@ -62,15 +70,15 @@ class ReviewForm extends React.Component{
                }
             else 
                if ( this.props.uiSettings.editable.includes(field) ){
-                    return (
+                    changebleFields.push(
                         <tr key={index}>    
-                            <td style={{ width: '120px',wordBreak:'break-word' }} > {field.replace(/_/g,' ')} : </td>
+                            <td style={{ width: '120px',wordBreak:'break-word',fontWeight: 'bold' }} > { rowTitle } : </td>
                             <td colSpan="5"> 
                             {/* { ( isAdmin ) ? */}
                                     <TextArea 
                                         name={ field }
                                         placeholder={ `Type your ${field.replace(/_/g,' ')} ...` } 
-                                        value={ (this.state[field] !== null ) ? this.state[field] : `Type your ${field.replace(/_/g,' ')} ...`  }
+                                        value={ (this.state[field] !== null ) ? this.state[field] : ``  }
                                         onChange={ this.updateState }
                                     />
                                 {/* : this.state[field] } */}
@@ -79,30 +87,31 @@ class ReviewForm extends React.Component{
                     )
                }
             else 
-                if( this.props.uiSettings.fields.show.includes(field) )
-                return (
-                    <tr key={index}>    
-                        <td style={{ width: '120px',wordBreak:'break-word' }} > {field.replace(/_/g,' ')} : </td>
-                        <td colSpan="5"> {this.state[field]} </td>
-                    </tr>
-                    )
-            else
-                return null
-        })
+                if( this.props.uiSettings.fields.show.includes(field) ){
+                    debugData.push(
+                        <tr key={index}>    
+                            <td style={{ width: '120px',wordBreak:'break-word',fontWeight: 'bold' }} > { rowTitle } : </td>
+                            <td colSpan="5"> {this.state[field]} </td>
+                        </tr>
+                        )
+                }
     
-        return rows
+        })
+
+    
+        return [debugData,changebleFields]
     }
 
     render(){    
     const isAdmin = ( AdminIds.includes( parseInt(this.props.user_id) ) ) ? true : false
 
-    let otherrows = this.getrows(isAdmin)
+    let [debugData,changebleFields] = this.getrows(isAdmin)
 
     return (
             <Fragment>
                 # {this.state.id}
                 <Button content="Re-Run" primary style={{ float: 'right' }} 
-                    onClick={()=>{window.open(`http://univ.cogniqa.ai/${this.props.user_id}`)
+                    onClick={()=>{window.open(`${this.props.uiSettings.rerunlink}/${this.props.user_id}?=${this.state.question}`)
                                 }}  
                     />
 
@@ -110,15 +119,21 @@ class ReviewForm extends React.Component{
                 <Table fluid="true" inverted>
                     <Table.Body>
                         <tr>
-                            <td > User Id: </td>
+                            <td style={{ fontWeight: 'bold' }} > User Id: </td>
                             <td > {this.state.user_id} </td>
-                            <td  style={{ textAlign: 'right' }}> UserName : </td>
+                            <td  style={{ textAlign: 'right',fontWeight: 'bold' }}> UserName : </td>
                             <td  style={{ textAlign: 'left' }}> { this.state.username } </td>
-                            <td  style={{ textAlign: 'right' }}> Email : </td>
+                            <td  style={{ textAlign: 'right',fontWeight: 'bold' }}> Email : </td>
                             <td > { this.state.email } </td>
                         </tr>
 
-                        { otherrows }     
+                        { debugData }
+
+                        <tr>
+                            <td colSpan="6" > <Divider horizontal inverted style={{ width: '100%',textAlign: 'center'}} > Update Review </Divider> </td>
+                        </tr>
+                         
+                        { changebleFields }
                         <tr>
                             <td colSpan="6" style={{ textAlign: 'center' }} >
                                 {/* { ( isAdmin ) ? */}
@@ -128,6 +143,10 @@ class ReviewForm extends React.Component{
                         </tr>                   
                     </Table.Body>
                 </Table> 
+
+                <Label id="successlabel" style={{ visibility:'hidden',position: 'fixed',bottom: '20px',right: '20px',backgroundColor: '#75ea75', color:'black',padding:'15px' }}> 
+                    Data Update Successfully 
+                </Label>
 
             </Fragment>
         )
@@ -173,6 +192,7 @@ class DbData extends React.Component{
         super(props)
 
         this.state = {
+            domain:"",
             data: {},
             activeIndex: undefined,
             relevant: undefined,
@@ -186,26 +206,38 @@ class DbData extends React.Component{
         this.getrows = this.getrows.bind(this)
         this.updateQue_obj = this.updateQue_obj.bind(this)
         this.handlepagination = this.handlepagination.bind(this)
+        this.getDbdata = this.getDbdata.bind(this)
+    }
+
+    getDbdata(){
+        this.setState({loading: true})
+        $.post('/api/dbData', JSON.stringify({ domain: this.props.domain}) ,(response,status) =>{
+        let reldata = []
+
+            response.forEach(element => {
+                if (element.relevant) {
+                    reldata.push(element)
+                }
+            });
+
+            this.setState({
+                data: response,
+                relevantData: reldata,
+                loading: false,
+            })
+        })
+    }
+
+    componentDidUpdate(){
+        if ( this.state.domain !== this.props.domain ){
+            this.setState({  domain: this.props.domain  })
+            this.getDbdata()
+        } 
     }
 
     componentDidMount(){
-
-        this.setState({loading: true})
-        $.get('/api/dbData',(response,status) =>{
-        let reldata = []
-
-        response.forEach(element => {
-            if (element.relevant) {
-                reldata.push(element)
-            }
-        });
-
-        this.setState({
-            data: response,
-            relevantData: reldata,
-            loading: false
-        })
-        })
+        this.setState({ domain: this.props.domain })
+        this.getDbdata()
     }
 
 
@@ -261,7 +293,14 @@ class DbData extends React.Component{
                             ( this.state.activeIndex === index ) ? 
                                 <Table.Row  >
                                     <Table.Cell colSpan='4'>
-                                        <ReviewForm answerData={que_object} uiSettings={ this.props.uiSettings } updateansData={this.updateQue_obj} user_id={this.props.user_id} />
+                                        <ReviewForm 
+                                            answerData={que_object} 
+                                            uiSettings={ this.props.uiSettings }
+                                            updateansData={this.updateQue_obj} 
+                                            user_id={this.props.user_id} 
+                                            domain = {this.props.domain}    
+                                        />
+
                                     </Table.Cell>
                                 </Table.Row>
                             : null
@@ -275,7 +314,6 @@ class DbData extends React.Component{
 
 
     render(){
-
         const relventtext = ( this.state.relevant ) ? 'Relevant' : ( this.state.relevant===undefined ) ? 'Show All' : 'Not Relevant' 
         let rowsData = ( this.state.relevant ) ? this.state.relevantData : ( this.state.relevant===undefined ) ? this.state.data : this.state.data 
         let rows = this.getrows(rowsData)
@@ -345,11 +383,16 @@ class DbData extends React.Component{
 }
 
 
-export default function DbComponent(props){
+export default class DbComponent extends React.Component{
+    constructor(props){
+        super(props)
+        this.state = { selecteddomain : "University QA Dashboard"}
+    }
 
+    render(){
     document.title = 'Dashboard | CogniQA'
 
-    let  domainOptions = Object.keys(props.uisettings).map(domain => {
+    let  domainOptions = Object.keys( this.props.uisettings).map(domain => {
         if ( domain === 'Admin' ) return null
         return {
             key: domain+' QA Dashboard',
@@ -359,21 +402,23 @@ export default function DbComponent(props){
     })
     domainOptions = domainOptions.filter(x => x !== null)
 
-    let selecteddomain = domainOptions[0].value
-
     return(
     <div >            
             
             <h3 style={{ marginTop: 30+'px',color: 'white' }}>
-                 {/* University QA Dashboard  */}
-                 <Dropdown placeholder={ `${selecteddomain}` } 
+                {/* University QA Dashboard  */}
+                <Dropdown placeholder={ `${this.state.selecteddomain}` } 
                     options={domainOptions}
-                    onChange={(event,data)=>{ selecteddomain = data.value }}
-                 />
+                    onChange={(event,data)=>{ this.setState({ selecteddomain : data.value}) }}
+                />
             </h3>
-            <DbData uiSettings={ props.uisettings[selecteddomain.split(' QA Dashboard')[0]] } user_id={ props.user_id}/>
+            <DbData
+             uiSettings={ this.props.uisettings[this.state.selecteddomain.split(' QA Dashboard')[0]] }
+             domain={ this.state.selecteddomain.split(' QA Dashboard')[0]} 
+             user_id={ this.props.user_id}
+            />
 
     </div>
     )
-
+    }
 }

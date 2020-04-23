@@ -17,11 +17,11 @@ class Dashboard extends React.Component{
         }
     }
 
-    componentDidMount(){
+    async componentDidMount(){
         const userid = this.props.match.params.id
         this.setState({user_id:userid})
 
-        $.get('/api/uiSettings',response => {
+        await $.get('/api/uiSettings',response => {
             this.setState({uisettings: response})
         })
         
