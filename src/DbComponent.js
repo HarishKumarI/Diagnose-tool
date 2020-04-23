@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 import { Table, Dropdown,Menu,Pagination, Button,Loader, TextArea } from 'semantic-ui-react'
 import $ from 'jquery'
-import uiSettings from './uiSettings.json'
 
 
 const AdminIds = [103]
@@ -31,9 +30,9 @@ class ReviewForm extends React.Component{
 
     getrows(isAdmin){
         const rows = Object.keys(this.state).map(( field, index) =>{
-            if( Object.keys(uiSettings.list).includes(field) ) {
+            if( Object.keys(this.props.uiSettings.list).includes(field) ) {
                    let selectedIndex = 0
-                   const options = uiSettings.list[field].map((option,index)=>{
+                   const options = this.props.uiSettings.list[field].map((option,index)=>{
                         if (this.state[field] === option) selectedIndex = index
                         return {
                             key: option,
@@ -46,7 +45,7 @@ class ReviewForm extends React.Component{
                     <tr key={index}>    
                         <td style={{ width: '120px',wordBreak:'break-word' }}>{field.replace(/_/g,' ')}: </td>
                         <td colSpan="5">
-                            { ( isAdmin ) ?
+                            { ( isAdmin || field === 'issue_type' ) ?
                                 <Dropdown 
                                     // text={`${this.state[field]}`}
                                     className='icon'
@@ -62,25 +61,25 @@ class ReviewForm extends React.Component{
 
                }
             else 
-               if ( uiSettings.editable.includes(field) ){
+               if ( this.props.uiSettings.editable.includes(field) ){
                     return (
                         <tr key={index}>    
                             <td style={{ width: '120px',wordBreak:'break-word' }} > {field.replace(/_/g,' ')} : </td>
                             <td colSpan="5"> 
-                            { ( isAdmin ) ?
+                            {/* { ( isAdmin ) ? */}
                                     <TextArea 
                                         name={ field }
                                         placeholder={ `Type your ${field.replace(/_/g,' ')} ...` } 
                                         value={ (this.state[field] !== null ) ? this.state[field] : `Type your ${field.replace(/_/g,' ')} ...`  }
                                         onChange={ this.updateState }
                                     />
-                                : this.state[field] }
+                                {/* : this.state[field] } */}
                             </td>
                         </tr>
                     )
                }
             else 
-                if( uiSettings.fields.show.includes(field) )
+                if( this.props.uiSettings.fields.show.includes(field) )
                 return (
                     <tr key={index}>    
                         <td style={{ width: '120px',wordBreak:'break-word' }} > {field.replace(/_/g,' ')} : </td>
@@ -102,6 +101,12 @@ class ReviewForm extends React.Component{
     return (
             <Fragment>
                 # {this.state.id}
+                <Button content="Re-Run" primary style={{ float: 'right' }} 
+                    onClick={()=>{window.open(`http://univ.cogniqa.ai/${this.props.user_id}`)
+                                }}  
+                    />
+
+
                 <Table fluid="true" inverted>
                     <Table.Body>
                         <tr>
@@ -116,9 +121,9 @@ class ReviewForm extends React.Component{
                         { otherrows }     
                         <tr>
                             <td colSpan="6" style={{ textAlign: 'center' }} >
-                                { ( isAdmin ) ?
+                                {/* { ( isAdmin ) ? */}
                                 <Button content=" Update Row " primary onClick={ this.requestServer} />
-                                : null}
+                                {/* : null} */}
                             </td> 
                         </tr>                   
                     </Table.Body>
@@ -256,7 +261,7 @@ class DbData extends React.Component{
                             ( this.state.activeIndex === index ) ? 
                                 <Table.Row  >
                                     <Table.Cell colSpan='4'>
-                                        <ReviewForm answerData={que_object} updateansData={this.updateQue_obj} user_id={this.props.user_id} />
+                                        <ReviewForm answerData={que_object} uiSettings={ this.props.uiSettings } updateansData={this.updateQue_obj} user_id={this.props.user_id} />
                                     </Table.Cell>
                                 </Table.Row>
                             : null
@@ -344,11 +349,29 @@ export default function DbComponent(props){
 
     document.title = 'Dashboard | CogniQA'
 
+    let  domainOptions = Object.keys(props.uisettings).map(domain => {
+        if ( domain === 'Admin' ) return null
+        return {
+            key: domain+' QA Dashboard',
+            value: domain+' QA Dashboard',
+            text: domain+' QA Dashboard'
+        }
+    })
+    domainOptions = domainOptions.filter(x => x !== null)
+
+    let selecteddomain = domainOptions[0].value
+
     return(
     <div >            
             
-            <h3 style={{ marginTop: 30+'px',color: 'white' }}> Dashboard </h3>
-            <DbData user_id={ props.user_id}/>
+            <h3 style={{ marginTop: 30+'px',color: 'white' }}>
+                 {/* University QA Dashboard  */}
+                 <Dropdown placeholder={ `${selecteddomain}` } 
+                    options={domainOptions}
+                    onChange={(event,data)=>{ selecteddomain = data.value }}
+                 />
+            </h3>
+            <DbData uiSettings={ props.uisettings[selecteddomain.split(' QA Dashboard')[0]] } user_id={ props.user_id}/>
 
     </div>
     )

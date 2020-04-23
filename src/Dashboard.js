@@ -2,7 +2,6 @@ import React from 'react'
 import $ from 'jquery'
 import DbComponent from './DbComponent'
 import { Dropdown } from 'semantic-ui-react'
-import uisettings from './uiSettings.json'
 import SettingsUi from './Settingsui'
 
 class Dashboard extends React.Component{
@@ -13,13 +12,18 @@ class Dashboard extends React.Component{
             user_id : 0,
             isvalid: false,
             username: "",
-            uicomponent: ""
+            uicomponent: "",
+            uisettings: {}
         }
     }
 
     componentDidMount(){
         const userid = this.props.match.params.id
         this.setState({user_id:userid})
+
+        $.get('/api/uiSettings',response => {
+            this.setState({uisettings: response})
+        })
         
         $.post('/api/verify', JSON.stringify( {'userid': userid }),response =>{
             this.setState({ ...response})
@@ -40,7 +44,7 @@ class Dashboard extends React.Component{
         return(
             <div >
 
-                { ( this.state.username !== "" && this.state.username !== undefined ) ?
+                { ( this.state.username !== "" && this.state.username !== undefined  ) ?
                     ( document.body.getBoundingClientRect().height <= document.body.scrollHeight  ) ?
                     <div className="userInfo" id="userInfo">
                         <Dropdown 
@@ -52,7 +56,7 @@ class Dashboard extends React.Component{
                                 else this.setState({ uicomponent: selectedValue}) 
                             }}  >
                             <Dropdown.Item icon="folder" text="Dashboard"/>
-                            { ( Object.keys(uisettings.Admin).includes(  this.state.user_id ) ) ?
+                            { ( Object.keys(this.state.uisettings.Admin).includes(  this.state.user_id ) ) ?
                                 <Dropdown.Item icon="settings" text="Settings"/>
                             : null }
                             <Dropdown.Item icon="sign-out" text="Logout"/>
@@ -64,8 +68,8 @@ class Dashboard extends React.Component{
 
                 { ( this.state.isvalid) ? 
                     (this.state.uicomponent === 'Settings') ?
-                        <SettingsUi uisettings={ uisettings }  />
-                    :   <DbComponent user_id={this.state.user_id} />
+                        <SettingsUi uisettings={ this.state.uisettings.University }  />
+                    :   <DbComponent uisettings={ this.state.uisettings } user_id={this.state.user_id} />
                     
                 :
                 <div style={{ marginTop: 20+'%', fontSize: 30+'px',color: 'white', width: 'max-content' }}>

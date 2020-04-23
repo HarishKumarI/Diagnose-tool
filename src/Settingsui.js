@@ -1,7 +1,6 @@
 import React from 'react'
-import { Label, Icon, Dropdown, Button } from 'semantic-ui-react'
+import { Icon, Dropdown, Button } from 'semantic-ui-react'
 import $ from 'jquery'
-var _ = require('underscore')
 
 export default class settings extends React.Component{
     constructor(props){
@@ -10,6 +9,7 @@ export default class settings extends React.Component{
 
         this.addListitem = this.addListitem.bind(this)
         this.resetOptions = this.resetOptions.bind(this)
+        this.saveSettings = this.saveSettings.bind(this)
     }
     
     addListitem(event,data){
@@ -21,9 +21,10 @@ export default class settings extends React.Component{
 
     
     resetOptions(event,data){
-        const {name, value, defaultValue } = data
+        const {name, value } = data
         let temp_state = this.state
         temp_state.fields[name] = value
+        console.log(name,value,temp_state.fields.hide)
 
         if( name === "show"){
             let hide_fields = temp_state.fields.hide.map((element)=>{
@@ -40,7 +41,15 @@ export default class settings extends React.Component{
             temp_state.fields.show = show_fields.filter(x=> x !== null)
         }
         $('#savebtn').css('visibility', 'visible')
-        this.setState({temp_state} ) 
+        this.setState({...temp_state} ) 
+    }
+
+    saveSettings(event){
+        event.preventDefault()
+        $.post('/api/saveSettings',JSON.stringify(this.state),response =>{
+            console.log(response)
+            $('#savebtn').css('visibility', 'hidden')
+        })
     }
 
     render(){
@@ -68,12 +77,13 @@ export default class settings extends React.Component{
                         <th colSpan="1"></th>
                         <td colSpan="2" style={{ textAlign: 'right' }} >  
                             <Button id="savebtn" style={{ visibility: 'hidden'}} 
-                                icon labelPosition='left'>
+                                icon labelPosition='left'
+                                onClick={this.saveSettings} >
                                 <Icon name='save' /> Save
                             </Button> 
                         </td> 
                     </tr>
-                    <tr>
+                    {/* <tr>
                         <th>Admin</th>
                         <td colSpan='2' style={{textAlign: 'start'}}> 
                             { Object.keys(this.state.Admin).map(( userid ) =>{
@@ -85,7 +95,7 @@ export default class settings extends React.Component{
                                </Label> )
                             }) } 
                         </td>
-                    </tr>
+                    </tr> */}
                     <tr>
                         <th>Editable Fields</th>
                         <td colSpan="2"> 
@@ -94,7 +104,7 @@ export default class settings extends React.Component{
                                 id="editable"
                                 search allowAdditions additionPosition={'top'}
                                 multiple selection
-                                onChange={() => { $('#savebtn').css('visibility', 'visible') } }
+                                onChange={(event,data) => { this.value = data.value;$('#savebtn').css('visibility', 'visible') } }
                                 onAddItem={(event,data) => {  fieldOptions.push({key: fieldOptions.length,value: data.value,text: data.value}) } }
                                 defaultValue={ this.state.editable }
                                 options={ fieldOptions }

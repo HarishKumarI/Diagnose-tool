@@ -43,6 +43,7 @@ class User(db.Model):
 	username = db.Column(db.String(1024), unique=False, nullable=True)
 	email = db.Column(db.String(20000), unique=False, nullable=True)
 	state = db.Column(db.String(1024), unique=False, nullable=True)
+	issue_type = db.Column(db.String(1024), unique=False, nullable=True)
 	owner = db.Column(db.String(1024), unique=False, nullable=True)
 	notes = db.Column(db.String(1024), unique=False, nullable=True)
 
@@ -114,6 +115,7 @@ class QaAgent(object):
 				username = data['username'],
 				email = data['email'],
 				state = data['state'],
+				issue_type = data['issue_type'],
 				owner = data['owner'],
 				notes = data['notes']
 				)
@@ -140,6 +142,17 @@ def fetch_dbdata():
 def updateRow():
 	if(request.method == 'POST'):
 		return qa_agent.updateRow(request)
+
+@app.route('/api/uiSettings',methods=['GET'])
+def uiSettings():
+	with open('./src/uiSettings.json','r') as fp:
+		return jsonify( json.load(fp) )
+
+@app.route('/api/saveSettings',methods=['POST'])
+def saveSettings():
+	with open('./src/uiSettings.json','w') as fp:
+		json.dump(request.get_json(force=True),fp,indent=4)
+	return jsonify('success')
 
 
 if __name__ == '__main__':

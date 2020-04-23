@@ -38,7 +38,7 @@ function Title( props){
   return(
     <div className="Title">
      <div className="main_title" >CogniQA</div>
-     <div className="tagline">University QA</div>
+     <div className="tagline"> Diagnose Tool </div>
   </div>
   )
 }
