@@ -53,7 +53,7 @@ class ReviewForm extends React.Component{
                     <tr key={index}>    
                         <td style={{ width: '120px',wordBreak:'break-word',fontWeight: 'bold' }}>{ rowTitle }: </td>
                         <td colSpan="5">
-                            { ( isAdmin || field === 'issue_type' ) ?
+                            {/* { ( isAdmin || field === 'issue_type' ) ? */}
                                 <Dropdown 
                                     // text={`${this.state[field]}`}
                                     className='icon'
@@ -62,7 +62,7 @@ class ReviewForm extends React.Component{
                                     options={options}
                                     defaultValue={options[selectedIndex].value}
                                 />
-                            :  this.state[field]  } 
+                            {/* :  this.state[field]  }  */}
                         </td>
                     </tr>
                 )
@@ -225,6 +225,9 @@ class DbData extends React.Component{
                 relevantData: reldata,
                 loading: false,
             })
+        }).fail(()=>{
+            this.setState({loading: false})
+            console.log('could not reach server or something wrong')
         })
     }
 

@@ -1,5 +1,5 @@
 {
-  "name": "data-correction-tool",
+  "name": "diagnose-tool",
   "version": "0.1.0",
   "private": true,
   "host": "http://127.0.0.1:3010",

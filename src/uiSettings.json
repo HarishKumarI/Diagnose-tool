@@ -1,33 +1,108 @@
 {
-    "University":{
-    "fields": {
-        "show": ["failed_assoc_prob_list", "node_doc",  "predicate_tuples",  "ref_exp_nodes",
-                 "response", "results","state", "owner", "notes" ,"answer","comment"],
-        "hide": ["res_dict"],
-        "default": ["user_id","username","email","relevant"]
+    "Admin": {
+        "103": {
+            "name": "Komal"
+        },
+        "104": {
+            "name": "Rahul"
+        }
     },
-    "list": {
-        "state" : ["Open", "In Analysis", "Fix Planned", "Fixed", "Closed", "Deferred", "Won't Fix" ],
-        "issue_type" : ["INFO_REPEATED"],
-        "owner":["Komal","Rahul"]
-    },
-    "editable":["notes"],
-    "rerunlink": "http://univ.cogniqa.ai"
-    },
-    "Covid":{
+    "Covid": {
+        "editable": [
+            "notes"
+        ],
         "fields": {
-            "show": ["failed_assoc_prob_list", "node_doc",  "predicate_tuples",  "ref_exp_nodes",
-                        "response", "results","state", "owner", "notes" ,"answer","comment","source","source_link"],
-            "hide": ["res_dict"],
-            "default": ["user_id","username","email","relevant"]
+            "default": [
+                "user_id",
+                "username",
+                "email",
+                "relevant"
+            ],
+            "hide": [
+                "res_dict"
+            ],
+            "show": [
+                "failed_assoc_prob_list",
+                "node_doc",
+                "predicate_tuples",
+                "ref_exp_nodes",
+                "response",
+                "results",
+                "state",
+                "owner",
+                "notes",
+                "answer",
+                "comment",
+                "source",
+                "source_link"
+            ]
         },
         "list": {
-            "state" : ["Open", "In Analysis", "Fix Planned", "Fixed", "Closed", "Deferred", "Won't Fix" ],
-            "issue_type" : ["INFO_REPEATED"],
-            "owner":["Komal","Rahul"]
+            "issue_type": [
+                "INFO_REPEATED"
+            ],
+            "owner": [
+                "Komal",
+                "Rahul"
+            ],
+            "state": [
+                "Open",
+                "In Analysis",
+                "Fix Planned",
+                "Fixed",
+                "Closed",
+                "Deferred",
+                "Won't Fix"
+            ]
         },
-        "editable":["notes"],
         "rerunlink": "http://covid.cogniqa.ai"
     },
-    "Admin":{ "103": { "name": "Komal"},"104":{"name": "Rahul"} }
+    "University": {
+        "editable": [
+            "notes"
+        ],
+        "fields": {
+            "default": [
+                "user_id",
+                "username",
+                "email",
+                "relevant"
+            ],
+            "hide": [
+                "res_dict"
+            ],
+            "show": [
+                "failed_assoc_prob_list",
+                "node_doc",
+                "predicate_tuples",
+                "ref_exp_nodes",
+                "response",
+                "results",
+                "state",
+                "owner",
+                "notes",
+                "answer",
+                "comment"
+            ]
+        },
+        "list": {
+            "issue_type": [
+                "INFO_REPEATED"
+            ],
+            "owner": [
+                "Komal",
+                "Rahul"
+            ],
+            "state": [
+                "Open",
+                "In Analysis",
+                "Fix Planned",
+                "Fixed",
+                "Closed",
+                "Deferred",
+                "Won't Fix"
+            ]
+        },
+        "rerunlink": "http://univ.cogniqa.ai"
+    }
 }

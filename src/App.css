@@ -161,18 +161,22 @@
 }
 
 
-.settingsTab table .ui.dropdown,.settingsTab table .ui.dropdown:hover {
+.settingsTab table .ui.dropdown,
+.settingsTab table .ui.dropdown .search,
+.settingsTab table .ui.dropdown:hover {
   background-color: transparent;
   border: 1px solid white;
   /* width: 80%; */
   color: wheat;
 }
 
-.settingsTab table .label,.settingsTab table .ui.dropdown .label{
+
+/* .settingsTab table .ui.dropdown .label, */
+.settingsTab table .label{
   background-color: #767a82;
   color: white;
   width: max-content;
-  padding: 5px 10px;
+  padding: 10px;
   font-size: 14px;
 }
 
@@ -186,4 +190,10 @@
 
 .settingsTab table .label:hover > .delete{
   display: inline-block;
+ }
+
+ .TabMenu .ui.menu,.TabMenu .ui.tab,.TabMenu .ui.segment{
+   background-color: transparent !important;
+   /* border: 1px solid rgba(138, 133, 133, 0.219) !important; */
+   border : none !important;
  }

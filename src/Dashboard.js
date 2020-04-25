@@ -68,7 +68,7 @@ class Dashboard extends React.Component{
 
                 { ( this.state.isvalid) ? 
                     (this.state.uicomponent === 'Settings') ?
-                        <SettingsUi uisettings={ this.state.uisettings.University }  />
+                        <SettingsUi uisettings={ this.state.uisettings }  />
                     :   <DbComponent uisettings={ this.state.uisettings } user_id={this.state.user_id} />
                     
                 :
