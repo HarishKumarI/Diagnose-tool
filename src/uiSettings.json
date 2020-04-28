@@ -8,6 +8,7 @@
         }
     },
     "Covid": {
+        "domain": "Covid",
         "editable": [
             "notes"
         ],
@@ -58,6 +59,7 @@
         "rerunlink": "http://covid.cogniqa.ai"
     },
     "University": {
+        "domain": "University",
         "editable": [
             "notes"
         ],
@@ -87,14 +89,15 @@
         },
         "list": {
             "issue_type": [
-                "INFO_REPEATED"
+                "info_repeated",
+                "info", "data"
             ],
             "owner": [
                 "Komal",
                 "Rahul"
             ],
             "state": [
-                "Open",
+                "open",
                 "In Analysis",
                 "Fix Planned",
                 "Fixed",

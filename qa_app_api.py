@@ -18,7 +18,7 @@ import sys
 
 id_data = pd.read_csv('user_ids.csv')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/harish/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/harish/test-Copy1.db'
 db = SQLAlchemy(app)
 
 

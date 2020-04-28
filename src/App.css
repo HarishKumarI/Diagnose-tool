@@ -86,17 +86,23 @@
   align-items: center;
   width: 90vw;
   margin: 0 5vw;
-  padding-bottom: 30px;
+  padding-bottom: 80px;
 }
 
+
+/*  area where the data is populated  */
 
 .dataTable{
   clear: both;
   margin-top: 0px;
-  width: 80vw;
+  width: 90vw;
   border: 1px solid rgb(151, 148, 148);
-  word-break: break-all;
+  word-break: keep-all;
   border-radius: 4px;
+}
+
+.dataTable .ui.table thead tr th{ 
+  
 }
 
 .dataTable textarea{
@@ -112,8 +118,25 @@
   color: white;
 }
 
+/* menu box with accuracy,relevant etc */
+
+.rerunSet button{
+  background-color: rgb(87, 82, 82) !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  color: white !important;
+  border-left: 1px solid rgb(65, 64, 64) !important;
+}
+
+.ui.progress, .ui.progress .bar{
+  margin: 0 !important;
+  height: 5px !important;
+  border-radius: 0px !important;
+}
+
 .controls{
-  width: 80vw;
+  width: 90vw;
 }
 
 .controls .ui.secondary.menu{
@@ -124,11 +147,15 @@
 
 .controls .ui.secondary.menu .item,
 .controls .ui.secondary.menu .item.dropdown:hover{
+  border: none;
   border-radius: 0;
   margin: 0;
   background-color: rgb(78, 74, 74);
   color: white;
 } 
+
+
+/* styleing for settings component */
 
 .settingsTab{
   margin-top: 30px;
@@ -153,6 +180,7 @@
 .settingsTab table th{
   width: 150px;
   text-transform: capitalize;
+
 }
 
 
@@ -191,6 +219,8 @@
 .settingsTab table .label:hover > .delete{
   display: inline-block;
  }
+
+
 
  .TabMenu .ui.menu,.TabMenu .ui.tab,.TabMenu .ui.segment{
    background-color: transparent !important;
