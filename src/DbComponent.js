@@ -3,7 +3,6 @@ import { Table, Dropdown,Menu,Pagination, Button,Loader, TextArea, Divider, Labe
 import $ from 'jquery'
 import * as d3 from 'd3'
 
-
 const AdminIds = [103]
 
 class ReviewForm extends React.Component{
@@ -52,7 +51,7 @@ class ReviewForm extends React.Component{
 
                 changebleFields.push(
                     <tr key={index}>    
-                        <td style={{ width: '120px',wordBreak:'break-word',fontWeight: 'bold' }}>{ rowTitle }: </td>
+                        <th style={{ width: '120px',wordBreak:'break-word',fontWeight: 'bold' }}>{ rowTitle }: </th>
                         <td colSpan="5">
                             {/* { ( isAdmin || field === 'issue_type' ) ? */}
                                 <Dropdown 
@@ -73,7 +72,7 @@ class ReviewForm extends React.Component{
                if ( this.props.uiSettings.editable.includes(field) ){
                     changebleFields.push(
                         <tr key={index}>    
-                            <td style={{ width: '120px',wordBreak:'break-word',fontWeight: 'bold' }} > { rowTitle } : </td>
+                            <th style={{ width: '120px',wordBreak:'break-word',fontWeight: 'bold' }} > { rowTitle } : </th>
                             <td colSpan="5"> 
                             {/* { ( isAdmin ) ? */}
                                     <TextArea 
@@ -91,7 +90,7 @@ class ReviewForm extends React.Component{
                 if( this.props.uiSettings.fields.show.includes(field) ){
                     debugData.push(
                         <tr key={index}>    
-                            <td style={{ width: '120px',wordBreak:'break-word',fontWeight: 'bold' }} > { rowTitle } : </td>
+                            <th style={{ width: '120px',wordBreak:'break-word',fontWeight: 'bold' }} > { rowTitle } : </th>
                             <td colSpan="5"> {this.state[field]} </td>
                         </tr>
                         )
@@ -120,11 +119,11 @@ class ReviewForm extends React.Component{
                 <Table fluid="true" inverted>
                     <Table.Body>
                         <tr>
-                            <td style={{ fontWeight: 'bold' }} > User Id: </td>
+                            <th style={{ fontWeight: 'bold' }} > User Id: </th>
                             <td > {this.state.user_id} </td>
-                            <td  style={{ textAlign: 'right',fontWeight: 'bold' }}> User Name : </td>
+                            <th  style={{ textAlign: 'right',fontWeight: 'bold' }}> User Name : </th>
                             <td  style={{ textAlign: 'left' }}> { this.state.username } </td>
-                            <td  style={{ textAlign: 'right',fontWeight: 'bold' }}> Email : </td>
+                            <th  style={{ textAlign: 'right',fontWeight: 'bold' }}> Email : </th>
                             <td > { this.state.email } </td>
                         </tr>
 
@@ -208,7 +207,9 @@ class DbData extends React.Component{
             loading: false,
             bulkrun: false,
             progress: undefined,
-            selectedQuestions : []
+            fromdate: undefined,
+            todate: undefined,
+            selectedQuestions : {}
         }
 
         this.getrows = this.getrows.bind(this)
@@ -294,11 +295,11 @@ class DbData extends React.Component{
     async getBulkData(event){
         let TSVData = []
         this.TSVDataDump = []
-        this.setState({progress: 0})
-        this.state.selectedQuestions.forEach((row,index) => { $(`#row_${index}`).prop('checked',false) })
+        this.setState({progress: 0,bulkrun: false})
+        Object.keys(this.state.selectedQuestions).forEach((row,index) => { $(`#row_${index}`).prop('checked',false) })
         $('#selectAll').prop('checked',false)
 
-        let questions = this.state.selectedQuestions
+        let questions = Object.keys(this.state.selectedQuestions)
 
         await questions.forEach( async (question,index,array)=>{
             await fetch(`${this.props.uiSettings.rerunlink}/api/${this.props.user_id}`,
@@ -318,6 +319,11 @@ class DbData extends React.Component{
                 Object.keys(answer_json).forEach( debugKey => {
                     response[debugKey] = JSON.stringify(answer_json[debugKey])
                 })
+                delete response['current_q']
+                response[question] = question
+                Object.keys(this.state.selectedQuestions[question]).forEach(key => {
+                    response[key] = this.state.selectedQuestions[question][key]
+                })
 
                 TSVData.push(response)
 
@@ -329,12 +335,11 @@ class DbData extends React.Component{
                     console.log('unable to connet to server')
                 }
             )
-
-
+            
             if ( TSVData.length === array.length ){
                 // console.log( d3.tsvFormat(TSVData) )
 
-                this.setState({ selectedQuestions: [] })
+                this.setState({ selectedQuestions: {} })
                 this.TSVDataDump = d3.tsvFormat(TSVData)
                 this.downloadFile('tsv.tsv', d3.tsvFormat(TSVData) )
             }
@@ -352,34 +357,39 @@ class DbData extends React.Component{
             let openCollapse = () => {
                 ( this.state.activeIndex === index  ) ? this.setState({activeIndex: undefined}) : this.setState({activeIndex: index}) 
             }
-
+            
             let bgColor = ( que_object.relevant ) ? '#365436' : ( que_object.relevant===undefined ) ? '' : '#c1383838' 
             if( ( this.state.relevant === undefined || que_object.relevant === this.state.relevant)
                 && ( this.state.state === undefined || que_object.state === this.state.state ) 
                 && ( this.state.issue_type === undefined || que_object.issue_type === this.state.issue_type)
-                && ( this.state.owner === undefined || que_object.owner === this.state.owner)
+                && ( this.state.owner === undefined || que_object.owner === this.state.owner )
+                && ( this.state.fromdate === undefined || this.state.todate === undefined || 
+                    ( this.state.fromdate <= new Date( que_object.timestamp) && this.state.todate >= new Date( que_object.timestamp))  ) 
                 ){ 
                 dictData.push(que_object)
                 rows.push(
                     <Fragment key={index}>
-                        <Table.Row 
+                        <tr 
                             style={{ cursor: 'pointer', backgroundColor: bgColor }}                       
-                            onClick={() => { if( !this.state.selectedQuestions.includes(que_object.question) ) openCollapse() }} >
-                                <Table.Cell width='1' > 
+                            onClick={() => { if( !Object.keys(this.state.selectedQuestions).includes(que_object.question) ) openCollapse() }} >
+                                <td > 
                                         { ( this.state.bulkrun ) ? 
                                         <div style={{width: 'max-content',textAlign: 'center'}} >
                                             <input type="checkbox" 
                                                 value={que_object.question} 
                                                 id={`row_${index}`}
                                                 onChange={(event) => { 
-                                                    if( !this.state.selectedQuestions.includes(que_object.question) ) {
-                                                        let tempquestions = [...this.state.selectedQuestions]
-                                                        tempquestions.push(que_object.question)
+                                                    if( !Object.keys(this.state.selectedQuestions).includes(que_object.question) ) {
+                                                        let tempquestions = this.state.selectedQuestions
+                                                        tempquestions[que_object.question] = { 
+                                                            original_answer: que_object.answer, state: que_object.state,
+                                                            issue_type: que_object.issue_type, timestamp: que_object.timestamp
+                                                        }
                                                         this.setState({ selectedQuestions: tempquestions })
                                                     } 
                                                     else { 
-                                                        let tempquestions = [...this.state.selectedQuestions]
-                                                        tempquestions.splice( this.state.selectedQuestions.indexOf( que_object.question ),1) 
+                                                        let tempquestions = this.state.selectedQuestions
+                                                        delete tempquestions[ que_object.question ]
                                                         this.setState({ selectedQuestions: tempquestions })
                                                     }
                                                     this.setState({activeIndex: undefined})
@@ -387,18 +397,18 @@ class DbData extends React.Component{
                                             /> 
                                         </div> 
                                         : count + 1 } 
-                                </Table.Cell>
-                                <Table.Cell width='9' onClick={()=> openCollapse()}> { que_object.question } </Table.Cell>
-                                <Table.Cell width='2' onClick={()=> openCollapse()}> { ( que_object.relevant ) ? '' : 'Not ' } Relevant </Table.Cell>
-                                <Table.Cell width='2' onClick={()=> openCollapse()}> { que_object.state } </Table.Cell>
-                                <Table.Cell width='2' onClick={()=> openCollapse()}> { que_object.issue_type || '-' } </Table.Cell>
-                                <Table.Cell width='2' onClick={()=> openCollapse()}> { que_object.owner || '' } </Table.Cell>
-                        </Table.Row>
+                                </td>
+                                <td onClick={()=> openCollapse()}> { que_object.question } </td>
+                                <td onClick={()=> openCollapse()}> { ( que_object.relevant ) ? '' : 'Not ' } Relevant </td>
+                                <td onClick={()=> openCollapse()}> { que_object.state } </td>
+                                <td onClick={()=> openCollapse()}> { que_object.issue_type || '-' } </td>
+                                <td onClick={()=> openCollapse()}> { que_object.owner || 'Komal' } </td>
+                        </tr>
                         
                         {
                             ( this.state.activeIndex === index ) ? 
-                                <Table.Row  >
-                                    <Table.Cell colSpan='6'>
+                                <tr  >
+                                    <td colSpan='6'>
                                         <ReviewForm 
                                             answerData={que_object} 
                                             uiSettings={ this.props.uiSettings }
@@ -407,8 +417,8 @@ class DbData extends React.Component{
                                             domain = {this.props.domain}    
                                         />
 
-                                    </Table.Cell>
-                                </Table.Row>
+                                    </td>
+                                </tr>
                             : null
                         }
                     </Fragment>
@@ -427,147 +437,160 @@ class DbData extends React.Component{
         
         let stateOptions = this.props.uiSettings.list.state.map((stateValue)=>
                 {return {key: stateValue,text:stateValue,value:stateValue } })
-        stateOptions.push({key: 'showall',text:'showall',value:undefined })
+        stateOptions.push({key: 'showall',text:'showall',value: undefined })
 
         let issuetypeOptions = this.props.uiSettings.list.issue_type.map((issueType)=>
                 {return {key: issueType,text:issueType,value:issueType } })
-        issuetypeOptions.push({key: 'showall',text:'showall',value:undefined })
+        issuetypeOptions.push({key: 'showall',text:'showall',value: undefined })
             
         let ownerOptions = this.props.uiSettings.list.owner.map((owner)=>
                 {return {key: owner,text:owner,value:owner } })
-        ownerOptions.push({key: 'showall',text:'showall',value:undefined })
-        
+        ownerOptions.push({key: 'showall',text:'showall',value: undefined })
+
+
         return(
             <Fragment>
                 { ( !this.state.loading ) ?
                 <div>
 
-                    <DataInsights 
-                        stateObj={ this.state } 
-                        bulkrun = { this.state.bulkrun }
-                        updatemaxRows={(latestmaxrows) => this.setState({maxrows : latestmaxrows})} 
-                    />
-                    <Menu secondary stackable className="rerunSet">
-                        <Menu.Item
-                            content={ ( this.state.bulkrun ) ? `Deselect` : `Bulk Re-run` }
-                            style={{ borderLeft: '1px solid #00000047'}}
-                            as={Button}
-                            onClick={(event) => this.setState({bulkrun: !this.state.bulkrun})}
+                    <div className="datepickers">
+                        From :<input type="date" name="fromdate" onChange={ (event)=>this.setState({ fromdate : new Date( event.target.value) }) } /> 
+                        To:   <input type="date" name="todate" onChange={ (event)=>this.setState({ todate: new Date( event.target.value ) }) } />
+                    </div>
+                    <div> 
+                        <DataInsights 
+                            stateObj={ this.state } 
+                            bulkrun = { this.state.bulkrun }
+                            updatemaxRows={(latestmaxrows) => this.setState({maxrows : latestmaxrows})} 
                         />
-                        { ( this.state.selectedQuestions.length > 0 || this.state.progress !== undefined ) ?
-                            ( this.state.progress === undefined ) ?
-                                <Menu.Item
-                                    content="Run"
-                                    icon="play"
-                                    as={Button}
-                                    onClick={this.getBulkData}
-                                />  
-                            : 
-                                <Menu.Item
-                                    content={ `${this.state.progress}%` }
-                                    icon={ ( this.state.progress < 100 ) ? `spinner` : 'download' }
-                                    as={Button}
-                                    onClick={() => (this.state.progress === 100) ? this.downloadFile('tsv.tsv', this.TSVDataDump ) : null }
-                                />
-                        : null }
-                    </Menu>
+                        <Menu secondary stackable className="rerunSet">
+                            <Menu.Item
+                                content={ ( this.state.bulkrun ) ? `Unselect` : `Bulk Re-run` }
+                                style={{ borderLeft: '1px solid #00000047'}}
+                                as={Button}
+                                onClick={(event) => this.setState({bulkrun: !this.state.bulkrun})}
+                            />
+                            { ( Object.keys(this.state.selectedQuestions).length > 0 || this.state.progress !== undefined ) ?
+                                ( this.state.progress === undefined ) ?
+                                    <Menu.Item
+                                        content="Run"
+                                        icon="play"
+                                        as={Button}
+                                        onClick={this.getBulkData}
+                                    />  
+                                : 
+                                    <Menu.Item
+                                        content={ `${this.state.progress}%` }
+                                        icon={ ( this.state.progress < 100 ) ? `spinner` : 'download' }
+                                        as={Button}
+                                        onClick={() => (this.state.progress === 100) ? this.downloadFile('tsv.tsv', this.TSVDataDump ) : null }
+                                    />
+                            : null }
+                        </Menu>
+                    </div>
 
-                    <span style={{ color: 'white', float:'left' }}>Showing &nbsp; { `${rows.length} of ${this.state.data.length}` } </span> 
+                    <span style={{ color: 'white', float:'left',margin: 0,marginBottom: '10px' }}>Showing &nbsp; { `${rows.length} of ${this.state.data.length}` } </span> 
                     { ( this.state.progress > 0 ) ? <Progress percent={ this.state.progress } inverted color='green'   /> : null }
                     <div className="dataTable">
                         <Table inverted>
-                            <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell width="2"> 
-                                    { ( this.state.bulkrun ) ? 
-                                        <div style={{width: 'max-content',textAlign: 'center'}} >Select All:<br/> 
-                                            <input type="checkbox" 
-                                                id="selectAll"
-                                                onChange={(event)=> { 
-                                                    if(event.target.checked){
-                                                        this.setState({selectedQuestions : dictData.map((que_data) =>{ return que_data.question }) })
-                                                        rows.forEach((row,index) => {$(`#row_${index}`).prop('checked',true) })
-                                                    }
-                                                     else {
-                                                         this.setState({ selectedQuestions : [] }) 
-                                                         rows.forEach((row,index) => { $(`#row_${index}`).prop('checked',false) })
-                                                    }
-                                                }}
-                                            /> 
-                                        </div> 
-                                    : '#' } 
-                                </Table.HeaderCell>
-                                <Table.HeaderCell >Question</Table.HeaderCell>
-                                <Table.HeaderCell width="2">
-                                    <Dropdown
-                                        text={ relventtext }  
-                                        icon='filter' >
-                                        <Dropdown.Menu >
-                                            <Dropdown.Item onClick={() => {this.setState({ relevant: true})} } text='Relevant' />
-                                            <Dropdown.Item onClick={() => {this.setState({ relevant: false})} } text='Not Relevant' />
-                                            <Dropdown.Item onClick={() => {this.setState({ relevant: undefined})} } text='Show All' />
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                </Table.HeaderCell>
-                                <Table.HeaderCell width="2" > 
-                                    <Dropdown 
-                                        text={`${(this.state.state === undefined) ? "All States" : this.state.state }`}
-                                        className='icon'
-                                        name="state" 
-                                        icon="filter"
-                                        onChange={ this.updatefilter }
-                                        options={stateOptions}
-                                        defaultValue={stateOptions[0].value}
-                                    />
-                                </Table.HeaderCell>
-                                <Table.HeaderCell width="2"> 
-                                    <Dropdown 
-                                        text={`${(this.state.issue_type === undefined) ? "Issue Type" : this.state.issue_type }`}
-                                        className='icon'
-                                        name="issue_type" 
-                                        icon="filter"
-                                        onChange={ this.updatefilter }
-                                        options={issuetypeOptions}
-                                        defaultValue={issuetypeOptions[0].value}
-                                    />
-                                </Table.HeaderCell>
-                                <Table.HeaderCell width="2"> 
-                                    <Dropdown 
-                                        text={`${(this.state.owner === undefined) ? "Owner" : this.state.owner }`}
-                                        className='icon'
-                                        name="owner" 
-                                        icon="filter"
-                                        onChange={ this.updatefilter }
-                                        options={ownerOptions}
-                                        defaultValue={ownerOptions[0].value}
-                                    />
-                                </Table.HeaderCell>
-                            </Table.Row>
-                            </Table.Header>
-                            
-                            <Table.Body>
-                                { rows.slice( (this.state.activePage-1)*this.state.maxrows , (this.state.activePage-1)*this.state.maxrows + this.state.maxrows ) }
-                            </Table.Body>
+                            <thead style={{textAlign: 'center',height: '50px'}}>
+                                <tr>
+                                    <th > 
+                                        { ( this.state.bulkrun ) ? 
+                                            <div >Select All:<br/> 
+                                                <input type="checkbox" 
+                                                    id="selectAll"
+                                                    onChange={(event)=> { 
+                                                        if(event.target.checked){
+                                                            let selectedList = {}
+                                                            dictData.forEach((que_data) =>{  
+                                                                selectedList[que_data.question] = { 
+                                                                    original_answer: que_data.answer, state: que_data.state,
+                                                                    issue_type: que_data.issue_type, timestamp: que_data.timestamp
+                                                                }})
 
-                            <Table.Footer>
-                            <Table.Row>
-                                <Table.Cell colSpan='6'style={{ padding: 0,textAlign: 'center' }} >
-                                    { ( rows.length > this.state.maxrows ) ?
-                                        <Pagination inverted
-                                            defaultActivePage={1}
-                                            firstItem={null}
-                                            prevItem={'<'}
-                                            nextItem={'>'}
-                                            lastItem={null}
-                                            onPageChange={this.handlepagination}
-                                            pointing
-                                            secondary
-                                            totalPages={ Math.ceil(rows.length / this.state.maxrows) }
+                                                            this.setState({selectedQuestions : selectedList })
+                                                            rows.forEach((row,index) => {$(`#row_${index}`).prop('checked',true) })
+                                                        }
+                                                        else {
+                                                            this.setState({ selectedQuestions : {} }) 
+                                                            rows.forEach((row,index) => { $(`#row_${index}`).prop('checked',false) })
+                                                        }
+                                                    }}
+                                                /> 
+                                            </div> 
+                                        : '#' } 
+                                    </th>
+                                    <th >Question</th>
+                                    <th >
+                                        <Dropdown
+                                            text={ relventtext }  
+                                            icon='filter' >
+                                            <Dropdown.Menu >
+                                                <Dropdown.Item onClick={() => {this.setState({ relevant: true})} } text='Relevant' />
+                                                <Dropdown.Item onClick={() => {this.setState({ relevant: false})} } text='Not Relevant' />
+                                                <Dropdown.Item selected onClick={() => {this.setState({ relevant: undefined})} } text='Show All' />
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </th>
+                                    <th > 
+                                        <Dropdown 
+                                            text={`${(this.state.state === undefined) ? "All States" : this.state.state }`}
+                                            className='icon'
+                                            name="state" 
+                                            icon="filter"
+                                            onChange={ this.updatefilter }
+                                            options={stateOptions}
+                                            defaultValue={ 'showall' }
                                         />
-                                    : null } 
-                                </Table.Cell>
-                            </Table.Row>
-                            </Table.Footer>
+                                    </th>
+                                    <th > 
+                                        <Dropdown 
+                                            text={`${(this.state.issue_type === undefined) ? "Issue Type" : this.state.issue_type }`}
+                                            className='icon'
+                                            name="issue_type" 
+                                            icon="filter"
+                                            onChange={ this.updatefilter }
+                                            options={issuetypeOptions}
+                                            defaultValue={'showall'}
+                                        />
+                                    </th>
+                                    <th style={{ width: 'max-content' }}> 
+                                        <Dropdown 
+                                            text={`${(this.state.owner === undefined) ? "Owner" : this.state.owner }`}
+                                            className='icon'
+                                            name="owner" 
+                                            icon="filter"
+                                            onChange={ this.updatefilter }
+                                            options={ownerOptions}
+                                            defaultValue={'showall'}
+
+                                        />
+                                    </th>
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                { rows.slice( (this.state.activePage-1)*this.state.maxrows , (this.state.activePage-1)*this.state.maxrows + this.state.maxrows ) }
+
+                                <tr>
+                                    <td colSpan='6'style={{ padding: 0,textAlign: 'center' }} >
+                                        { ( rows.length > this.state.maxrows ) ?
+                                            <Pagination inverted
+                                                defaultActivePage={1}
+                                                firstItem={null}
+                                                prevItem={'<'}
+                                                nextItem={'>'}
+                                                lastItem={null}
+                                                onPageChange={this.handlepagination}
+                                                pointing
+                                                secondary
+                                                totalPages={ Math.ceil(rows.length / this.state.maxrows) }
+                                            />
+                                        : null } 
+                                    </td>
+                                </tr>
+                            </tbody>
                         </Table>
 
                     </div>

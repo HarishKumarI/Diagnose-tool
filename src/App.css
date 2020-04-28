@@ -101,9 +101,24 @@
   border-radius: 4px;
 }
 
-.dataTable .ui.table thead tr th{ 
-  
+.datepickers{
+  color: white;
+  text-align: right;
 }
+
+.datepickers input[type='date']{
+  border: 1px solid white;
+  border-radius: 2px;
+  padding: 2px;
+  text-align: center;
+  margin: 0 8px;
+}
+
+.dataTable .ui.table tr th{
+  background-color: transparent;
+  text-transform: capitalize;
+}
+
 
 .dataTable textarea{
   width: 100%;

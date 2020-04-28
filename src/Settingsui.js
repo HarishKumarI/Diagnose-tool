@@ -12,6 +12,15 @@ class SettingsPanel extends React.Component{
         this.resetOptions = this.resetOptions.bind(this)
         this.saveSettings = this.saveSettings.bind(this)
     }
+
+    componentDidMount(){
+        this.setState({...this.props.settingsJSON})
+    }
+
+    componentDidUpdate(){
+        if( this.state.domain !== this.props.domain )
+            this.setState({ ...this.props.settingsJSON })
+    }
     
     addListitem(event,data){
         const { name, value} = data

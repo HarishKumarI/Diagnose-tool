@@ -35,7 +35,8 @@
                 "answer",
                 "comment",
                 "source",
-                "source_link"
+                "source_link",
+                "timestamp"
             ]
         },
         "list": {
@@ -84,20 +85,21 @@
                 "owner",
                 "notes",
                 "answer",
-                "comment"
+                "comment",
+                "timestamp"
             ]
         },
         "list": {
             "issue_type": [
                 "info_repeated",
-                "info", "data"
+                "info",
+                "data"
             ],
             "owner": [
                 "Komal",
                 "Rahul"
             ],
             "state": [
-                "open",
                 "In Analysis",
                 "Fix Planned",
                 "Fixed",
