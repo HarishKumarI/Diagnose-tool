@@ -313,19 +313,20 @@ class DbData extends React.Component{
                     },
                 body: JSON.stringify({question:question})
             })
-            .then((response)=> {
-                let answer_json = response.json().answer_json
+            .then((response)=> response.json())
+            .then(response => {
+                let responsejson = response[0].answer_json
+                let answer_json = responsejson
                 delete response['answer_json']
                 Object.keys(answer_json).forEach( debugKey => {
-                    response[debugKey] = JSON.stringify(answer_json[debugKey])
+                    responsejson[debugKey] = JSON.stringify(answer_json[debugKey])
                 })
-                delete response['current_q']
-                response[question] = question
+                delete responsejson['current_q']
                 Object.keys(this.state.selectedQuestions[question]).forEach(key => {
-                    response[key] = this.state.selectedQuestions[question][key]
+                    responsejson[key] = JSON.stringify(this.state.selectedQuestions[question][key])
                 })
 
-                TSVData.push(response)
+                TSVData.push(responsejson)
 
                 this.setState({ progress : Math.floor((index+1) * 100 /array.length) })
 
@@ -399,10 +400,10 @@ class DbData extends React.Component{
                                         : count + 1 } 
                                 </td>
                                 <td onClick={()=> openCollapse()}> { que_object.question } </td>
-                                <td onClick={()=> openCollapse()}> { ( que_object.relevant ) ? '' : 'Not ' } Relevant </td>
-                                <td onClick={()=> openCollapse()}> { que_object.state } </td>
-                                <td onClick={()=> openCollapse()}> { que_object.issue_type || '-' } </td>
-                                <td onClick={()=> openCollapse()}> { que_object.owner || 'Komal' } </td>
+                                <td style={{ textAlign: 'center' }} onClick={()=> openCollapse()}> { ( que_object.relevant ) ? '' : 'Not ' } Relevant </td>
+                                <td style={{ textAlign: 'center' }} onClick={()=> openCollapse()}> { que_object.state } </td>
+                                <td style={{ textAlign: 'center' }} onClick={()=> openCollapse()}> { que_object.issue_type || '-' } </td>
+                                <td style={{ textAlign: 'center' }} onClick={()=> openCollapse()}> { que_object.owner || 'Komal' } </td>
                         </tr>
                         
                         {
@@ -489,8 +490,12 @@ class DbData extends React.Component{
                         </Menu>
                     </div>
 
-                    <span style={{ color: 'white', float:'left',margin: 0,marginBottom: '10px' }}>Showing &nbsp; { `${rows.length} of ${this.state.data.length}` } </span> 
-                    { ( this.state.progress > 0 ) ? <Progress percent={ this.state.progress } inverted color='green'   /> : null }
+     
+                    <div >
+                        { ( this.state.progress > 0) ? <Progress  percent={ this.state.progress } inverted color='green'   /> : null }
+                        <div style={{ color: 'white', float:'left',margin: '15px 0'}}>Showing &nbsp; { `${rows.length} of ${this.state.data.length}` } </div> 
+                    </div>
+    
                     <div className="dataTable">
                         <Table inverted>
                             <thead style={{textAlign: 'center',height: '50px'}}>
