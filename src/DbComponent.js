@@ -207,8 +207,8 @@ class DbData extends React.Component{
             loading: false,
             bulkrun: false,
             progress: undefined,
-            fromdate: undefined,
-            todate: undefined,
+            fromdate: new Date("2020-03-10"),
+            todate: new Date(),
             selectedQuestions : {}
         }
 
@@ -221,6 +221,7 @@ class DbData extends React.Component{
     }
 
     getDbdata(){
+
         this.setState({loading: true})
         $.post('/api/dbData', JSON.stringify({ domain: this.props.domain}) ,(response,status) =>{
             let relcount = 0
@@ -228,8 +229,18 @@ class DbData extends React.Component{
             this.setState({
                 data: response,
                 loading: false,
-                relevantCount: relcount
+                relevantCount: relcount,
+                relevant: undefined,
+                state: undefined,
+                owner: undefined,
+                issue_type: undefined,
+                bulkrun: false,
+                progress: undefined,
+                fromdate: new Date("2020-03-10"),
+                todate: new Date(),
+                selectedQuestions : {}
             })
+            this.TSVDataDump = []
         }).fail(()=>{
             this.setState({loading: false})
             console.log('could not reach server or something wrong')
@@ -293,9 +304,12 @@ class DbData extends React.Component{
     };
 
     async getBulkData(event){
+
+        // console.log(Object.keys(this.state.selectedQuestions).length)
+
         let TSVData = []
         this.TSVDataDump = []
-        this.setState({progress: 0,bulkrun: false})
+        this.setState({progress: 0.1,bulkrun: false})
         Object.keys(this.state.selectedQuestions).forEach((row,index) => { $(`#row_${index}`).prop('checked',false) })
         $('#selectAll').prop('checked',false)
 
@@ -315,18 +329,20 @@ class DbData extends React.Component{
             })
             .then((response)=> response.json())
             .then(response => {
-                let responsejson = response[0].answer_json
-                let answer_json = responsejson
-                delete response['answer_json']
+                let answer_json = response[0].answer_json
+                let outputjson = {feedback_id: 0,question: question,original_answer: ""}
+
+
                 Object.keys(answer_json).forEach( debugKey => {
-                    responsejson[debugKey] = JSON.stringify(answer_json[debugKey])
-                })
-                delete responsejson['current_q']
-                Object.keys(this.state.selectedQuestions[question]).forEach(key => {
-                    responsejson[key] = JSON.stringify(this.state.selectedQuestions[question][key])
+                    outputjson[debugKey] = JSON.stringify(answer_json[debugKey])
                 })
 
-                TSVData.push(responsejson)
+                Object.keys(this.state.selectedQuestions[question]).forEach(key => {
+                    outputjson[key] = JSON.stringify(this.state.selectedQuestions[question][key])
+                })
+                // console.log(Object.keys(outputjson))
+
+                TSVData.push(outputjson)
 
                 this.setState({ progress : Math.floor((index+1) * 100 /array.length) })
 
@@ -345,6 +361,14 @@ class DbData extends React.Component{
                 this.downloadFile('tsv.tsv', d3.tsvFormat(TSVData) )
             }
         })        
+    }
+
+    getquedict(que_data){
+        return {
+            feedback_id: que_data.id, 
+            original_answer: que_data.answer, state: que_data.state,
+            issue_type: que_data.issue_type, timestamp: que_data.timestamp
+        }
     }
 
 
@@ -382,10 +406,7 @@ class DbData extends React.Component{
                                                 onChange={(event) => { 
                                                     if( !Object.keys(this.state.selectedQuestions).includes(que_object.question) ) {
                                                         let tempquestions = this.state.selectedQuestions
-                                                        tempquestions[que_object.question] = { 
-                                                            original_answer: que_object.answer, state: que_object.state,
-                                                            issue_type: que_object.issue_type, timestamp: que_object.timestamp
-                                                        }
+                                                        tempquestions[que_object.question] = this.getquedict(que_object)
                                                         this.setState({ selectedQuestions: tempquestions })
                                                     } 
                                                     else { 
@@ -448,6 +469,16 @@ class DbData extends React.Component{
                 {return {key: owner,text:owner,value:owner } })
         ownerOptions.push({key: 'showall',text:'showall',value: undefined })
 
+        let date = new Date()
+        date.setDate(date.getDate() + 1 )
+        const maxDate = ( date ).toISOString().substr(0,10)
+        const minDate = ( new Date("2020-03-10") ).toISOString().substr(0,10)
+        date.setDate(date.getDate() -1)
+        const frommaxDate = date.toISOString().substr(0,10)
+        date = new Date(this.state.fromdate)
+        date.setDate( date.getDate() +1 )  
+        const toMinDate = date.toISOString().substr(0,10)
+
 
         return(
             <Fragment>
@@ -455,8 +486,8 @@ class DbData extends React.Component{
                 <div>
 
                     <div className="datepickers">
-                        From :<input type="date" name="fromdate" onChange={ (event)=>this.setState({ fromdate : new Date( event.target.value) }) } /> 
-                        To:   <input type="date" name="todate" onChange={ (event)=>this.setState({ todate: new Date( event.target.value ) }) } />
+                        From :<input type="date" id="fromdate" name="fromdate" value={this.state.fromdate.toISOString().substr(0,10)} min={minDate} max={frommaxDate}  onChange={ (event)=> { this.setState({ fromdate : new Date( event.target.value) }) } } /> 
+                        To:   <input type="date" id="todate"   name="todate"   value={this.state.todate.toISOString().substr(0,10)}   min={toMinDate} max={maxDate} onChange={ (event)=>this.setState({ todate: new Date( event.target.value ) }) } />
                     </div>
                     <div> 
                         <DataInsights 
@@ -471,17 +502,18 @@ class DbData extends React.Component{
                                 as={Button}
                                 onClick={(event) => this.setState({bulkrun: !this.state.bulkrun})}
                             />
-                            { ( Object.keys(this.state.selectedQuestions).length > 0 || this.state.progress !== undefined ) ?
-                                ( this.state.progress === undefined ) ?
+                            { ( Object.keys(this.state.selectedQuestions).length > 0 ) ?
                                     <Menu.Item
                                         content="Run"
                                         icon="play"
                                         as={Button}
                                         onClick={this.getBulkData}
                                     />  
-                                : 
+                            : null}
+
+                            { ( this.state.progress ) ? 
                                     <Menu.Item
-                                        content={ `${this.state.progress}%` }
+                                        content={ (this.state.progress === 100) ? 'Download' :`${parseInt(this.state.progress)}%` }
                                         icon={ ( this.state.progress < 100 ) ? `spinner` : 'download' }
                                         as={Button}
                                         onClick={() => (this.state.progress === 100) ? this.downloadFile('tsv.tsv', this.TSVDataDump ) : null }
@@ -490,11 +522,11 @@ class DbData extends React.Component{
                         </Menu>
                     </div>
 
-     
-                    <div >
-                        { ( this.state.progress > 0) ? <Progress  percent={ this.state.progress } inverted color='green'   /> : null }
-                        <div style={{ color: 'white', float:'left',margin: '15px 0'}}>Showing &nbsp; { `${rows.length} of ${this.state.data.length}` } </div> 
+                    <div style={{ color: 'white', textAlign:'left',width: '100%'}}>
+                        <div style={{ margin: '10px 0' }}>Showing &nbsp; { `${rows.length} of ${this.state.data.length}` } </div> 
+                        { ( this.state.progress > 0) ?  <Progress attached="bottom"  percent={ this.state.progress } inverted color='green'   /> : null }
                     </div>
+    
     
                     <div className="dataTable">
                         <Table inverted>
@@ -506,21 +538,16 @@ class DbData extends React.Component{
                                                 <input type="checkbox" 
                                                     id="selectAll"
                                                     onChange={(event)=> { 
-                                                        if(event.target.checked){
-                                                            let selectedList = {}
-                                                            dictData.forEach((que_data) =>{  
-                                                                selectedList[que_data.question] = { 
-                                                                    original_answer: que_data.answer, state: que_data.state,
-                                                                    issue_type: que_data.issue_type, timestamp: que_data.timestamp
-                                                                }})
+                                                        let selectedList = undefined
+                                                        rows.forEach((row,index) => { $(`#row_${index}`).prop('checked',false) })
 
-                                                            this.setState({selectedQuestions : selectedList })
+                                                        if(event.target.checked){
+                                                            selectedList = {}
+                                                            dictData.forEach((que_data) =>{  selectedList[que_data.question] = this.getquedict(que_data) })
                                                             rows.forEach((row,index) => {$(`#row_${index}`).prop('checked',true) })
                                                         }
-                                                        else {
-                                                            this.setState({ selectedQuestions : {} }) 
-                                                            rows.forEach((row,index) => { $(`#row_${index}`).prop('checked',false) })
-                                                        }
+
+                                                        this.setState({ selectedQuestions : selectedList || {} }) 
                                                     }}
                                                 /> 
                                             </div> 
