@@ -470,7 +470,7 @@ class DbData extends React.Component{
         ownerOptions.push({key: 'showall',text:'showall',value: undefined })
 
         let date = new Date()
-        date.setDate(date.getDate() + 1 )
+        date.setDate(date.getDate() )
         const maxDate = ( date ).toISOString().substr(0,10)
         const minDate = ( new Date("2020-03-10") ).toISOString().substr(0,10)
         date.setDate(date.getDate() -1)
