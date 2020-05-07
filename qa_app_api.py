@@ -18,8 +18,8 @@ import sys
 
 id_data = pd.read_csv('user_ids.csv')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/harish/Webapps/ReactApps/diagnose-tool/test.db'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/komi/test.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/harish/Webapps/ReactApps/diagnose-tool/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/komi/test.db'
 db = SQLAlchemy(app)
 
 
