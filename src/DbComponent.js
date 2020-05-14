@@ -158,14 +158,14 @@ function DataInsights(props){
         <div className="controls" >
             <Menu secondary stackable>
                 <Menu.Item
-                    content={ `Accuracy ${ Math.floor( props.stateObj.relevantCount *100/( props.stateObj.data.length ) *100)/100 || 0 }%` }
+                    content={ `Accuracy ${ Math.floor( props.relcount *100/( props.jsondata.length ) *100)/100 || 0 }%` }
                 />
                 <Menu.Item
-                    content={ `Relevant - ${ props.stateObj.relevantCount }` }
+                    content={ `Relevant - ${ props.relcount }` }
                     style={{ backgroundColor: '#365436' }}
                 />
                 <Menu.Item
-                    content={ `Not Relevant - ${ props.stateObj.data.length - props.stateObj.relevantCount }`}
+                    content={ `Not Relevant - ${ props.jsondata.length - props.relcount }`}
                     style={{ backgroundColor: '#c1383838' }}
                 />
 
@@ -188,6 +188,7 @@ function DataInsights(props){
 
 class DbData extends React.Component{
     TSVDataDump = []
+    relevantCount = 0
 
     constructor(props){
         super(props)
@@ -224,12 +225,10 @@ class DbData extends React.Component{
 
         this.setState({loading: true})
         $.post('/api/dbData', JSON.stringify({ domain: this.props.domain}) ,(response,status) =>{
-            let relcount = 0
-            response.forEach(que_object => {if(que_object.relevant) relcount+=1 })
             this.setState({
                 data: response,
                 loading: false,
-                relevantCount: relcount,
+                relevantCount: undefined,
                 relevant: undefined,
                 state: undefined,
                 owner: undefined,
@@ -377,8 +376,14 @@ class DbData extends React.Component{
         let rows = []
         let dictData = []
         let count = 0
+        let relcount = 0
+        let feedbackData = this.state.data
+        
+        console.log(feedbackData)
+        feedbackData.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
+        console.log(feedbackData)
 
-        this.state.data.forEach((que_object,index) => {
+        feedbackData.forEach((que_object,index) => {
             let openCollapse = () => {
                 ( this.state.activeIndex === index  ) ? this.setState({activeIndex: undefined}) : this.setState({activeIndex: index}) 
             }
@@ -391,6 +396,8 @@ class DbData extends React.Component{
                 && ( this.state.fromdate === undefined || this.state.todate === undefined || 
                     ( this.state.fromdate <= new Date( que_object.timestamp) && this.state.todate >= new Date( que_object.timestamp))  ) 
                 ){ 
+
+                if(que_object.relevant) relcount+=1 
                 dictData.push(que_object)
                 rows.push(
                     <Fragment key={index}>
@@ -449,6 +456,8 @@ class DbData extends React.Component{
             }
         })
 
+        this.relevantCount = relcount
+
         return {rows,dictData }
     }
 
@@ -491,7 +500,9 @@ class DbData extends React.Component{
                     </div>
                     <div> 
                         <DataInsights 
-                            stateObj={ this.state } 
+                            stateObj={ this.state }
+                            relcount={ this.relevantCount } 
+                            jsondata= { dictData }
                             bulkrun = { this.state.bulkrun }
                             updatemaxRows={(latestmaxrows) => this.setState({maxrows : latestmaxrows})} 
                         />
@@ -522,8 +533,11 @@ class DbData extends React.Component{
                         </Menu>
                     </div>
 
-                    <div style={{ color: 'white', textAlign:'left',width: '100%'}}>
-                        <div style={{ margin: '10px 0' }}>Showing &nbsp; { `${rows.length} of ${this.state.data.length}` } </div> 
+                    <div style={{ color: 'white',width: '100%'}}>
+                        <div style={{ margin: '10px 0',display: 'inline-block',width: 'inherit' }}> 
+                            <div style={{ float: 'left' }}> # Latest on Top </div> 
+                            <div style={{ float: 'right' }}>Showing &nbsp; { `${rows.length} of ${this.state.data.length}` } </div> 
+                        </div>
                         { ( this.state.progress > 0) ?  <Progress attached="bottom"  percent={ this.state.progress } inverted color='green'   /> : null }
                     </div>
     
