@@ -367,7 +367,7 @@ class DbData extends React.Component{
             feedback_id: que_data.id, 
             original_answer: que_data.answer, state: que_data.state,
             issue_type: que_data.issue_type, timestamp: que_data.timestamp,
-            user_comment: que_data.cmt, relevant: (que_data.relevant) ? 'YES' : 'NO'
+            user_comment: que_data.comment, relevant: (que_data.relevant) ? 'YES' : 'NO'
         }
     }
 
