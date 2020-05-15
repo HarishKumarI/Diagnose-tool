@@ -366,7 +366,8 @@ class DbData extends React.Component{
         return {
             feedback_id: que_data.id, 
             original_answer: que_data.answer, state: que_data.state,
-            issue_type: que_data.issue_type, timestamp: que_data.timestamp
+            issue_type: que_data.issue_type, timestamp: que_data.timestamp,
+            user_comment: que_data.cmt, relevant: (que_data.relevant) ? 'YES' : 'NO'
         }
     }
 
@@ -379,9 +380,9 @@ class DbData extends React.Component{
         let relcount = 0
         let feedbackData = this.state.data
         
-        console.log(feedbackData)
+        // console.log(feedbackData)
         feedbackData.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
-        console.log(feedbackData)
+        // console.log(feedbackData)
 
         feedbackData.forEach((que_object,index) => {
             let openCollapse = () => {
@@ -487,7 +488,8 @@ class DbData extends React.Component{
         date = new Date(this.state.fromdate)
         date.setDate( date.getDate() +1 )  
         const toMinDate = date.toISOString().substr(0,10)
-
+        
+        console.log(this.state.progress)
 
         return(
             <Fragment>
