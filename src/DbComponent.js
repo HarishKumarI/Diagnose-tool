@@ -2,6 +2,12 @@ import React, { Fragment } from 'react'
 import { Table, Dropdown,Menu,Pagination, Button,Loader, TextArea, Divider, Label,Progress } from 'semantic-ui-react'
 import $ from 'jquery'
 import * as d3 from 'd3'
+import * as json2md from 'json2md'
+import * as showdown from 'showdown' 
+
+
+var converter = new showdown.Converter({'noHeaderId':'true'})
+
 
 const AdminIds = [103]
 
@@ -37,6 +43,13 @@ class ReviewForm extends React.Component{
         Object.keys(this.state).forEach(( field, index) =>{
 
             const rowTitle = ( field === "answer") ? "Original Answer" : field.replace(/_/g,' ')
+            
+            const answerElement = ( field === "answer" ) ? 
+                    <div  style={{textAlign:"left"}} 
+                        dangerouslySetInnerHTML={{ __html: converter.makeHtml( 
+                                json2md( JSON.parse(this.state[field].replace(/{'/g,'{"').replace(/'}/g,'"}')
+                                    .replace(/: '/g,':"').replace(/':/g,'":') ) ) ).replace(/<a href="/g,'<a target="_blank" href="') }} /> 
+                    : this.state[field]
 
             if( Object.keys(this.props.uiSettings.list).includes(field) ) {
                    let selectedIndex = 0
@@ -91,7 +104,7 @@ class ReviewForm extends React.Component{
                     debugData.push(
                         <tr key={index}>    
                             <th style={{ width: '120px',wordBreak:'break-word',fontWeight: 'bold' }} > { rowTitle } : </th>
-                            <td colSpan="5"> {this.state[field]} </td>
+                            <td colSpan="5"> { answerElement } </td>
                         </tr>
                         )
                 }
