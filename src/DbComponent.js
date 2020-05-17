@@ -43,13 +43,18 @@ class ReviewForm extends React.Component{
         Object.keys(this.state).forEach(( field, index) =>{
 
             const rowTitle = ( field === "answer") ? "Original Answer" : field.replace(/_/g,' ')
-            
-            const answerElement = ( field === "answer" ) ? 
+            let answerElement = ""
+            try{
+            answerElement =  ( field === "answer" ) ? 
                     <div  style={{textAlign:"left"}} 
                         dangerouslySetInnerHTML={{ __html: converter.makeHtml( 
                                 json2md( JSON.parse(this.state[field].replace(/{'/g,'{"').replace(/'}/g,'"}')
                                     .replace(/: '/g,':"').replace(/':/g,'":') ) ) ).replace(/<a href="/g,'<a target="_blank" href="') }} /> 
                     : this.state[field]
+            }
+            catch(error)
+            { answerElement = this.state[field] }
+
 
             if( Object.keys(this.props.uiSettings.list).includes(field) ) {
                    let selectedIndex = 0
