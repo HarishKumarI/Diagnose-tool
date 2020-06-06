@@ -4,6 +4,8 @@ from flask_restful import Resource, Api
 import pandas as pd
 import json
 
+import sys
+
 from flask_sqlalchemy import SQLAlchemy
 
 import sqlalchemy
@@ -13,62 +15,115 @@ api = Api(app)
 
 CORS(app)
 
+import logging
+import logging.handlers as handlers
+
+# logging.basicConfig(filename='demo.log', level=logging.DEBUG)
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+
+logHandler = handlers.RotatingFileHandler('diagnostic_tool.log', maxBytes=1024*1024*1024, backupCount=1)
+logHandler.setLevel(logging.DEBUG)
+logHandler.setFormatter(formatter)
+logger.addHandler(logHandler)
+
+
+sys.stdout.write = logger.info
+
 import os
 import sys
 
 id_data = pd.read_csv('user_ids.csv')
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/harish/Webapps/ReactApps/diagnose-tool/test.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/komi/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/komi/user_log.db'
 db = SQLAlchemy(app)
 
 
-class User(db.Model):
+#class User(db.Model):
+#
+#	id = db.Column(db.Integer, primary_key=True)
+#	question = db.Column(db.String(20000), unique=False, nullable=False)
+#	answer = db.Column(db.String(20000), unique=False, nullable=True)
+#	failed_assoc_prob_list = db.Column(db.String(20000), unique=False, nullable=True)
+#	node_doc = db.Column(db.String(20000), unique=False, nullable=True)
+#	predicate_tuples = db.Column(db.String(20000), unique=False, nullable=True)
+#	ref_exp_nodes = db.Column(db.String(20000), unique=False, nullable=True)
+#	res_dict = db.Column(db.String(20000), unique=False, nullable=True)
+#	response = db.Column(db.String(20000), unique=False, nullable=True)
+#	results = db.Column(db.String(20000), unique=False, nullable=True)
+#	relevant = db.Column(db.Boolean, unique=False, nullable=True)
+#	comment = db.Column(db.String(20000), unique=False, nullable=True)
+#	submitted = db.Column(db.Boolean, unique=False, nullable=True)
+#	status = db.Column(db.String(20000), unique=False, nullable=True)
+#	timestamp = db.Column(db.String(20000), unique=False, nullable=True)
+#	user_id = db.Column(db.Integer, unique=False, nullable=False)
+#	username = db.Column(db.String(1024), unique=False, nullable=True)
+#	email = db.Column(db.String(20000), unique=False, nullable=True)
+#	state = db.Column(db.String(1024), unique=False, nullable=True)
+#	issue_type = db.Column(db.String(1024), unique=False, nullable=True)
+#	owner = db.Column(db.String(1024), unique=False, nullable=True)
+#	notes = db.Column(db.String(1024), unique=False, nullable=True)
 
+#	def __repr__(self):
+#		return '<User %r>' % self.username
+
+#class Covid(db.Model):
+
+#	id = db.Column(db.Integer, primary_key=True)
+#	question = db.Column(db.String(20000), unique=False, nullable=False)
+#	answer = db.Column(db.String(20000), unique=False, nullable=True)
+#	failed_assoc_prob_list = db.Column(db.String(20000), unique=False, nullable=True)
+#	node_doc = db.Column(db.String(20000), unique=False, nullable=True)
+#	predicate_tuples = db.Column(db.String(20000), unique=False, nullable=True)
+#	ref_exp_nodes = db.Column(db.String(20000), unique=False, nullable=True)
+#	res_dict = db.Column(db.String(20000), unique=False, nullable=True)
+#	response = db.Column(db.String(20000), unique=False, nullable=True)
+#	results = db.Column(db.String(20000), unique=False, nullable=True)
+#	relevant = db.Column(db.Boolean, unique=False, nullable=True)
+#	comment = db.Column(db.String(20000), unique=False, nullable=True)
+#	submitted = db.Column(db.Boolean, unique=False, nullable=True)
+#	status = db.Column(db.String(20000), unique=False, nullable=True)
+#	timestamp = db.Column(db.String(20000), unique=False, nullable=True)
+#	statictics = db.Column(db.String(20000), unique=False, nullable=True)
+#	source = db.Column(db.String(20000), unique=False, nullable=True)
+#	source_link = db.Column(db.String(20000), unique=False, nullable=True)
+#	img_link = db.Column(db.String(20000), unique=False, nullable=True)
+#	user_id = db.Column(db.Integer, unique=False, nullable=False)
+#	username = db.Column(db.String(1024), unique=False, nullable=True)
+#	email = db.Column(db.String(20000), unique=False, nullable=True)
+#	state = db.Column(db.String(1024), unique=False, nullable=True)
+#	issue_type = db.Column(db.String(2000), unique=False, nullable=True)
+#	owner = db.Column(db.String(1024), unique=False, nullable=True)
+#	notes = db.Column(db.String(1024), unique=False, nullable=True)
+
+
+#	def __repr__(self):
+#		return '<User %r>' % self.username
+
+#classObj = { "University": User, "Covid": Covid }
+
+class Covid_v2(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	question = db.Column(db.String(20000), unique=False, nullable=False)
 	answer = db.Column(db.String(20000), unique=False, nullable=True)
-	failed_assoc_prob_list = db.Column(db.String(20000), unique=False, nullable=True)
-	node_doc = db.Column(db.String(20000), unique=False, nullable=True)
-	predicate_tuples = db.Column(db.String(20000), unique=False, nullable=True)
-	ref_exp_nodes = db.Column(db.String(20000), unique=False, nullable=True)
-	res_dict = db.Column(db.String(20000), unique=False, nullable=True)
-	response = db.Column(db.String(20000), unique=False, nullable=True)
+	format_query = db.Column(db.String(20000), unique=False, nullable=True)
+	concept_nodes = db.Column(db.String(20000), unique=False, nullable=True)
+	inv_index = db.Column(db.String(20000), unique=False, nullable=True)
+	networkx_graph = db.Column(db.String(20000), unique=False, nullable=True)
+	pred_tuples = db.Column(db.String(20000), unique=False, nullable=True)
+	sem_parse_out = db.Column(db.String(20000), unique=False, nullable=True)
 	results = db.Column(db.String(20000), unique=False, nullable=True)
+	plot_json = db.Column(db.String(20000), unique=False, nullable=True)
+	text = db.Column(db.String(20000), unique=False, nullable=True)
 	relevant = db.Column(db.Boolean, unique=False, nullable=True)
 	comment = db.Column(db.String(20000), unique=False, nullable=True)
 	submitted = db.Column(db.Boolean, unique=False, nullable=True)
 	status = db.Column(db.String(20000), unique=False, nullable=True)
 	timestamp = db.Column(db.String(20000), unique=False, nullable=True)
-	user_id = db.Column(db.Integer, unique=False, nullable=False)
-	username = db.Column(db.String(1024), unique=False, nullable=True)
-	email = db.Column(db.String(20000), unique=False, nullable=True)
-	state = db.Column(db.String(1024), unique=False, nullable=True)
-	issue_type = db.Column(db.String(1024), unique=False, nullable=True)
-	owner = db.Column(db.String(1024), unique=False, nullable=True)
-	notes = db.Column(db.String(1024), unique=False, nullable=True)
-
-	def __repr__(self):
-		return '<User %r>' % self.username
-
-class Covid(db.Model):
-
-	id = db.Column(db.Integer, primary_key=True)
-	question = db.Column(db.String(20000), unique=False, nullable=False)
-	answer = db.Column(db.String(20000), unique=False, nullable=True)
-	failed_assoc_prob_list = db.Column(db.String(20000), unique=False, nullable=True)
-	node_doc = db.Column(db.String(20000), unique=False, nullable=True)
-	predicate_tuples = db.Column(db.String(20000), unique=False, nullable=True)
-	ref_exp_nodes = db.Column(db.String(20000), unique=False, nullable=True)
-	res_dict = db.Column(db.String(20000), unique=False, nullable=True)
-	response = db.Column(db.String(20000), unique=False, nullable=True)
-	results = db.Column(db.String(20000), unique=False, nullable=True)
-	relevant = db.Column(db.Boolean, unique=False, nullable=True)
-	comment = db.Column(db.String(20000), unique=False, nullable=True)
-	submitted = db.Column(db.Boolean, unique=False, nullable=True)
-	status = db.Column(db.String(20000), unique=False, nullable=True)
-	timestamp = db.Column(db.String(20000), unique=False, nullable=True)
-	statictics = db.Column(db.String(20000), unique=False, nullable=True)
 	source = db.Column(db.String(20000), unique=False, nullable=True)
 	source_link = db.Column(db.String(20000), unique=False, nullable=True)
 	img_link = db.Column(db.String(20000), unique=False, nullable=True)
@@ -79,13 +134,47 @@ class Covid(db.Model):
 	issue_type = db.Column(db.String(2000), unique=False, nullable=True)
 	owner = db.Column(db.String(1024), unique=False, nullable=True)
 	notes = db.Column(db.String(1024), unique=False, nullable=True)
+	statictics = db.Column(db.String(20000), unique=False, nullable=True)
+	version = db.Column(db.String(20000), unique=False, nullable=True)
 
+	def __repr__(self):
+		return '<User %r>' % self.username
+    
+class Univ_v2(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	question = db.Column(db.String(20000), unique=False, nullable=False)
+	answer = db.Column(db.String(20000), unique=False, nullable=True)
+	format_query = db.Column(db.String(20000), unique=False, nullable=True)
+	concept_nodes = db.Column(db.String(20000), unique=False, nullable=True)
+	inv_index = db.Column(db.String(20000), unique=False, nullable=True)
+	networkx_graph = db.Column(db.String(20000), unique=False, nullable=True)
+	pred_tuples = db.Column(db.String(20000), unique=False, nullable=True)
+	sem_parse_out = db.Column(db.String(20000), unique=False, nullable=True)
+	results = db.Column(db.String(20000), unique=False, nullable=True)
+	plot_json = db.Column(db.String(20000), unique=False, nullable=True)
+	text = db.Column(db.String(20000), unique=False, nullable=True)
+	relevant = db.Column(db.Boolean, unique=False, nullable=True)
+	comment = db.Column(db.String(20000), unique=False, nullable=True)
+	submitted = db.Column(db.Boolean, unique=False, nullable=True)
+	status = db.Column(db.String(20000), unique=False, nullable=True)
+	timestamp = db.Column(db.String(20000), unique=False, nullable=True)
+	source = db.Column(db.String(20000), unique=False, nullable=True)
+	source_link = db.Column(db.String(20000), unique=False, nullable=True)
+	img_link = db.Column(db.String(20000), unique=False, nullable=True)
+	user_id = db.Column(db.Integer, unique=False, nullable=False)
+	username = db.Column(db.String(1024), unique=False, nullable=True)
+	email = db.Column(db.String(20000), unique=False, nullable=True)
+	state = db.Column(db.String(1024), unique=False, nullable=True)
+	issue_type = db.Column(db.String(2000), unique=False, nullable=True)
+	owner = db.Column(db.String(1024), unique=False, nullable=True)
+	notes = db.Column(db.String(1024), unique=False, nullable=True)
+	statictics = db.Column(db.String(20000), unique=False, nullable=True)
+	version = db.Column(db.String(20000), unique=False, nullable=True)
 
 	def __repr__(self):
 		return '<User %r>' % self.username
 
-classObj = { "University": User, "Covid": Covid }
-
+classObj = {"University":Univ_v2, "Covid":Covid_v2}
 
 class QaAgent(object):
 	"""docstring for QaAgent"""

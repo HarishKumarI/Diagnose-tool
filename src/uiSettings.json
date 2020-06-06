@@ -20,23 +20,32 @@
                 "relevant"
             ],
             "hide": [
-                "res_dict"
+                "img_link",
+                "plotly_json",
+                "source",
+                "source_link",
+                "state",
+                "statistics",
+                "status",
+                "submitted",
+                "networkx_graph"
             ],
             "show": [
-                "failed_assoc_prob_list",
                 "node_doc",
-                "predicate_tuples",
                 "ref_exp_nodes",
                 "response",
                 "results",
-                "state",
                 "owner",
                 "notes",
                 "answer",
                 "comment",
-                "source",
-                "source_link",
-                "timestamp"
+                "timestamp",
+                "concept_nodes",
+                "format_query",
+                "inv_index",
+                "pred_tuples",
+                "sem_parse_out",
+                "text"
             ]
         },
         "list": {
@@ -72,28 +81,37 @@
                 "relevant"
             ],
             "hide": [
-                "res_dict"
+                "img_link",
+                "plotly_json",
+                "source",
+                "source_link",
+                "state",
+                "statistics",
+                "status",
+                "submitted",
+                "networkx_graph"
             ],
             "show": [
-                "failed_assoc_prob_list",
                 "node_doc",
-                "predicate_tuples",
                 "ref_exp_nodes",
                 "response",
                 "results",
-                "state",
                 "owner",
                 "notes",
                 "answer",
                 "comment",
-                "timestamp"
+                "timestamp",
+                "concept_nodes",
+                "format_query",
+                "inv_index",
+                "pred_tuples",
+                "sem_parse_out",
+                "text"
             ]
         },
         "list": {
             "issue_type": [
-                "info_repeated",
-                "info",
-                "data"
+                "INFO_REPEATED"
             ],
             "owner": [
                 "Komal",
