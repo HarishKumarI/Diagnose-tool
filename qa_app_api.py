@@ -4,6 +4,8 @@ from flask_restful import Resource, Api
 import pandas as pd
 import json
 
+import sys
+
 from flask_sqlalchemy import SQLAlchemy
 
 import sqlalchemy
@@ -12,6 +14,24 @@ app = Flask(__name__)
 api = Api(app)
 
 CORS(app)
+
+import logging
+import logging.handlers as handlers
+
+# logging.basicConfig(filename='demo.log', level=logging.DEBUG)
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+
+logHandler = handlers.RotatingFileHandler('diagnostic_tool.log', maxBytes=1024*1024*1024, backupCount=1)
+logHandler.setLevel(logging.DEBUG)
+logHandler.setFormatter(formatter)
+logger.addHandler(logHandler)
+
+
+sys.stdout.write = logger.info
 
 import os
 import sys
@@ -116,7 +136,6 @@ class Univ_v2(db.Model):
 	notes = db.Column(db.String(1024), unique=False, nullable=True)
 	statictics = db.Column(db.String(20000), unique=False, nullable=True)
 	version = db.Column(db.String(20000), unique=False, nullable=True)
-
 
 	def __repr__(self):
 		return '<User %r>' % self.username

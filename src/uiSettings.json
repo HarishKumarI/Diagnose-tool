@@ -21,30 +21,27 @@
                 "question"
             ],
             "hide": [
-                "res_dict",
                 "img_link",
-                "networkx_graph",
-                "plot_json",
+                "plotly_json",
                 "source",
                 "source_link",
                 "state",
-                "statictics",
+                "statistics",
                 "status",
-                "submitted"
+                "submitted",
+                "networkx_graph"
             ],
             "show": [
                 "node_doc",
                 "ref_exp_nodes",
                 "response",
                 "results",
-                "state",
                 "owner",
                 "notes",
                 "answer",
                 "comment",
                 "timestamp",
-
-                "concept-nodes",
+                "concept_nodes",
                 "format_query",
                 "inv_index",
                 "pred_tuples",
@@ -86,27 +83,27 @@
                 "question"
             ],
             "hide": [
-                "res_dict",
                 "img_link",
-                "networkx_graph",
-                "plot_json",
+                "plotly_json",
                 "source",
                 "source_link",
                 "state",
-                "statictics",
+                "statistics",
                 "status",
-                "submitted"
+                "submitted",
+                "networkx_graph"
             ],
             "show": [
                 "node_doc",
                 "ref_exp_nodes",
                 "response",
                 "results",
-                "state",
+                "owner",
+                "notes",
                 "answer",
                 "comment",
                 "timestamp",
-                "concept-nodes",
+                "concept_nodes",
                 "format_query",
                 "inv_index",
                 "pred_tuples",
@@ -116,9 +113,7 @@
         },
         "list": {
             "issue_type": [
-                "info_repeated",
-                "info",
-                "data"
+                "INFO_REPEATED"
             ],
             "owner": [
                 "Komal",
