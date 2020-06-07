@@ -17,15 +17,23 @@
                 "user_id",
                 "username",
                 "email",
-                "relevant"
+                "relevant",
+                "question"
             ],
             "hide": [
-                "res_dict"
+                "res_dict",
+                "img_link",
+                "networkx_graph",
+                "plot_json",
+                "source",
+                "source_link",
+                "state",
+                "statictics",
+                "status",
+                "submitted"
             ],
             "show": [
-                "failed_assoc_prob_list",
                 "node_doc",
-                "predicate_tuples",
                 "ref_exp_nodes",
                 "response",
                 "results",
@@ -34,9 +42,14 @@
                 "notes",
                 "answer",
                 "comment",
-                "source",
-                "source_link",
-                "timestamp"
+                "timestamp",
+
+                "concept-nodes",
+                "format_query",
+                "inv_index",
+                "pred_tuples",
+                "sem_parse_out",
+                "text"
             ]
         },
         "list": {
@@ -69,24 +82,36 @@
                 "user_id",
                 "username",
                 "email",
-                "relevant"
+                "relevant",
+                "question"
             ],
             "hide": [
-                "res_dict"
+                "res_dict",
+                "img_link",
+                "networkx_graph",
+                "plot_json",
+                "source",
+                "source_link",
+                "state",
+                "statictics",
+                "status",
+                "submitted"
             ],
             "show": [
-                "failed_assoc_prob_list",
                 "node_doc",
-                "predicate_tuples",
                 "ref_exp_nodes",
                 "response",
                 "results",
                 "state",
-                "owner",
-                "notes",
                 "answer",
                 "comment",
-                "timestamp"
+                "timestamp",
+                "concept-nodes",
+                "format_query",
+                "inv_index",
+                "pred_tuples",
+                "sem_parse_out",
+                "text"
             ]
         },
         "list": {

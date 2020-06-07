@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react'
-import { Table, Dropdown,Menu,Pagination, Button,Loader, TextArea, Divider, Label,Progress } from 'semantic-ui-react'
+import { Table, Dropdown,Menu,Pagination, Button,Loader, TextArea, Divider, Progress } from 'semantic-ui-react'
 import $ from 'jquery'
 import * as d3 from 'd3'
 import * as json2md from 'json2md'
 import * as showdown from 'showdown' 
+
+import ReactJson from 'react-json-view'
 
 
 var converter = new showdown.Converter({'noHeaderId':'true'})
@@ -30,43 +32,70 @@ class ReviewForm extends React.Component{
     requestServer(){
         this.props.updateansData(this.state)
         $.post('/api/updateRow',JSON.stringify({...this.state,domain: this.props.domain}),(response,status) => {
-            $('#successlabel').css({'visibility':'visible'})
-            setTimeout(()=>{ $('#successlabel').css({'visibility':'hidden'})} ,3000)
+            // $('#successlabel').css({'visibility':'visible'})
+            $('#root').append(`<div class="msg" > Row Updated Successfully </div>`)
+            // setTimeout(()=>{ $('#successlabel').css({'visibility':'hidden'})} ,3000)
         })
+        .fail((error) => {
+            $('#root').append(`<div class="msg" style="background-color: rgb(221, 103, 103)"> ${error}  </div>`)
+            console.error( error )
+        })
+
+    }
+
+    strToJSON( data ){
+
+        // console.log( data.replace(/{'/g,'{"').replace(/'}/g,'"}')
+        // .replace(/: '/g,':"').replace(/':/g,'":')
+        // .replace(/\['/g,'["').replace(/'\]/g,'"]')
+        // .replace(/',/g,'",').replace(/, '/g,', "')
+        // .replace(/None/g, null) )
+        const json = ( data !== null) ?
+                        JSON.parse(data.replace(/{'/g,'{"').replace(/'}/g,'"}')
+                            .replace(/: '/g,':"').replace(/':/g,'":')
+                            .replace(/\['/g,'["').replace(/'\]/g,'"]')
+                            .replace(/',/g,'",').replace(/, '/g,', "')
+                            .replace(/None/g, null) )
+                        : null
+        return  json
     }
 
     getrows(isAdmin){
 
         let debugData = []
         let changebleFields = [] 
+
         
         Object.keys(this.state).forEach(( field, index) =>{
 
             const rowTitle = ( field === "answer") ? "Original Answer" : field.replace(/_/g,' ')
             let answerElement = ""
-            try{
-            answerElement =  ( field === "answer" ) ? 
-                    <div  style={{textAlign:"left"}} 
-                        dangerouslySetInnerHTML={{ __html: converter.makeHtml( 
-                                json2md( JSON.parse(this.state[field].replace(/{'/g,'{"').replace(/'}/g,'"}')
-                                    .replace(/: '/g,':"').replace(/':/g,'":') ) ) ).replace(/<a href="/g,'<a target="_blank" href="') }} /> 
-                    : this.state[field]
-            }
-            catch(error)
-            { answerElement = this.state[field] }
-
+            
+            if ( this.props.uiSettings.fields.show.includes(field))
+                try{
+                answerElement =  ( field === "answer" || field === 'text' ) ? 
+                        <div  style={{textAlign:"left"}} 
+                            dangerouslySetInnerHTML={{ __html: converter.makeHtml( json2md( this.strToJSON( this.state[field] ) )).replace(/<a href="/g,'<a target="_blank" href="') }} /> 
+                        : <ReactJson  style={{ textAlign: 'initial', backgroundColor: 'none' }} 
+                                src={ this.strToJSON( this.state[field] ) } theme="colors" displayDataTypes={false} 
+                                displayObjectSize={ false } onEdit={ false } onAdd={ false }
+                                onDelete={ false } collapsed={ true } sortKeys={ false } />
+                }
+                catch(error){ 
+                    // console.log( this.state[field].replace(/'/g,'"'), field )
+                    answerElement = this.state[field] 
+                }
 
             if( Object.keys(this.props.uiSettings.list).includes(field) ) {
-                   let selectedIndex = 0
-                   const options = this.props.uiSettings.list[field].map((option,index)=>{
-                        if (this.state[field] === option) selectedIndex = index
-                        return {
-                            key: option,
-                            text: option,
-                            value: option
-                        }
-                   })
-
+                let selectedIndex = 0
+                const options = this.props.uiSettings.list[field].map((option,index)=>{
+                    if (this.state[field] === option) selectedIndex = index
+                    return {
+                        key: option,
+                        text: option,
+                        value: option
+                    }
+                })
                 changebleFields.push(
                     <tr key={index}>    
                         <th style={{ width: '120px',wordBreak:'break-word',fontWeight: 'bold' }}>{ rowTitle }: </th>
@@ -109,7 +138,9 @@ class ReviewForm extends React.Component{
                     debugData.push(
                         <tr key={index}>    
                             <th style={{ width: '120px',wordBreak:'break-word',fontWeight: 'bold' }} > { rowTitle } : </th>
-                            <td colSpan="5"> { answerElement } </td>
+                            <td colSpan="5"> 
+                                { answerElement } 
+                            </td>
                         </tr>
                         )
                 }
@@ -162,9 +193,9 @@ class ReviewForm extends React.Component{
                     </Table.Body>
                 </Table> 
 
-                <Label id="successlabel" style={{ visibility:'hidden',position: 'fixed',bottom: '20px',right: '20px',backgroundColor: '#75ea75', color:'black',padding:'15px' }}> 
+                {/* <Label id="successlabel" style={{ visibility:'hidden',position: 'fixed',bottom: '20px',right: '20px',backgroundColor: '#75ea75', color:'black',padding:'15px' }}> 
                     Data Update Successfully 
-                </Label>
+                </Label> */}
 
             </Fragment>
         )
@@ -243,6 +274,7 @@ class DbData extends React.Component{
 
         this.setState({loading: true})
         $.post('/api/dbData', JSON.stringify({ domain: this.props.domain}) ,(response,status) =>{
+            // console.log( response )
             this.setState({
                 data: response,
                 loading: false,
@@ -258,21 +290,22 @@ class DbData extends React.Component{
                 selectedQuestions : {}
             })
             this.TSVDataDump = []
-        }).fail(()=>{
-            this.setState({loading: false})
-            console.log('could not reach server or something wrong')
+        })
+        .fail((error) => {
+            $('#root').append(`<div class="msg" style="background-color: rgb(221, 103, 103)"> ${error}  </div>`)
+            console.error( error )
         })
     }
 
     componentDidUpdate(){
         if ( this.state.domain !== this.props.domain ){
-            this.setState({  domain: this.props.domain  })
+            this.setState({  domain: this.props.domain, activeIndex: undefined })
             this.getDbdata()
         } 
     }
 
     componentDidMount(){
-        this.setState({ domain: this.props.domain })
+        this.setState({ domain: this.props.domain, activeIndex: undefined })
         this.getDbdata()
     }
 
@@ -331,8 +364,10 @@ class DbData extends React.Component{
         $('#selectAll').prop('checked',false)
 
         let questions = Object.keys(this.state.selectedQuestions)
-
+        const controller = new AbortController();
+        let continueFetch = true
         await questions.forEach( async (question,index,array)=>{
+            if ( continueFetch )
             await fetch(`${this.props.uiSettings.rerunlink}/api/${this.props.user_id}`,
             {
                 method: 'POST',
@@ -366,7 +401,10 @@ class DbData extends React.Component{
             },
                 (error) => { 
                     this.setState({progress: undefined}) 
-                    console.log('unable to connet to server')
+                    console.error( error )
+                    controller.abort();
+                    continueFetch = false
+                    $('#root').append(`<div class="msg" style="background-color: rgb(221, 103, 103)"> ${error} </div>`)
                 }
             )
             
@@ -507,7 +545,7 @@ class DbData extends React.Component{
         date.setDate( date.getDate() +1 )  
         const toMinDate = date.toISOString().substr(0,10)
         
-        console.log(this.state.progress)
+        // console.log(this.state.progress)
 
         return(
             <Fragment>
@@ -696,7 +734,7 @@ export default class DbComponent extends React.Component{
                 {/* University QA Dashboard  */}
                 <Dropdown placeholder={ `${this.state.selecteddomain}` } 
                     options={domainOptions}
-                    onChange={(event,data)=>{ this.setState({ selecteddomain : data.value}) }}
+                    onChange={(event,data)=>{ $.ajax().abort(); this.setState({ selecteddomain : data.value}) }}
                 />
             </h3>
             <DbData
