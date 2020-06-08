@@ -4,6 +4,7 @@ import DbComponent from './DbComponent'
 import { Dropdown } from 'semantic-ui-react'
 import SettingsUi from './Settingsui'
 
+
 class Dashboard extends React.Component{
     constructor(props){
         super(props)
@@ -13,23 +14,28 @@ class Dashboard extends React.Component{
             isvalid: false,
             username: "",
             uicomponent: "",
-            uisettings: {}
+            uisettings: {},
+            msg: ""
         }
     }
 
-    async componentDidMount(){
+    componentDidMount(){
         const userid = this.props.match.params.id
         this.setState({user_id:userid})
 
-        await $.get('/api/uiSettings',response => {
+        $.get('/api/uiSettings',response => {
             this.setState({uisettings: response})
         })
+        .fail((error) => {})
         
         $.post('/api/verify', JSON.stringify( {'userid': userid }),response =>{
             this.setState({ ...response})
             this.props.changeuserName( response )
-        }).fail(()=>{
-            console.log('could not reach server')
+        })
+        .fail((error)=>{
+            this.setState({ msg: error.statusText})
+            $('#root').append(`<div class="msg" style="background-color: rgb(221, 103, 103)"> ${error.statusText} </div>`)
+            // console.log( error )
         })
     }
 
@@ -76,7 +82,7 @@ class Dashboard extends React.Component{
                         { ( this.state.username !== "" ) ?
                             `Not a Registered User`
                         : 
-                           `Not a Registered User for Team`
+                            ( this.state.msg.length <= 0 ) ?`Not a Registered User for Team` : this.state.msg
                         }
                         <br/> <br />
                     <a href="/" style={{ fontSize:'18px' }}>HomePage</a>

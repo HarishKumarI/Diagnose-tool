@@ -17,7 +17,8 @@
                 "user_id",
                 "username",
                 "email",
-                "relevant"
+                "relevant",
+                "question"
             ],
             "hide": [
                 "img_link",
@@ -78,7 +79,8 @@
                 "user_id",
                 "username",
                 "email",
-                "relevant"
+                "relevant",
+                "question"
             ],
             "hide": [
                 "img_link",
