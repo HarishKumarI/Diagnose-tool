@@ -4056,3 +4056,690 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) attempt to write a r
 2020-06-06 14:09:42,750 - werkzeug - INFO - 115.111.97.194 - - [06/Jun/2020 14:09:42] "[37mPOST /api/verify HTTP/1.0[0m" 200 -
 2020-06-06 14:09:42,896 - werkzeug - INFO - 115.111.97.194 - - [06/Jun/2020 14:09:42] "[37mPOST /api/dbData HTTP/1.0[0m" 200 -
 2020-06-06 14:09:46,983 - werkzeug - INFO - 115.111.97.194 - - [06/Jun/2020 14:09:46] "[37mPOST /api/dbData HTTP/1.0[0m" 200 -
+2020-06-06 22:01:49,412 - werkzeug - INFO - 115.111.97.194 - - [06/Jun/2020 22:01:49] "[37mGET /api/uiSettings HTTP/1.0[0m" 200 -
+2020-06-06 22:01:50,540 - werkzeug - INFO - 115.111.97.194 - - [06/Jun/2020 22:01:50] "[37mPOST /api/verify HTTP/1.0[0m" 200 -
+2020-06-06 22:01:54,072 - werkzeug - INFO - 115.111.97.194 - - [06/Jun/2020 22:01:54] "[37mPOST /api/dbData HTTP/1.0[0m" 200 -
+2020-06-06 22:18:26,555 - root - INFO - answer
+2020-06-06 22:18:26,555 - root - INFO -  
+2020-06-06 22:18:26,556 - root - INFO - <class 'str'>
+2020-06-06 22:18:26,556 - root - INFO - 
+
+2020-06-06 22:18:26,556 - root - INFO - comment
+2020-06-06 22:18:26,556 - root - INFO -  
+2020-06-06 22:18:26,556 - root - INFO - <class 'str'>
+2020-06-06 22:18:26,556 - root - INFO - 
+
+2020-06-06 22:18:26,557 - root - INFO - concept_nodes
+2020-06-06 22:18:26,557 - root - INFO -  
+2020-06-06 22:18:26,557 - root - INFO - <class 'str'>
+2020-06-06 22:18:26,557 - root - INFO - 
+
+2020-06-06 22:18:26,558 - root - INFO - email
+2020-06-06 22:18:26,558 - root - INFO -  
+2020-06-06 22:18:26,558 - root - INFO - <class 'str'>
+2020-06-06 22:18:26,558 - root - INFO - 
+
+2020-06-06 22:18:26,558 - root - INFO - format_query
+2020-06-06 22:18:26,559 - root - INFO -  
+2020-06-06 22:18:26,559 - root - INFO - <class 'str'>
+2020-06-06 22:18:26,559 - root - INFO - 
+
+2020-06-06 22:18:26,559 - root - INFO - id
+2020-06-06 22:18:26,559 - root - INFO -  
+2020-06-06 22:18:26,559 - root - INFO - <class 'int'>
+2020-06-06 22:18:26,559 - root - INFO - 
+
+2020-06-06 22:18:26,560 - root - INFO - img_link
+2020-06-06 22:18:26,560 - root - INFO -  
+2020-06-06 22:18:26,560 - root - INFO - <class 'NoneType'>
+2020-06-06 22:18:26,560 - root - INFO - 
+
+2020-06-06 22:18:26,560 - root - INFO - inv_index
+2020-06-06 22:18:26,560 - root - INFO -  
+2020-06-06 22:18:26,561 - root - INFO - <class 'str'>
+2020-06-06 22:18:26,561 - root - INFO - 
+
+2020-06-06 22:18:26,561 - root - INFO - issue_type
+2020-06-06 22:18:26,561 - root - INFO -  
+2020-06-06 22:18:26,561 - root - INFO - <class 'NoneType'>
+2020-06-06 22:18:26,561 - root - INFO - 
+
+2020-06-06 22:18:26,562 - root - INFO - networkx_graph
+2020-06-06 22:18:26,562 - root - INFO -  
+2020-06-06 22:18:26,562 - root - INFO - <class 'str'>
+2020-06-06 22:18:26,562 - root - INFO - 
+
+2020-06-06 22:18:26,562 - root - INFO - notes
+2020-06-06 22:18:26,562 - root - INFO -  
+2020-06-06 22:18:26,563 - root - INFO - <class 'str'>
+2020-06-06 22:18:26,563 - root - INFO - 
+
+2020-06-06 22:18:26,563 - root - INFO - owner
+2020-06-06 22:18:26,563 - root - INFO -  
+2020-06-06 22:18:26,564 - root - INFO - <class 'NoneType'>
+2020-06-06 22:18:26,564 - root - INFO - 
+
+2020-06-06 22:18:26,564 - root - INFO - plot_json
+2020-06-06 22:18:26,564 - root - INFO -  
+2020-06-06 22:18:26,564 - root - INFO - <class 'str'>
+2020-06-06 22:18:26,564 - root - INFO - 
+
+2020-06-06 22:18:26,565 - root - INFO - pred_tuples
+2020-06-06 22:18:26,565 - root - INFO -  
+2020-06-06 22:18:26,565 - root - INFO - <class 'str'>
+2020-06-06 22:18:26,565 - root - INFO - 
+
+2020-06-06 22:18:26,565 - root - INFO - question
+2020-06-06 22:18:26,565 - root - INFO -  
+2020-06-06 22:18:26,566 - root - INFO - <class 'str'>
+2020-06-06 22:18:26,566 - root - INFO - 
+
+2020-06-06 22:18:26,566 - root - INFO - relevant
+2020-06-06 22:18:26,566 - root - INFO -  
+2020-06-06 22:18:26,566 - root - INFO - <class 'bool'>
+2020-06-06 22:18:26,566 - root - INFO - 
+
+2020-06-06 22:18:26,567 - root - INFO - results
+2020-06-06 22:18:26,567 - root - INFO -  
+2020-06-06 22:18:26,567 - root - INFO - <class 'str'>
+2020-06-06 22:18:26,567 - root - INFO - 
+
+2020-06-06 22:18:26,567 - root - INFO - sem_parse_out
+2020-06-06 22:18:26,567 - root - INFO -  
+2020-06-06 22:18:26,567 - root - INFO - <class 'str'>
+2020-06-06 22:18:26,568 - root - INFO - 
+
+2020-06-06 22:18:26,568 - root - INFO - source
+2020-06-06 22:18:26,568 - root - INFO -  
+2020-06-06 22:18:26,568 - root - INFO - <class 'NoneType'>
+2020-06-06 22:18:26,568 - root - INFO - 
+
+2020-06-06 22:18:26,568 - root - INFO - source_link
+2020-06-06 22:18:26,569 - root - INFO -  
+2020-06-06 22:18:26,569 - root - INFO - <class 'NoneType'>
+2020-06-06 22:18:26,569 - root - INFO - 
+
+2020-06-06 22:18:26,569 - root - INFO - state
+2020-06-06 22:18:26,569 - root - INFO -  
+2020-06-06 22:18:26,569 - root - INFO - <class 'NoneType'>
+2020-06-06 22:18:26,570 - root - INFO - 
+
+2020-06-06 22:18:26,570 - root - INFO - statictics
+2020-06-06 22:18:26,570 - root - INFO -  
+2020-06-06 22:18:26,570 - root - INFO - <class 'NoneType'>
+2020-06-06 22:18:26,570 - root - INFO - 
+
+2020-06-06 22:18:26,570 - root - INFO - status
+2020-06-06 22:18:26,570 - root - INFO -  
+2020-06-06 22:18:26,571 - root - INFO - <class 'NoneType'>
+2020-06-06 22:18:26,571 - root - INFO - 
+
+2020-06-06 22:18:26,571 - root - INFO - submitted
+2020-06-06 22:18:26,571 - root - INFO -  
+2020-06-06 22:18:26,571 - root - INFO - <class 'NoneType'>
+2020-06-06 22:18:26,571 - root - INFO - 
+
+2020-06-06 22:18:26,572 - root - INFO - text
+2020-06-06 22:18:26,572 - root - INFO -  
+2020-06-06 22:18:26,572 - root - INFO - <class 'str'>
+2020-06-06 22:18:26,572 - root - INFO - 
+
+2020-06-06 22:18:26,586 - root - INFO - timestamp
+2020-06-06 22:18:26,586 - root - INFO -  
+2020-06-06 22:18:26,586 - root - INFO - <class 'str'>
+2020-06-06 22:18:26,587 - root - INFO - 
+
+2020-06-06 22:18:26,587 - root - INFO - user_id
+2020-06-06 22:18:26,587 - root - INFO -  
+2020-06-06 22:18:26,587 - root - INFO - <class 'int'>
+2020-06-06 22:18:26,587 - root - INFO - 
+
+2020-06-06 22:18:26,587 - root - INFO - username
+2020-06-06 22:18:26,588 - root - INFO -  
+2020-06-06 22:18:26,588 - root - INFO - <class 'str'>
+2020-06-06 22:18:26,588 - root - INFO - 
+
+2020-06-06 22:18:26,588 - root - INFO - version
+2020-06-06 22:18:26,588 - root - INFO -  
+2020-06-06 22:18:26,588 - root - INFO - <class 'NoneType'>
+2020-06-06 22:18:26,588 - root - INFO - 
+
+2020-06-06 22:18:26,629 - qa_app_api - ERROR - Exception on /api/updateRow [POST]
+Traceback (most recent call last):
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1248, in _execute_context
+    cursor, statement, parameters, context
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/default.py", line 590, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: attempt to write a readonly database
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask_cors/extension.py", line 161, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask_restful/__init__.py", line 269, in error_router
+    return original_handler(e)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "qa_app_api.py", line 259, in updateRow
+    return qa_agent.updateRow(request)
+  File "qa_app_api.py", line 238, in updateRow
+    db.session.commit()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/scoping.py", line 162, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 1036, in commit
+    self.transaction.commit()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 503, in commit
+    self._prepare_impl()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 482, in _prepare_impl
+    self.session.flush()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 2496, in flush
+    self._flush(objects)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 2637, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/util/langhelpers.py", line 69, in __exit__
+    exc_value, with_traceback=exc_tb,
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/util/compat.py", line 178, in raise_
+    raise exception
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 2597, in _flush
+    flush_context.execute()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/unitofwork.py", line 422, in execute
+    rec.execute(self)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/unitofwork.py", line 589, in execute
+    uow,
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/persistence.py", line 236, in save_obj
+    update,
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/persistence.py", line 995, in _emit_update_statements
+    statement, multiparams
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 984, in execute
+    return meth(self, multiparams, params)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/sql/elements.py", line 293, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1103, in _execute_clauseelement
+    distilled_params,
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1288, in _execute_context
+    e, statement, parameters, cursor, context
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1482, in _handle_dbapi_exception
+    sqlalchemy_exception, with_traceback=exc_info[2], from_=e
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/util/compat.py", line 178, in raise_
+    raise exception
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1248, in _execute_context
+    cursor, statement, parameters, context
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/default.py", line 590, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) attempt to write a readonly database
+[SQL: UPDATE univ_v2 SET notes=? WHERE univ_v2.id = ?]
+[parameters: ('notes', 1)]
+(Background on this error at: http://sqlalche.me/e/e3q8)
+2020-06-06 22:18:26,875 - werkzeug - INFO - 115.111.97.194 - - [06/Jun/2020 22:18:26] "[35m[1mPOST /api/updateRow HTTP/1.0[0m" 500 -
+2020-06-06 22:18:30,302 - werkzeug - INFO - 115.111.97.194 - - [06/Jun/2020 22:18:30] "[37mGET /api/uiSettings HTTP/1.0[0m" 200 -
+2020-06-06 22:18:30,526 - werkzeug - INFO - 115.111.97.194 - - [06/Jun/2020 22:18:30] "[37mPOST /api/verify HTTP/1.0[0m" 200 -
+2020-06-06 22:18:30,851 - werkzeug - INFO - 115.111.97.194 - - [06/Jun/2020 22:18:30] "[37mPOST /api/dbData HTTP/1.0[0m" 200 -
+2020-06-07 12:25:07,537 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 12:25:07] "[37mGET /api/uiSettings HTTP/1.0[0m" 200 -
+2020-06-07 12:25:07,639 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 12:25:07] "[37mPOST /api/verify HTTP/1.0[0m" 200 -
+2020-06-07 12:25:08,825 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 12:25:08] "[37mPOST /api/dbData HTTP/1.0[0m" 200 -
+2020-06-07 12:25:13,021 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 12:25:13] "[37mPOST /api/dbData HTTP/1.0[0m" 200 -
+2020-06-07 12:26:09,931 - root - INFO - answer
+2020-06-07 12:26:09,931 - root - INFO -  
+2020-06-07 12:26:09,932 - root - INFO - <class 'str'>
+2020-06-07 12:26:09,932 - root - INFO - 
+
+2020-06-07 12:26:09,932 - root - INFO - comment
+2020-06-07 12:26:09,932 - root - INFO -  
+2020-06-07 12:26:09,932 - root - INFO - <class 'str'>
+2020-06-07 12:26:09,932 - root - INFO - 
+
+2020-06-07 12:26:09,933 - root - INFO - concept_nodes
+2020-06-07 12:26:09,933 - root - INFO -  
+2020-06-07 12:26:09,933 - root - INFO - <class 'str'>
+2020-06-07 12:26:09,933 - root - INFO - 
+
+2020-06-07 12:26:09,933 - root - INFO - email
+2020-06-07 12:26:09,934 - root - INFO -  
+2020-06-07 12:26:09,934 - root - INFO - <class 'str'>
+2020-06-07 12:26:09,934 - root - INFO - 
+
+2020-06-07 12:26:09,934 - root - INFO - format_query
+2020-06-07 12:26:09,978 - root - INFO -  
+2020-06-07 12:26:09,979 - root - INFO - <class 'str'>
+2020-06-07 12:26:09,979 - root - INFO - 
+
+2020-06-07 12:26:09,979 - root - INFO - id
+2020-06-07 12:26:09,979 - root - INFO -  
+2020-06-07 12:26:09,979 - root - INFO - <class 'int'>
+2020-06-07 12:26:09,979 - root - INFO - 
+
+2020-06-07 12:26:09,980 - root - INFO - img_link
+2020-06-07 12:26:09,980 - root - INFO -  
+2020-06-07 12:26:09,980 - root - INFO - <class 'NoneType'>
+2020-06-07 12:26:09,980 - root - INFO - 
+
+2020-06-07 12:26:09,980 - root - INFO - inv_index
+2020-06-07 12:26:09,981 - root - INFO -  
+2020-06-07 12:26:09,981 - root - INFO - <class 'str'>
+2020-06-07 12:26:09,981 - root - INFO - 
+
+2020-06-07 12:26:09,981 - root - INFO - issue_type
+2020-06-07 12:26:09,981 - root - INFO -  
+2020-06-07 12:26:09,981 - root - INFO - <class 'NoneType'>
+2020-06-07 12:26:09,982 - root - INFO - 
+
+2020-06-07 12:26:09,982 - root - INFO - networkx_graph
+2020-06-07 12:26:09,982 - root - INFO -  
+2020-06-07 12:26:09,982 - root - INFO - <class 'str'>
+2020-06-07 12:26:09,982 - root - INFO - 
+
+2020-06-07 12:26:09,982 - root - INFO - notes
+2020-06-07 12:26:09,983 - root - INFO -  
+2020-06-07 12:26:09,983 - root - INFO - <class 'str'>
+2020-06-07 12:26:09,983 - root - INFO - 
+
+2020-06-07 12:26:09,983 - root - INFO - owner
+2020-06-07 12:26:09,983 - root - INFO -  
+2020-06-07 12:26:09,983 - root - INFO - <class 'NoneType'>
+2020-06-07 12:26:09,983 - root - INFO - 
+
+2020-06-07 12:26:09,984 - root - INFO - plot_json
+2020-06-07 12:26:09,984 - root - INFO -  
+2020-06-07 12:26:09,984 - root - INFO - <class 'str'>
+2020-06-07 12:26:09,984 - root - INFO - 
+
+2020-06-07 12:26:09,984 - root - INFO - pred_tuples
+2020-06-07 12:26:09,984 - root - INFO -  
+2020-06-07 12:26:09,984 - root - INFO - <class 'str'>
+2020-06-07 12:26:09,984 - root - INFO - 
+
+2020-06-07 12:26:09,984 - root - INFO - question
+2020-06-07 12:26:09,984 - root - INFO -  
+2020-06-07 12:26:09,984 - root - INFO - <class 'str'>
+2020-06-07 12:26:09,984 - root - INFO - 
+
+2020-06-07 12:26:09,984 - root - INFO - relevant
+2020-06-07 12:26:09,984 - root - INFO -  
+2020-06-07 12:26:09,984 - root - INFO - <class 'bool'>
+2020-06-07 12:26:09,984 - root - INFO - 
+
+2020-06-07 12:26:09,984 - root - INFO - results
+2020-06-07 12:26:09,984 - root - INFO -  
+2020-06-07 12:26:09,984 - root - INFO - <class 'str'>
+2020-06-07 12:26:09,984 - root - INFO - 
+
+2020-06-07 12:26:09,984 - root - INFO - sem_parse_out
+2020-06-07 12:26:09,984 - root - INFO -  
+2020-06-07 12:26:09,984 - root - INFO - <class 'str'>
+2020-06-07 12:26:09,984 - root - INFO - 
+
+2020-06-07 12:26:09,984 - root - INFO - source
+2020-06-07 12:26:09,984 - root - INFO -  
+2020-06-07 12:26:09,984 - root - INFO - <class 'NoneType'>
+2020-06-07 12:26:09,984 - root - INFO - 
+
+2020-06-07 12:26:09,984 - root - INFO - source_link
+2020-06-07 12:26:09,984 - root - INFO -  
+2020-06-07 12:26:09,984 - root - INFO - <class 'NoneType'>
+2020-06-07 12:26:09,984 - root - INFO - 
+
+2020-06-07 12:26:09,985 - root - INFO - state
+2020-06-07 12:26:09,985 - root - INFO -  
+2020-06-07 12:26:09,985 - root - INFO - <class 'NoneType'>
+2020-06-07 12:26:09,985 - root - INFO - 
+
+2020-06-07 12:26:09,985 - root - INFO - statictics
+2020-06-07 12:26:09,985 - root - INFO -  
+2020-06-07 12:26:09,985 - root - INFO - <class 'NoneType'>
+2020-06-07 12:26:09,985 - root - INFO - 
+
+2020-06-07 12:26:09,985 - root - INFO - status
+2020-06-07 12:26:09,985 - root - INFO -  
+2020-06-07 12:26:09,985 - root - INFO - <class 'NoneType'>
+2020-06-07 12:26:09,985 - root - INFO - 
+
+2020-06-07 12:26:09,985 - root - INFO - submitted
+2020-06-07 12:26:09,985 - root - INFO -  
+2020-06-07 12:26:09,985 - root - INFO - <class 'NoneType'>
+2020-06-07 12:26:09,985 - root - INFO - 
+
+2020-06-07 12:26:09,985 - root - INFO - text
+2020-06-07 12:26:09,985 - root - INFO -  
+2020-06-07 12:26:09,985 - root - INFO - <class 'str'>
+2020-06-07 12:26:09,985 - root - INFO - 
+
+2020-06-07 12:26:09,985 - root - INFO - timestamp
+2020-06-07 12:26:09,985 - root - INFO -  
+2020-06-07 12:26:09,985 - root - INFO - <class 'str'>
+2020-06-07 12:26:09,985 - root - INFO - 
+
+2020-06-07 12:26:09,985 - root - INFO - user_id
+2020-06-07 12:26:09,985 - root - INFO -  
+2020-06-07 12:26:09,985 - root - INFO - <class 'int'>
+2020-06-07 12:26:09,985 - root - INFO - 
+
+2020-06-07 12:26:09,985 - root - INFO - username
+2020-06-07 12:26:09,985 - root - INFO -  
+2020-06-07 12:26:09,985 - root - INFO - <class 'str'>
+2020-06-07 12:26:09,985 - root - INFO - 
+
+2020-06-07 12:26:09,985 - root - INFO - version
+2020-06-07 12:26:09,985 - root - INFO -  
+2020-06-07 12:26:09,985 - root - INFO - <class 'NoneType'>
+2020-06-07 12:26:09,985 - root - INFO - 
+
+2020-06-07 12:26:09,986 - qa_app_api - ERROR - Exception on /api/updateRow [POST]
+Traceback (most recent call last):
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1248, in _execute_context
+    cursor, statement, parameters, context
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/default.py", line 590, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: attempt to write a readonly database
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask_cors/extension.py", line 161, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask_restful/__init__.py", line 269, in error_router
+    return original_handler(e)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "qa_app_api.py", line 259, in updateRow
+    return qa_agent.updateRow(request)
+  File "qa_app_api.py", line 238, in updateRow
+    db.session.commit()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/scoping.py", line 162, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 1036, in commit
+    self.transaction.commit()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 503, in commit
+    self._prepare_impl()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 482, in _prepare_impl
+    self.session.flush()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 2496, in flush
+    self._flush(objects)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 2637, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/util/langhelpers.py", line 69, in __exit__
+    exc_value, with_traceback=exc_tb,
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/util/compat.py", line 178, in raise_
+    raise exception
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 2597, in _flush
+    flush_context.execute()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/unitofwork.py", line 422, in execute
+    rec.execute(self)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/unitofwork.py", line 589, in execute
+    uow,
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/persistence.py", line 236, in save_obj
+    update,
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/persistence.py", line 995, in _emit_update_statements
+    statement, multiparams
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 984, in execute
+    return meth(self, multiparams, params)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/sql/elements.py", line 293, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1103, in _execute_clauseelement
+    distilled_params,
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1288, in _execute_context
+    e, statement, parameters, cursor, context
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1482, in _handle_dbapi_exception
+    sqlalchemy_exception, with_traceback=exc_info[2], from_=e
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/util/compat.py", line 178, in raise_
+    raise exception
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1248, in _execute_context
+    cursor, statement, parameters, context
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/default.py", line 590, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) attempt to write a readonly database
+[SQL: UPDATE covid_v2 SET notes=? WHERE covid_v2.id = ?]
+[parameters: ('no answer', 2)]
+(Background on this error at: http://sqlalche.me/e/e3q8)
+2020-06-07 12:26:09,987 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 12:26:09] "[35m[1mPOST /api/updateRow HTTP/1.0[0m" 500 -
+2020-06-07 13:04:21,695 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 13:04:21] "[37mGET /api/uiSettings HTTP/1.0[0m" 200 -
+2020-06-07 13:04:21,755 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 13:04:21] "[37mPOST /api/verify HTTP/1.0[0m" 200 -
+2020-06-07 13:04:21,861 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 13:04:21] "[37mPOST /api/dbData HTTP/1.0[0m" 200 -
+2020-06-07 13:04:25,121 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 13:04:25] "[37mPOST /api/dbData HTTP/1.0[0m" 200 -
+2020-06-07 13:04:40,424 - root - INFO - answer
+2020-06-07 13:04:40,424 - root - INFO -  
+2020-06-07 13:04:40,424 - root - INFO - <class 'str'>
+2020-06-07 13:04:40,424 - root - INFO - 
+
+2020-06-07 13:04:40,425 - root - INFO - comment
+2020-06-07 13:04:40,425 - root - INFO -  
+2020-06-07 13:04:40,425 - root - INFO - <class 'str'>
+2020-06-07 13:04:40,425 - root - INFO - 
+
+2020-06-07 13:04:40,425 - root - INFO - concept_nodes
+2020-06-07 13:04:40,426 - root - INFO -  
+2020-06-07 13:04:40,426 - root - INFO - <class 'str'>
+2020-06-07 13:04:40,426 - root - INFO - 
+
+2020-06-07 13:04:40,426 - root - INFO - email
+2020-06-07 13:04:40,426 - root - INFO -  
+2020-06-07 13:04:40,426 - root - INFO - <class 'str'>
+2020-06-07 13:04:40,426 - root - INFO - 
+
+2020-06-07 13:04:40,427 - root - INFO - format_query
+2020-06-07 13:04:40,427 - root - INFO -  
+2020-06-07 13:04:40,427 - root - INFO - <class 'str'>
+2020-06-07 13:04:40,427 - root - INFO - 
+
+2020-06-07 13:04:40,427 - root - INFO - id
+2020-06-07 13:04:40,427 - root - INFO -  
+2020-06-07 13:04:40,428 - root - INFO - <class 'int'>
+2020-06-07 13:04:40,428 - root - INFO - 
+
+2020-06-07 13:04:40,428 - root - INFO - img_link
+2020-06-07 13:04:40,428 - root - INFO -  
+2020-06-07 13:04:40,428 - root - INFO - <class 'NoneType'>
+2020-06-07 13:04:40,429 - root - INFO - 
+
+2020-06-07 13:04:40,429 - root - INFO - inv_index
+2020-06-07 13:04:40,429 - root - INFO -  
+2020-06-07 13:04:40,429 - root - INFO - <class 'str'>
+2020-06-07 13:04:40,429 - root - INFO - 
+
+2020-06-07 13:04:40,429 - root - INFO - issue_type
+2020-06-07 13:04:40,430 - root - INFO -  
+2020-06-07 13:04:40,430 - root - INFO - <class 'NoneType'>
+2020-06-07 13:04:40,430 - root - INFO - 
+
+2020-06-07 13:04:40,430 - root - INFO - networkx_graph
+2020-06-07 13:04:40,430 - root - INFO -  
+2020-06-07 13:04:40,430 - root - INFO - <class 'str'>
+2020-06-07 13:04:40,431 - root - INFO - 
+
+2020-06-07 13:04:40,431 - root - INFO - notes
+2020-06-07 13:04:40,431 - root - INFO -  
+2020-06-07 13:04:40,431 - root - INFO - <class 'str'>
+2020-06-07 13:04:40,431 - root - INFO - 
+
+2020-06-07 13:04:40,432 - root - INFO - owner
+2020-06-07 13:04:40,432 - root - INFO -  
+2020-06-07 13:04:40,432 - root - INFO - <class 'NoneType'>
+2020-06-07 13:04:40,432 - root - INFO - 
+
+2020-06-07 13:04:40,432 - root - INFO - plot_json
+2020-06-07 13:04:40,432 - root - INFO -  
+2020-06-07 13:04:40,433 - root - INFO - <class 'str'>
+2020-06-07 13:04:40,433 - root - INFO - 
+
+2020-06-07 13:04:40,433 - root - INFO - pred_tuples
+2020-06-07 13:04:40,433 - root - INFO -  
+2020-06-07 13:04:40,433 - root - INFO - <class 'str'>
+2020-06-07 13:04:40,433 - root - INFO - 
+
+2020-06-07 13:04:40,434 - root - INFO - question
+2020-06-07 13:04:40,434 - root - INFO -  
+2020-06-07 13:04:40,434 - root - INFO - <class 'str'>
+2020-06-07 13:04:40,434 - root - INFO - 
+
+2020-06-07 13:04:40,434 - root - INFO - relevant
+2020-06-07 13:04:40,434 - root - INFO -  
+2020-06-07 13:04:40,435 - root - INFO - <class 'bool'>
+2020-06-07 13:04:40,435 - root - INFO - 
+
+2020-06-07 13:04:40,435 - root - INFO - results
+2020-06-07 13:04:40,435 - root - INFO -  
+2020-06-07 13:04:40,435 - root - INFO - <class 'str'>
+2020-06-07 13:04:40,435 - root - INFO - 
+
+2020-06-07 13:04:40,436 - root - INFO - sem_parse_out
+2020-06-07 13:04:40,436 - root - INFO -  
+2020-06-07 13:04:40,436 - root - INFO - <class 'str'>
+2020-06-07 13:04:40,436 - root - INFO - 
+
+2020-06-07 13:04:40,436 - root - INFO - source
+2020-06-07 13:04:40,436 - root - INFO -  
+2020-06-07 13:04:40,437 - root - INFO - <class 'NoneType'>
+2020-06-07 13:04:40,437 - root - INFO - 
+
+2020-06-07 13:04:40,437 - root - INFO - source_link
+2020-06-07 13:04:40,437 - root - INFO -  
+2020-06-07 13:04:40,437 - root - INFO - <class 'NoneType'>
+2020-06-07 13:04:40,437 - root - INFO - 
+
+2020-06-07 13:04:40,438 - root - INFO - state
+2020-06-07 13:04:40,438 - root - INFO -  
+2020-06-07 13:04:40,438 - root - INFO - <class 'NoneType'>
+2020-06-07 13:04:40,438 - root - INFO - 
+
+2020-06-07 13:04:40,438 - root - INFO - statictics
+2020-06-07 13:04:40,438 - root - INFO -  
+2020-06-07 13:04:40,438 - root - INFO - <class 'NoneType'>
+2020-06-07 13:04:40,439 - root - INFO - 
+
+2020-06-07 13:04:40,439 - root - INFO - status
+2020-06-07 13:04:40,439 - root - INFO -  
+2020-06-07 13:04:40,439 - root - INFO - <class 'NoneType'>
+2020-06-07 13:04:40,439 - root - INFO - 
+
+2020-06-07 13:04:40,439 - root - INFO - submitted
+2020-06-07 13:04:40,440 - root - INFO -  
+2020-06-07 13:04:40,440 - root - INFO - <class 'NoneType'>
+2020-06-07 13:04:40,440 - root - INFO - 
+
+2020-06-07 13:04:40,440 - root - INFO - text
+2020-06-07 13:04:40,440 - root - INFO -  
+2020-06-07 13:04:40,440 - root - INFO - <class 'str'>
+2020-06-07 13:04:40,441 - root - INFO - 
+
+2020-06-07 13:04:40,441 - root - INFO - timestamp
+2020-06-07 13:04:40,441 - root - INFO -  
+2020-06-07 13:04:40,441 - root - INFO - <class 'str'>
+2020-06-07 13:04:40,441 - root - INFO - 
+
+2020-06-07 13:04:40,441 - root - INFO - user_id
+2020-06-07 13:04:40,442 - root - INFO -  
+2020-06-07 13:04:40,442 - root - INFO - <class 'int'>
+2020-06-07 13:04:40,442 - root - INFO - 
+
+2020-06-07 13:04:40,442 - root - INFO - username
+2020-06-07 13:04:40,442 - root - INFO -  
+2020-06-07 13:04:40,442 - root - INFO - <class 'str'>
+2020-06-07 13:04:40,442 - root - INFO - 
+
+2020-06-07 13:04:40,443 - root - INFO - version
+2020-06-07 13:04:40,443 - root - INFO -  
+2020-06-07 13:04:40,443 - root - INFO - <class 'NoneType'>
+2020-06-07 13:04:40,443 - root - INFO - 
+
+2020-06-07 13:04:40,445 - qa_app_api - ERROR - Exception on /api/updateRow [POST]
+Traceback (most recent call last):
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1248, in _execute_context
+    cursor, statement, parameters, context
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/default.py", line 590, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: attempt to write a readonly database
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask_cors/extension.py", line 161, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask_restful/__init__.py", line 269, in error_router
+    return original_handler(e)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "qa_app_api.py", line 259, in updateRow
+    return qa_agent.updateRow(request)
+  File "qa_app_api.py", line 238, in updateRow
+    db.session.commit()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/scoping.py", line 162, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 1036, in commit
+    self.transaction.commit()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 503, in commit
+    self._prepare_impl()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 482, in _prepare_impl
+    self.session.flush()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 2496, in flush
+    self._flush(objects)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 2637, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/util/langhelpers.py", line 69, in __exit__
+    exc_value, with_traceback=exc_tb,
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/util/compat.py", line 178, in raise_
+    raise exception
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 2597, in _flush
+    flush_context.execute()
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/unitofwork.py", line 422, in execute
+    rec.execute(self)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/unitofwork.py", line 589, in execute
+    uow,
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/persistence.py", line 236, in save_obj
+    update,
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/orm/persistence.py", line 995, in _emit_update_statements
+    statement, multiparams
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 984, in execute
+    return meth(self, multiparams, params)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/sql/elements.py", line 293, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1103, in _execute_clauseelement
+    distilled_params,
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1288, in _execute_context
+    e, statement, parameters, cursor, context
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1482, in _handle_dbapi_exception
+    sqlalchemy_exception, with_traceback=exc_info[2], from_=e
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/util/compat.py", line 178, in raise_
+    raise exception
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1248, in _execute_context
+    cursor, statement, parameters, context
+  File "/home/harish/anaconda3/envs/Yana/lib/python3.6/site-packages/sqlalchemy/engine/default.py", line 590, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) attempt to write a readonly database
+[SQL: UPDATE covid_v2 SET notes=? WHERE covid_v2.id = ?]
+[parameters: ('no answer', 2)]
+(Background on this error at: http://sqlalche.me/e/e3q8)
+2020-06-07 13:04:40,631 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 13:04:40] "[35m[1mPOST /api/updateRow HTTP/1.0[0m" 500 -
+2020-06-07 13:04:53,428 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 13:04:53] "[37mGET /api/uiSettings HTTP/1.0[0m" 200 -
+2020-06-07 13:04:53,516 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 13:04:53] "[37mPOST /api/verify HTTP/1.0[0m" 200 -
+2020-06-07 13:04:53,618 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 13:04:53] "[37mPOST /api/dbData HTTP/1.0[0m" 200 -
+2020-06-07 13:05:02,015 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 13:05:02] "[37mPOST /api/dbData HTTP/1.0[0m" 200 -
