@@ -526,7 +526,7 @@ class DbData extends React.Component{
         let ownerOptions = []
         
         
-        if ( Object.keys(this.props.uiSettings).includes('list') ){
+        if ( this.props.uiSettings !== undefined ){
             let stateOptions = this.props.uiSettings.list.state.map((stateValue)=>
                     {return {key: stateValue,text:stateValue,value:stateValue } })
             stateOptions.push({key: 'showall',text:'showall',value: undefined })
@@ -731,9 +731,10 @@ export default class DbComponent extends React.Component{
         }
     })
     domainOptions = domainOptions.filter(x => x !== null)
+    // console.log( this.props.uisettings,domainOptions )
     return(
     <div >            
-        { ( this.props.uiSettings !== undefined ) ? 
+        {/* { ( this.props.uisettings !== undefined ) ?  */}
             <div>
                 <h3 style={{ marginTop: 30+'px',color: 'white' }}>
                     {/* University QA Dashboard  */}
@@ -748,7 +749,7 @@ export default class DbComponent extends React.Component{
                 user_id={ this.props.user_id}
                 />
             </div>
-        : null}
+        {/* : null} */}
     </div>
     )
     }
