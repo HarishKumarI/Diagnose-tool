@@ -521,18 +521,25 @@ class DbData extends React.Component{
         const relventtext = ( this.state.relevant ) ? 'Relevant' : ( this.state.relevant===undefined ) ? 'Relevancy' : 'Not Relevant' 
         let {rows, dictData} = ( this.state.data.length ) ? this.getrows() : { rows: [],dictData:[] }
         
-        let stateOptions = this.props.uiSettings.list.state.map((stateValue)=>
-                {return {key: stateValue,text:stateValue,value:stateValue } })
-        stateOptions.push({key: 'showall',text:'showall',value: undefined })
+        let stateOptions = []
+        let issuetypeOptions = []
+        let ownerOptions = []
+        
+        
+        if ( Object.keys(this.props.uiSettings).includes('list') ){
+            let stateOptions = this.props.uiSettings.list.state.map((stateValue)=>
+                    {return {key: stateValue,text:stateValue,value:stateValue } })
+            stateOptions.push({key: 'showall',text:'showall',value: undefined })
 
-        let issuetypeOptions = this.props.uiSettings.list.issue_type.map((issueType)=>
-                {return {key: issueType,text:issueType,value:issueType } })
-        issuetypeOptions.push({key: 'showall',text:'showall',value: undefined })
-            
-        let ownerOptions = this.props.uiSettings.list.owner.map((owner)=>
-                {return {key: owner,text:owner,value:owner } })
-        ownerOptions.push({key: 'showall',text:'showall',value: undefined })
-
+            let issuetypeOptions = this.props.uiSettings.list.issue_type.map((issueType)=>
+                    {return {key: issueType,text:issueType,value:issueType } })
+            issuetypeOptions.push({key: 'showall',text:'showall',value: undefined })
+                
+            let ownerOptions = this.props.uiSettings.list.owner.map((owner)=>
+                    {return {key: owner,text:owner,value:owner } })
+            ownerOptions.push({key: 'showall',text:'showall',value: undefined })
+        }
+     
         let date = new Date()
         date.setDate(date.getDate() )
         const maxDate = ( date ).toISOString().substr(0,10)
@@ -724,23 +731,24 @@ export default class DbComponent extends React.Component{
         }
     })
     domainOptions = domainOptions.filter(x => x !== null)
-
     return(
     <div >            
-            
-            <h3 style={{ marginTop: 30+'px',color: 'white' }}>
-                {/* University QA Dashboard  */}
-                <Dropdown placeholder={ `${this.state.selecteddomain}` } 
-                    options={domainOptions}
-                    onChange={(event,data)=>{ $.ajax().abort(); this.setState({ selecteddomain : data.value}) }}
+        { ( this.props.uiSettings !== undefined ) ? 
+            <div>
+                <h3 style={{ marginTop: 30+'px',color: 'white' }}>
+                    {/* University QA Dashboard  */}
+                    <Dropdown placeholder={ `${this.state.selecteddomain}` } 
+                        options={domainOptions}
+                        onChange={(event,data)=>{ $.ajax().abort(); this.setState({ selecteddomain : data.value}) }}
+                    />
+                </h3>
+                <DbData
+                uiSettings={ this.props.uisettings[this.state.selecteddomain.split(' QA Dashboard')[0]] }
+                domain={ this.state.selecteddomain.split(' QA Dashboard')[0]} 
+                user_id={ this.props.user_id}
                 />
-            </h3>
-            <DbData
-             uiSettings={ this.props.uisettings[this.state.selecteddomain.split(' QA Dashboard')[0]] }
-             domain={ this.state.selecteddomain.split(' QA Dashboard')[0]} 
-             user_id={ this.props.user_id}
-            />
-
+            </div>
+        : null}
     </div>
     )
     }
