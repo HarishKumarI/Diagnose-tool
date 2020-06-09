@@ -4743,3 +4743,69 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) attempt to write a r
 2020-06-07 13:04:53,516 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 13:04:53] "[37mPOST /api/verify HTTP/1.0[0m" 200 -
 2020-06-07 13:04:53,618 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 13:04:53] "[37mPOST /api/dbData HTTP/1.0[0m" 200 -
 2020-06-07 13:05:02,015 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 13:05:02] "[37mPOST /api/dbData HTTP/1.0[0m" 200 -
+2020-06-09 19:48:31,231 - root - INFO - b''
+2020-06-09 19:48:31,231 - root - INFO - b' * Serving Flask app "qa_app_api" (lazy loading)\n'
+2020-06-09 19:48:31,232 - root - INFO - b' * Environment: production\n'
+2020-06-09 19:48:31,232 - root - INFO - b'\x1b[31m   WARNING: This is a development server. Do not use it in a production deployment.\x1b[0m\n'
+2020-06-09 19:48:31,232 - root - INFO - b'\x1b[2m   Use a production WSGI server instead.\x1b[0m\n'
+2020-06-09 19:48:31,232 - root - INFO - b' * Debug mode: off\n'
+2020-06-09 19:48:31,235 - werkzeug - INFO -  * Running on http://0.0.0.0:7230/ (Press CTRL+C to quit)
+2020-06-09 19:52:02,366 - werkzeug - INFO - 95.217.239.6 - - [09/Jun/2020 19:52:02] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-06-09 19:52:02,372 - werkzeug - INFO - 95.217.239.6 - - [09/Jun/2020 19:52:02] "[37mPOST /api/verify HTTP/1.1[0m" 200 -
+2020-06-09 19:53:01,791 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 19:53:01] "[37mPOST /api/verify HTTP/1.1[0m" 200 -
+2020-06-09 19:53:17,654 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 19:53:17] "[33mPOST /api/dbdata HTTP/1.1[0m" 404 -
+2020-06-09 19:54:04,266 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 19:54:04] "[33mPOST /api/dbdata HTTP/1.1[0m" 404 -
+2020-06-09 19:54:26,083 - qa_app_api - ERROR - Exception on /api/dbData [POST]
+Traceback (most recent call last):
+  File "/home/cognibot/miniconda3/envs/qa/lib/python3.7/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/cognibot/miniconda3/envs/qa/lib/python3.7/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/cognibot/miniconda3/envs/qa/lib/python3.7/site-packages/flask_cors/extension.py", line 161, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/cognibot/miniconda3/envs/qa/lib/python3.7/site-packages/flask_restful/__init__.py", line 272, in error_router
+    return original_handler(e)
+  File "/home/cognibot/miniconda3/envs/qa/lib/python3.7/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/cognibot/miniconda3/envs/qa/lib/python3.7/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/cognibot/miniconda3/envs/qa/lib/python3.7/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/cognibot/miniconda3/envs/qa/lib/python3.7/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "qa_app_api.py", line 250, in fetch_dbdata
+    return qa_agent.fetch_dbdata()
+  File "qa_app_api.py", line 211, in fetch_dbdata
+    tableData = classObj[json_data['domain']].query.all()
+KeyError: 'covid'
+2020-06-09 19:54:26,089 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 19:54:26] "[35m[1mPOST /api/dbData HTTP/1.1[0m" 500 -
+2020-06-09 19:55:06,448 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 19:55:06] "[37mPOST /api/dbData HTTP/1.1[0m" 200 -
+2020-06-09 19:58:49,870 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 19:58:49] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-06-09 19:58:56,261 - werkzeug - INFO - 95.217.239.6 - - [09/Jun/2020 19:58:56] "[37mPOST /api/verify HTTP/1.1[0m" 200 -
+2020-06-09 19:58:56,263 - werkzeug - INFO - 95.217.239.6 - - [09/Jun/2020 19:58:56] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-06-09 20:02:36,890 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:02:36] "[37mPOST /api/verify HTTP/1.1[0m" 200 -
+2020-06-09 20:02:36,899 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:02:36] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-06-09 20:03:16,605 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:03:16] "[37mPOST /api/verify HTTP/1.1[0m" 200 -
+2020-06-09 20:03:16,607 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:03:16] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-06-09 20:03:37,538 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:03:37] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-06-09 20:03:37,544 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:03:37] "[37mPOST /api/verify HTTP/1.1[0m" 200 -
+2020-06-09 20:04:07,853 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:04:07] "[37mPOST /api/verify HTTP/1.1[0m" 200 -
+2020-06-09 20:04:07,855 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:04:07] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-06-09 20:04:15,938 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:04:15] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-06-09 20:04:15,943 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:04:15] "[37mPOST /api/verify HTTP/1.1[0m" 200 -
+2020-06-09 20:04:46,932 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:04:46] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-06-09 20:04:46,937 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:04:46] "[37mPOST /api/verify HTTP/1.1[0m" 200 -
+2020-06-09 20:05:33,739 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:05:33] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-06-09 20:05:33,762 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:05:33] "[37mPOST /api/verify HTTP/1.1[0m" 200 -
+2020-06-09 20:07:54,832 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:07:54] "[37mPOST /api/verify HTTP/1.1[0m" 200 -
+2020-06-09 20:07:54,844 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:07:54] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-06-09 20:08:07,410 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:08:07] "[37mPOST /api/verify HTTP/1.1[0m" 200 -
+2020-06-09 20:08:07,417 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:08:07] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-06-09 20:08:16,053 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:08:16] "[37mPOST /api/verify HTTP/1.1[0m" 200 -
+2020-06-09 20:08:16,067 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:08:16] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-06-09 20:09:08,126 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:09:08] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-06-09 20:09:08,132 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:09:08] "[37mPOST /api/verify HTTP/1.1[0m" 200 -
+2020-06-09 20:09:08,608 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:09:08] "[37mPOST /api/dbData HTTP/1.1[0m" 200 -
+2020-06-09 20:09:16,584 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:09:16] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-06-09 20:09:16,588 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:09:16] "[37mPOST /api/verify HTTP/1.1[0m" 200 -
+2020-06-09 20:09:17,029 - werkzeug - INFO - 103.15.63.126 - - [09/Jun/2020 20:09:17] "[37mPOST /api/dbData HTTP/1.1[0m" 200 -
