@@ -25,8 +25,11 @@ class Dashboard extends React.Component{
 
         $.get('/api/uiSettings',response => {
             this.setState({uisettings: response})
+            // console.log( response)
         })
-        .fail((error) => {})
+        .fail((error) => { 
+            console.error( error )
+        })
         
         $.post('/api/verify', JSON.stringify( {'userid': userid }),response =>{
             this.setState({ ...response})
@@ -62,9 +65,13 @@ class Dashboard extends React.Component{
                                 else this.setState({ uicomponent: selectedValue}) 
                             }}  >
                             <Dropdown.Item icon="folder" text="Dashboard"/>
-                            { ( Object.keys(this.state.uisettings.Admin).includes(  this.state.user_id ) ) ?
-                                <Dropdown.Item icon="settings" text="Settings"/>
-                            : null }
+                            { 
+                                ( Object.keys(this.state.uisettings).includes('Admin') ) ?
+                                    Object.keys(this.state.uisettings.Admin).includes(  this.state.user_id ) ?
+                                        <Dropdown.Item icon="settings" text="Settings"/>
+                                    : null
+                                : null
+                            }
                             <Dropdown.Item icon="sign-out" text="Logout"/>
                         </Dropdown.Menu>
                         </Dropdown>

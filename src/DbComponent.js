@@ -436,9 +436,7 @@ class DbData extends React.Component{
         let relcount = 0
         let feedbackData = this.state.data
         
-        // console.log(feedbackData)
         feedbackData.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
-        // console.log(feedbackData)
 
         feedbackData.forEach((que_object,index) => {
             let openCollapse = () => {
@@ -545,7 +543,7 @@ class DbData extends React.Component{
         date.setDate( date.getDate() +1 )  
         const toMinDate = date.toISOString().substr(0,10)
         
-        // console.log(this.state.progress)
+        // console.log(this.props.uiSettings)
 
         return(
             <Fragment>
