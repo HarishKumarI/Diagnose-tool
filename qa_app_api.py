@@ -40,7 +40,8 @@ import sys
 id_data = pd.read_csv('user_ids.csv')
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/harish/Webapps/ReactApps/diagnose-tool/user_log.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/komi/user_log.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/cognibot/user_log.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/komi/user_log.db'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
