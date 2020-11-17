@@ -9,6 +9,7 @@
     },
     "Covid": {
         "domain": "Covid",
+        "type":"QA",
         "editable": [
             "notes"
         ],
@@ -71,6 +72,7 @@
     },
     "University": {
         "domain": "University",
+        "type":"QA",
         "editable": [
             "notes"
         ],
@@ -129,5 +131,11 @@
             ]
         },
         "rerunlink": "http://univ.cogniqa.ai"
+    },
+    "Cars": {
+        "domain": "Cars",
+        "type":"Chat",
+        "db_ip": "localhost",
+        "db_port": "6379"
     }
 }

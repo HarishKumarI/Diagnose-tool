@@ -18,7 +18,7 @@ import sys
 
 id_data = pd.read_csv('user_ids.csv')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/harish/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/harish/user_log.db'
 db = SQLAlchemy(app)
 
 
@@ -197,4 +197,4 @@ def saveSettings():
 
 
 if __name__ == '__main__':
-	app.run('0.0.0.0',debug=False, port=7230,threaded=False,processes=1)
+	app.run('0.0.0.0',debug=True, port=7230,threaded=False,processes=1)

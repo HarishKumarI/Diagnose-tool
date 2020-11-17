@@ -4743,3 +4743,190 @@ sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) attempt to write a r
 2020-06-07 13:04:53,516 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 13:04:53] "[37mPOST /api/verify HTTP/1.0[0m" 200 -
 2020-06-07 13:04:53,618 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 13:04:53] "[37mPOST /api/dbData HTTP/1.0[0m" 200 -
 2020-06-07 13:05:02,015 - werkzeug - INFO - 115.111.97.194 - - [07/Jun/2020 13:05:02] "[37mPOST /api/dbData HTTP/1.0[0m" 200 -
+2020-11-17 21:53:31,095 - root - INFO - b''
+2020-11-17 21:53:31,096 - root - INFO - b' * Serving Flask app "qa_app_api" (lazy loading)\n'
+2020-11-17 21:53:31,097 - root - INFO - b' * Environment: production\n'
+2020-11-17 21:53:31,097 - root - INFO - b'\x1b[31m   WARNING: This is a development server. Do not use it in a production deployment.\x1b[0m\n'
+2020-11-17 21:53:31,097 - root - INFO - b'\x1b[2m   Use a production WSGI server instead.\x1b[0m\n'
+2020-11-17 21:53:31,098 - root - INFO - b' * Debug mode: off\n'
+2020-11-17 21:53:31,329 - werkzeug - INFO -  * Running on http://0.0.0.0:7230/ (Press CTRL+C to quit)
+2020-11-17 21:56:11,117 - root - INFO - b''
+2020-11-17 21:56:11,117 - root - INFO - b' * Serving Flask app "qa_app_api" (lazy loading)\n'
+2020-11-17 21:56:11,117 - root - INFO - b' * Environment: production\n'
+2020-11-17 21:56:11,117 - root - INFO - b'\x1b[31m   WARNING: This is a development server. Do not use it in a production deployment.\x1b[0m\n'
+2020-11-17 21:56:11,117 - root - INFO - b'\x1b[2m   Use a production WSGI server instead.\x1b[0m\n'
+2020-11-17 21:56:11,117 - root - INFO - b' * Debug mode: off\n'
+2020-11-17 21:56:11,139 - werkzeug - INFO -  * Running on http://0.0.0.0:7230/ (Press CTRL+C to quit)
+2020-11-17 21:58:32,608 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2020 21:58:32] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-11-17 21:59:49,333 - root - INFO - b''
+2020-11-17 21:59:49,334 - root - INFO - b' * Serving Flask app "qa_app_api" (lazy loading)\n'
+2020-11-17 21:59:49,334 - root - INFO - b' * Environment: production\n'
+2020-11-17 21:59:49,334 - root - INFO - b'\x1b[31m   WARNING: This is a development server. Do not use it in a production deployment.\x1b[0m\n'
+2020-11-17 21:59:49,334 - root - INFO - b'\x1b[2m   Use a production WSGI server instead.\x1b[0m\n'
+2020-11-17 21:59:49,334 - root - INFO - b' * Debug mode: off\n'
+2020-11-17 21:59:49,676 - werkzeug - INFO -  * Running on http://0.0.0.0:7230/ (Press CTRL+C to quit)
+2020-11-17 22:00:30,580 - root - INFO - b''
+2020-11-17 22:00:30,580 - root - INFO - b' * Serving Flask app "qa_app_api" (lazy loading)\n'
+2020-11-17 22:00:30,580 - root - INFO - b' * Environment: production\n'
+2020-11-17 22:00:30,580 - root - INFO - b'\x1b[31m   WARNING: This is a development server. Do not use it in a production deployment.\x1b[0m\n'
+2020-11-17 22:00:30,580 - root - INFO - b'\x1b[2m   Use a production WSGI server instead.\x1b[0m\n'
+2020-11-17 22:00:30,580 - root - INFO - b' * Debug mode: off\n'
+2020-11-17 22:00:30,599 - werkzeug - INFO -  * Running on http://0.0.0.0:7230/ (Press CTRL+C to quit)
+2020-11-17 22:01:30,652 - root - INFO - b''
+2020-11-17 22:01:30,653 - root - INFO - b' * Serving Flask app "qa_app_api" (lazy loading)\n'
+2020-11-17 22:01:30,653 - root - INFO - b' * Environment: production\n'
+2020-11-17 22:01:30,653 - root - INFO - b'\x1b[31m   WARNING: This is a development server. Do not use it in a production deployment.\x1b[0m\n'
+2020-11-17 22:01:30,653 - root - INFO - b'\x1b[2m   Use a production WSGI server instead.\x1b[0m\n'
+2020-11-17 22:01:30,653 - root - INFO - b' * Debug mode: off\n'
+2020-11-17 22:01:30,670 - werkzeug - INFO -  * Running on http://0.0.0.0:7230/ (Press CTRL+C to quit)
+2020-11-17 22:02:08,078 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2020 22:02:08] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-11-17 22:02:42,039 - root - INFO - b''
+2020-11-17 22:02:42,039 - root - INFO - b' * Serving Flask app "qa_app_api" (lazy loading)\n'
+2020-11-17 22:02:42,039 - root - INFO - b' * Environment: production\n'
+2020-11-17 22:02:42,039 - root - INFO - b'\x1b[31m   WARNING: This is a development server. Do not use it in a production deployment.\x1b[0m\n'
+2020-11-17 22:02:42,039 - root - INFO - b'\x1b[2m   Use a production WSGI server instead.\x1b[0m\n'
+2020-11-17 22:02:42,039 - root - INFO - b' * Debug mode: off\n'
+2020-11-17 22:02:42,413 - werkzeug - INFO -  * Running on http://0.0.0.0:7230/ (Press CTRL+C to quit)
+2020-11-17 22:06:27,240 - root - INFO - b''
+2020-11-17 22:06:27,240 - root - INFO - b' * Serving Flask app "qa_app_api" (lazy loading)\n'
+2020-11-17 22:06:27,240 - root - INFO - b' * Environment: production\n'
+2020-11-17 22:06:27,240 - root - INFO - b'\x1b[31m   WARNING: This is a development server. Do not use it in a production deployment.\x1b[0m\n'
+2020-11-17 22:06:27,240 - root - INFO - b'\x1b[2m   Use a production WSGI server instead.\x1b[0m\n'
+2020-11-17 22:06:27,240 - root - INFO - b' * Debug mode: off\n'
+2020-11-17 22:06:27,286 - werkzeug - INFO -  * Running on http://0.0.0.0:7230/ (Press CTRL+C to quit)
+2020-11-17 22:07:56,491 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2020 22:07:56] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-11-17 22:08:16,901 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2020 22:08:16] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-11-17 22:08:29,491 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2020 22:08:29] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-11-17 22:08:29,600 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2020 22:08:29] "[37mPOST /api/verify HTTP/1.1[0m" 200 -
+2020-11-17 22:08:29,882 - qa_app_api - ERROR - Exception on /api/dbData [POST]
+Traceback (most recent call last):
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 2285, in _wrap_pool_connect
+    return fn()
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/pool/base.py", line 773, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/pool/impl.py", line 238, in _do_get
+    return self._create_connection()
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/pool/base.py", line 657, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/util/langhelpers.py", line 69, in __exit__
+    exc_value, with_traceback=exc_tb,
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/util/compat.py", line 178, in raise_
+    raise exception
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/pool/base.py", line 652, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/engine/default.py", line 490, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+sqlite3.OperationalError: unable to open database file
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/harish/.local/lib/python3.6/site-packages/flask/app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/harish/.local/lib/python3.6/site-packages/flask/app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/harish/.local/lib/python3.6/site-packages/flask_cors/extension.py", line 161, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/harish/.local/lib/python3.6/site-packages/flask/app.py", line 1820, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/harish/.local/lib/python3.6/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/home/harish/.local/lib/python3.6/site-packages/flask/app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/harish/.local/lib/python3.6/site-packages/flask/app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "qa_app_api.py", line 249, in fetch_dbdata
+    return qa_agent.fetch_dbdata()
+  File "qa_app_api.py", line 210, in fetch_dbdata
+    tableData = classObj[json_data['domain']].query.all()
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/orm/query.py", line 3246, in all
+    return list(self)
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/orm/query.py", line 3405, in __iter__
+    return self._execute_and_instances(context)
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/orm/query.py", line 3427, in _execute_and_instances
+    querycontext, self._connection_from_session, close_with_result=True
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/orm/query.py", line 3442, in _get_bind_args
+    mapper=self._bind_mapper(), clause=querycontext.statement, **kw
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/orm/query.py", line 3420, in _connection_from_session
+    conn = self.session.connection(**kw)
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 1133, in connection
+    execution_options=execution_options,
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 1139, in _connection_for_bind
+    engine, execution_options
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 432, in _connection_for_bind
+    conn = bind._contextual_connect()
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 2251, in _contextual_connect
+    self._wrap_pool_connect(self.pool.connect, None),
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 2289, in _wrap_pool_connect
+    e, dialect, self
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1555, in _handle_dbapi_exception_noconnection
+    sqlalchemy_exception, with_traceback=exc_info[2], from_=e
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/util/compat.py", line 178, in raise_
+    raise exception
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 2285, in _wrap_pool_connect
+    return fn()
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/pool/base.py", line 363, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/pool/base.py", line 773, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/pool/base.py", line 492, in checkout
+    rec = pool._do_get()
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/pool/impl.py", line 238, in _do_get
+    return self._create_connection()
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/pool/base.py", line 308, in _create_connection
+    return _ConnectionRecord(self)
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/pool/base.py", line 437, in __init__
+    self.__connect(first_connect_check=True)
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/pool/base.py", line 657, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/util/langhelpers.py", line 69, in __exit__
+    exc_value, with_traceback=exc_tb,
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/util/compat.py", line 178, in raise_
+    raise exception
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/pool/base.py", line 652, in __connect
+    connection = pool._invoke_creator(self)
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/engine/strategies.py", line 114, in connect
+    return dialect.connect(*cargs, **cparams)
+  File "/home/harish/anaconda3/envs/knowledgemodel/lib/python3.6/site-packages/sqlalchemy/engine/default.py", line 490, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) unable to open database file
+(Background on this error at: http://sqlalche.me/e/e3q8)
+2020-11-17 22:08:30,037 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2020 22:08:30] "[1m[35mPOST /api/dbData HTTP/1.1[0m" 500 -
+2020-11-17 22:09:01,770 - root - INFO - b''
+2020-11-17 22:09:01,770 - root - INFO - b' * Serving Flask app "qa_app_api" (lazy loading)\n'
+2020-11-17 22:09:01,770 - root - INFO - b' * Environment: production\n'
+2020-11-17 22:09:01,770 - root - INFO - b'\x1b[31m   WARNING: This is a development server. Do not use it in a production deployment.\x1b[0m\n'
+2020-11-17 22:09:01,771 - root - INFO - b'\x1b[2m   Use a production WSGI server instead.\x1b[0m\n'
+2020-11-17 22:09:01,771 - root - INFO - b' * Debug mode: on\n'
+2020-11-17 22:09:01,930 - werkzeug - INFO -  * Running on http://0.0.0.0:7230/ (Press CTRL+C to quit)
+2020-11-17 22:09:01,965 - werkzeug - INFO -  * Restarting with stat
+2020-11-17 22:09:02,642 - werkzeug - WARNING -  * Debugger is active!
+2020-11-17 22:09:03,021 - werkzeug - INFO -  * Debugger PIN: 337-932-403
+2020-11-17 22:10:19,975 - werkzeug - INFO -  * Detected change in '/home/harish/Webapps/ReactApps/diagnose-tool/qa_app_api.py', reloading
+2020-11-17 22:10:20,086 - werkzeug - INFO -  * Restarting with stat
+2020-11-17 22:10:20,765 - werkzeug - WARNING -  * Debugger is active!
+2020-11-17 22:10:20,765 - werkzeug - INFO -  * Debugger PIN: 337-932-403
+2020-11-17 22:10:28,041 - werkzeug - INFO -  * Running on http://0.0.0.0:7230/ (Press CTRL+C to quit)
+2020-11-17 22:10:28,042 - werkzeug - INFO -  * Restarting with stat
+2020-11-17 22:10:28,702 - werkzeug - WARNING -  * Debugger is active!
+2020-11-17 22:10:28,702 - werkzeug - INFO -  * Debugger PIN: 337-932-403
+2020-11-17 22:10:36,926 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2020 22:10:36] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-11-17 22:10:36,936 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2020 22:10:36] "[37mPOST /api/verify HTTP/1.1[0m" 200 -
+2020-11-17 22:10:37,078 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2020 22:10:37] "[1m[35mPOST /api/dbData HTTP/1.1[0m" 500 -
+2020-11-17 22:11:58,620 - werkzeug - INFO -  * Running on http://0.0.0.0:7230/ (Press CTRL+C to quit)
+2020-11-17 22:11:58,621 - werkzeug - INFO -  * Restarting with stat
+2020-11-17 22:11:59,281 - werkzeug - WARNING -  * Debugger is active!
+2020-11-17 22:11:59,282 - werkzeug - INFO -  * Debugger PIN: 337-932-403
+2020-11-17 22:12:06,773 - werkzeug - INFO - 127.0.0.1 - - [17/Nov/2020 22:12:06] "[37mGET /api/uiSettings HTTP/1.1[0m" 200 -
+2020-11-17 22:13:19,432 - werkzeug - INFO -  * Detected change in '/home/harish/Webapps/ReactApps/diagnose-tool/qa_app_api.py', reloading
+2020-11-17 22:13:19,550 - werkzeug - INFO -  * Restarting with stat
