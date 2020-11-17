@@ -2,8 +2,13 @@
   "name": "diagnose-tool",
   "version": "0.1.0",
   "private": true,
+<<<<<<< HEAD
   "host": "http://95.217.239.6:7229",
   "proxy": "http://95.217.239.6:7230",
+=======
+  "host": "http://127.0.0.1:3010",
+  "proxy": "http://diagnose.cogniqa.ai",
+>>>>>>> 0c47eb6b3fa27d2af6f5c255a07ae12e1e306a4d
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",

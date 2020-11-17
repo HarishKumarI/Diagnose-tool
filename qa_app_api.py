@@ -1,6 +1,5 @@
 from flask import Flask, request, Response, jsonify, send_file, send_from_directory
 from flask_cors import CORS
-from flask_restful import Resource, Api
 import pandas as pd
 import json
 
@@ -11,27 +10,29 @@ from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 
 app = Flask(__name__)
-api = Api(app)
 
 CORS(app)
+
+import redis
+import pickle
 
 import logging
 import logging.handlers as handlers
 
 # logging.basicConfig(filename='demo.log', level=logging.DEBUG)
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# logger = logging.getLogger()
+# logger.setLevel(logging.INFO)
+# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 
-logHandler = handlers.RotatingFileHandler('diagnostic_tool.log', maxBytes=1024*1024*1024, backupCount=1)
-logHandler.setLevel(logging.DEBUG)
-logHandler.setFormatter(formatter)
-logger.addHandler(logHandler)
+# logHandler = handlers.RotatingFileHandler('diagnostic_tool.log', maxBytes=1024*1024*1024, backupCount=1)
+# logHandler.setLevel(logging.DEBUG)
+# logHandler.setFormatter(formatter)
+# logger.addHandler(logHandler)
 
 
-sys.stdout.write = logger.info
+# sys.stdout.write = logger.info
 
 import os
 import sys
@@ -40,6 +41,9 @@ id_data = pd.read_csv('user_ids.csv')
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/harish/Webapps/ReactApps/diagnose-tool/user_log.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/cognibot/user_log.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/komi/user_log.db'
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
 
@@ -185,6 +189,10 @@ class QaAgent(object):
 	def __init__(self):
 		super().__init__()
 
+		self.uiSettingsJson = {}
+		with open('./src/uiSettings.json','r') as fp:
+			self.uiSettingsJson = json.load(fp)
+
 	def verify_user(self,request):
 		json_data = request.get_json(force=True)
 		userid = json_data['userid']
@@ -234,39 +242,76 @@ class QaAgent(object):
 		db.session.commit()
 		
 		return jsonify('success')
+	
+	def uiSettings(self):
+		return jsonify(	self.uiSettingsJson )
+
+	def SaveuiSettings( self, request ):
+		self.uiSettingsJson = request.get_json(force=True)
+
+		with open('./src/uiSettings.json','w') as fp:
+			json.dump(request.get_json(force=True),fp,indent=4)
+		return jsonify('success')
+
+
+	def ChatFeedbacks(self, request):
+		r = redis.Redis(host='localhost', port=6379, db=0)
+		res = r.keys()
+		session_list = []
+		for x in res:
+			ses = x.decode('utf-8')
+
+			if ses.startswith('session:') :
+				ses_res_pkl = r.get(ses)
+				ses_res = pickle.loads(ses_res_pkl)
+				
+				session_list.append({
+					'session_id': ses[8:],
+					'user_id': ses_res.get('user_id', None),
+					'created_at': ses_res.get('created_at', None),
+					'feedbacks': [ row['feedback'] if 'feedback' in row else None for row in ses_res.get('history', [])  ],
+					'history': ses_res.get('history', None)
+				})
+
+		return jsonify({ "msg": "success", "data": session_list })
 
 
 qa_agent = QaAgent()
 
+# QA Feedback
 @app.route('/api/verify',methods=['POST'])
 def verify_user():
-	if(request.method == 'POST'):
+	if request.method == 'POST' :
 		return qa_agent.verify_user(request)
 
 
 @app.route('/api/dbData',methods=['POST'])
 def fetch_dbdata():
-	if(request.method == 'POST'):
+	if request.method == 'POST' :
 		return qa_agent.fetch_dbdata()
 
 @app.route('/api/updateRow',methods=['POST'])
 def updateRow():
-	if(request.method == 'POST'):
+	if request.method == 'POST' :
 		return qa_agent.updateRow(request)
+
+
+# Chat Feedback
+@app.route('/api/chatDbData', methods=['POST'])
+def ChatFeedbacks():
+	if request.method == 'POST':
+		return qa_agent.ChatFeedbacks( request )
 
 
 # For Getting UISettings JSON
 
 @app.route('/api/uiSettings',methods=['GET'])
 def uiSettings():
-	with open('./src/uiSettings.json','r') as fp:
-		return jsonify( json.load(fp) )
+	return qa_agent.uiSettings()
 
 @app.route('/api/saveSettings',methods=['POST'])
 def saveSettings():
-	with open('./src/uiSettings.json','w') as fp:
-		json.dump(request.get_json(force=True),fp,indent=4)
-	return jsonify('success')
+	return qa_agent.SaveuiSettings( request )
 
 
 if __name__ == '__main__':

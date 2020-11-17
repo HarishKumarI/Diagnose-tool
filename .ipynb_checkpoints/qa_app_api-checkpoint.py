@@ -1,73 +1,133 @@
 from flask import Flask, request, Response, jsonify, send_file, send_from_directory
 from flask_cors import CORS
-from flask_restful import Resource, Api
 import pandas as pd
 import json
+
+import sys
 
 from flask_sqlalchemy import SQLAlchemy
 
 import sqlalchemy
 
 app = Flask(__name__)
-api = Api(app)
 
 CORS(app)
+
+import redis
+import pickle
+
+import logging
+import logging.handlers as handlers
+
+# logging.basicConfig(filename='demo.log', level=logging.DEBUG)
+
+# logger = logging.getLogger()
+# logger.setLevel(logging.INFO)
+# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+
+# logHandler = handlers.RotatingFileHandler('diagnostic_tool.log', maxBytes=1024*1024*1024, backupCount=1)
+# logHandler.setLevel(logging.DEBUG)
+# logHandler.setFormatter(formatter)
+# logger.addHandler(logHandler)
+
+
+# sys.stdout.write = logger.info
 
 import os
 import sys
 
 id_data = pd.read_csv('user_ids.csv')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/harish/test.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/harish/Webapps/ReactApps/diagnose-tool/user_log.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/cognibot/user_log.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/komi/user_log.db'
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
 
-class User(db.Model):
+# class User(db.Model):
 
+# 	id = db.Column(db.Integer, primary_key=True)
+# 	question = db.Column(db.String(20000), unique=False, nullable=False)
+# 	answer = db.Column(db.String(20000), unique=False, nullable=True)
+# 	failed_assoc_prob_list = db.Column(db.String(20000), unique=False, nullable=True)
+# 	node_doc = db.Column(db.String(20000), unique=False, nullable=True)
+# 	predicate_tuples = db.Column(db.String(20000), unique=False, nullable=True)
+# 	ref_exp_nodes = db.Column(db.String(20000), unique=False, nullable=True)
+# 	res_dict = db.Column(db.String(20000), unique=False, nullable=True)
+# 	response = db.Column(db.String(20000), unique=False, nullable=True)
+# 	results = db.Column(db.String(20000), unique=False, nullable=True)
+# 	relevant = db.Column(db.Boolean, unique=False, nullable=True)
+# 	comment = db.Column(db.String(20000), unique=False, nullable=True)
+# 	submitted = db.Column(db.Boolean, unique=False, nullable=True)
+# 	status = db.Column(db.String(20000), unique=False, nullable=True)
+# 	timestamp = db.Column(db.String(20000), unique=False, nullable=True)
+# 	user_id = db.Column(db.Integer, unique=False, nullable=False)
+# 	username = db.Column(db.String(1024), unique=False, nullable=True)
+# 	email = db.Column(db.String(20000), unique=False, nullable=True)
+# 	state = db.Column(db.String(1024), unique=False, nullable=True)
+# 	issue_type = db.Column(db.String(1024), unique=False, nullable=True)
+# 	owner = db.Column(db.String(1024), unique=False, nullable=True)
+# 	notes = db.Column(db.String(1024), unique=False, nullable=True)
+
+# 	def __repr__(self):
+# 		return '<User %r>' % self.username
+
+# class Covid(db.Model):
+
+# 	id = db.Column(db.Integer, primary_key=True)
+# 	question = db.Column(db.String(20000), unique=False, nullable=False)
+# 	answer = db.Column(db.String(20000), unique=False, nullable=True)
+# 	failed_assoc_prob_list = db.Column(db.String(20000), unique=False, nullable=True)
+# 	node_doc = db.Column(db.String(20000), unique=False, nullable=True)
+# 	predicate_tuples = db.Column(db.String(20000), unique=False, nullable=True)
+# 	ref_exp_nodes = db.Column(db.String(20000), unique=False, nullable=True)
+# 	res_dict = db.Column(db.String(20000), unique=False, nullable=True)
+# 	response = db.Column(db.String(20000), unique=False, nullable=True)
+# 	results = db.Column(db.String(20000), unique=False, nullable=True)
+# 	relevant = db.Column(db.Boolean, unique=False, nullable=True)
+# 	comment = db.Column(db.String(20000), unique=False, nullable=True)
+# 	submitted = db.Column(db.Boolean, unique=False, nullable=True)
+# 	status = db.Column(db.String(20000), unique=False, nullable=True)
+# 	timestamp = db.Column(db.String(20000), unique=False, nullable=True)
+# 	statictics = db.Column(db.String(20000), unique=False, nullable=True)
+# 	source = db.Column(db.String(20000), unique=False, nullable=True)
+# 	source_link = db.Column(db.String(20000), unique=False, nullable=True)
+# 	img_link = db.Column(db.String(20000), unique=False, nullable=True)
+# 	user_id = db.Column(db.Integer, unique=False, nullable=False)
+# 	username = db.Column(db.String(1024), unique=False, nullable=True)
+# 	email = db.Column(db.String(20000), unique=False, nullable=True)
+# 	state = db.Column(db.String(1024), unique=False, nullable=True)
+# 	issue_type = db.Column(db.String(2000), unique=False, nullable=True)
+# 	owner = db.Column(db.String(1024), unique=False, nullable=True)
+# 	notes = db.Column(db.String(1024), unique=False, nullable=True)
+
+
+# 	def __repr__(self):
+# 		return '<User %r>' % self.username
+
+
+class Univ_v2(db.Model):
+ 
 	id = db.Column(db.Integer, primary_key=True)
 	question = db.Column(db.String(20000), unique=False, nullable=False)
 	answer = db.Column(db.String(20000), unique=False, nullable=True)
-	failed_assoc_prob_list = db.Column(db.String(20000), unique=False, nullable=True)
-	node_doc = db.Column(db.String(20000), unique=False, nullable=True)
-	predicate_tuples = db.Column(db.String(20000), unique=False, nullable=True)
-	ref_exp_nodes = db.Column(db.String(20000), unique=False, nullable=True)
-	res_dict = db.Column(db.String(20000), unique=False, nullable=True)
-	response = db.Column(db.String(20000), unique=False, nullable=True)
+	format_query = db.Column(db.String(20000), unique=False, nullable=True)
+	concept_nodes = db.Column(db.String(20000), unique=False, nullable=True)
+	inv_index = db.Column(db.String(20000), unique=False, nullable=True)
+	networkx_graph = db.Column(db.String(20000), unique=False, nullable=True)
+	pred_tuples = db.Column(db.String(20000), unique=False, nullable=True)
+	sem_parse_out = db.Column(db.String(20000), unique=False, nullable=True)
 	results = db.Column(db.String(20000), unique=False, nullable=True)
+	plot_json = db.Column(db.String(20000), unique=False, nullable=True)
+	text = db.Column(db.String(20000), unique=False, nullable=True)
 	relevant = db.Column(db.Boolean, unique=False, nullable=True)
 	comment = db.Column(db.String(20000), unique=False, nullable=True)
 	submitted = db.Column(db.Boolean, unique=False, nullable=True)
 	status = db.Column(db.String(20000), unique=False, nullable=True)
 	timestamp = db.Column(db.String(20000), unique=False, nullable=True)
-	user_id = db.Column(db.Integer, unique=False, nullable=False)
-	username = db.Column(db.String(1024), unique=False, nullable=True)
-	email = db.Column(db.String(20000), unique=False, nullable=True)
-	state = db.Column(db.String(1024), unique=False, nullable=True)
-	issue_type = db.Column(db.String(1024), unique=False, nullable=True)
-	owner = db.Column(db.String(1024), unique=False, nullable=True)
-	notes = db.Column(db.String(1024), unique=False, nullable=True)
-
-	def __repr__(self):
-		return '<User %r>' % self.username
-
-class Covid(db.Model):
-
-	id = db.Column(db.Integer, primary_key=True)
-	question = db.Column(db.String(20000), unique=False, nullable=False)
-	answer = db.Column(db.String(20000), unique=False, nullable=True)
-	failed_assoc_prob_list = db.Column(db.String(20000), unique=False, nullable=True)
-	node_doc = db.Column(db.String(20000), unique=False, nullable=True)
-	predicate_tuples = db.Column(db.String(20000), unique=False, nullable=True)
-	ref_exp_nodes = db.Column(db.String(20000), unique=False, nullable=True)
-	res_dict = db.Column(db.String(20000), unique=False, nullable=True)
-	response = db.Column(db.String(20000), unique=False, nullable=True)
-	results = db.Column(db.String(20000), unique=False, nullable=True)
-	relevant = db.Column(db.Boolean, unique=False, nullable=True)
-	comment = db.Column(db.String(20000), unique=False, nullable=True)
-	submitted = db.Column(db.Boolean, unique=False, nullable=True)
-	status = db.Column(db.String(20000), unique=False, nullable=True)
-	timestamp = db.Column(db.String(20000), unique=False, nullable=True)
-	statictics = db.Column(db.String(20000), unique=False, nullable=True)
 	source = db.Column(db.String(20000), unique=False, nullable=True)
 	source_link = db.Column(db.String(20000), unique=False, nullable=True)
 	img_link = db.Column(db.String(20000), unique=False, nullable=True)
@@ -78,18 +138,60 @@ class Covid(db.Model):
 	issue_type = db.Column(db.String(2000), unique=False, nullable=True)
 	owner = db.Column(db.String(1024), unique=False, nullable=True)
 	notes = db.Column(db.String(1024), unique=False, nullable=True)
-
+	statictics = db.Column(db.String(20000), unique=False, nullable=True)
+	version = db.Column(db.String(20000), unique=False, nullable=True)
 
 	def __repr__(self):
 		return '<User %r>' % self.username
 
-classObj = { "University": User, "Covid": Covid }
 
+class Covid_v2(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    question = db.Column(db.String(20000), unique=False, nullable=False)
+    answer = db.Column(db.String(20000), unique=False, nullable=True)
+    format_query = db.Column(db.String(20000), unique=False, nullable=True)
+    concept_nodes = db.Column(db.String(20000), unique=False, nullable=True)
+    inv_index = db.Column(db.String(20000), unique=False, nullable=True)
+    networkx_graph = db.Column(db.String(20000), unique=False, nullable=True)
+    pred_tuples = db.Column(db.String(20000), unique=False, nullable=True)
+    sem_parse_out = db.Column(db.String(20000), unique=False, nullable=True)
+    results = db.Column(db.String(20000), unique=False, nullable=True)
+    plot_json = db.Column(db.String(20000), unique=False, nullable=True)
+    text = db.Column(db.String(20000), unique=False, nullable=True)
+    relevant = db.Column(db.Boolean, unique=False, nullable=True)
+    comment = db.Column(db.String(20000), unique=False, nullable=True)
+    submitted = db.Column(db.Boolean, unique=False, nullable=True)
+    status = db.Column(db.String(20000), unique=False, nullable=True)
+    timestamp = db.Column(db.String(20000), unique=False, nullable=True)
+    source = db.Column(db.String(20000), unique=False, nullable=True)
+    source_link = db.Column(db.String(20000), unique=False, nullable=True)
+    img_link = db.Column(db.String(20000), unique=False, nullable=True)
+    user_id = db.Column(db.Integer, unique=False, nullable=False)
+    username = db.Column(db.String(1024), unique=False, nullable=True)
+    email = db.Column(db.String(20000), unique=False, nullable=True)
+    state = db.Column(db.String(1024), unique=False, nullable=True)
+    issue_type = db.Column(db.String(2000), unique=False, nullable=True)
+    owner = db.Column(db.String(1024), unique=False, nullable=True)
+    notes = db.Column(db.String(1024), unique=False, nullable=True)
+    statictics = db.Column(db.String(20000), unique=False, nullable=True)
+    version = db.Column(db.String(20000), unique=False, nullable=True)
+
+
+    def __repr__(self):
+        return '<User %r>' % self.username
+
+# change values according to classes
+classObj = { "University": Univ_v2, "Covid": Covid_v2 }
+# classObj = {"University": User, "Covid": Covid}
 
 class QaAgent(object):
 	"""docstring for QaAgent"""
 	def __init__(self):
 		super().__init__()
+
+		self.uiSettingsJson = {}
+		with open('./src/uiSettings.json','r') as fp:
+			self.uiSettingsJson = json.load(fp)
 
 	def verify_user(self,request):
 		json_data = request.get_json(force=True)
@@ -125,75 +227,91 @@ class QaAgent(object):
 
 	def updateRow(self,request):
 		data = request.get_json(force=True)
-		id_no = data['id']
-		# print(data)
-				
-		row = User.query.filter_by(id = id_no).first()
-		db.session.delete(row)
-		db.session.commit()
-		
-		ans = data
-		record = User(
-				id = id_no,
-				question = data["question"],
-				answer = str(ans["answer"]),
-				failed_assoc_prob_list = str(ans["failed_assoc_prob_list"]),
-				node_doc = str(ans["node_doc"]) ,
-				predicate_tuples = str(ans["predicate_tuples"]) ,
-				ref_exp_nodes = str(ans["ref_exp_nodes"]),
-				res_dict = ans["res_dict"],
-				response = str(ans["response"]),
-				results = str(ans["results"]),
-				relevant = data["relevant"],
-				comment = data["comment"],
-				submitted = data["submitted"],
-				status = data["status"],
-				timestamp = data["timestamp"],
-				user_id = int(data['user_id']) ,
-				username = data['username'],
-				email = data['email'],
-				state = data['state'],
-				issue_type = data['issue_type'],
-				owner = data['owner'],
-				notes = data['notes']
-				)
-		db.session.add(record)
+		domain = data['domain']
+
+		del data['domain']
+		id = int(data['id'])
+		row = classObj[domain].query.filter_by(id = id).first()
+
+		for key,value in data.items():
+			print(key,type(value))
+			if key in ["user_id","id"] :
+				setattr(row,key,int(value))
+			else :
+				setattr(row,key,value)
 		db.session.commit()
 		
 		return jsonify('success')
+	
+	def uiSettings(self):
+		return jsonify(	self.uiSettingsJson )
+
+	def SaveuiSettings( self, request ):
+		self.uiSettingsJson = request.get_json(force=True)
+
+		with open('./src/uiSettings.json','w') as fp:
+			json.dump(request.get_json(force=True),fp,indent=4)
+		return jsonify('success')
+
+
+	def ChatFeedbacks(self, request):
+		r = redis.Redis(host='localhost', port=6379, db=0)
+		res = r.keys()
+		session_list = []
+		for x in res:
+			ses = x.decode('utf-8')
+
+			if ses.startswith('session:') :
+				ses_res_pkl = r.get(ses)
+				ses_res = pickle.loads(ses_res_pkl)
+				
+				session_list.append({
+					'session_id': ses[8:],
+					'user_id': ses_res.get('user_id', None),
+					'created_at': ses_res.get('created_at', None),
+					'feedbacks': [ row['feedback'] if 'feedback' in row else None for row in ses_res.get('history', [])  ],
+					'history': ses_res.get('history', None)
+				})
+
+		return jsonify({ "msg": "success", "data": session_list })
 
 
 qa_agent = QaAgent()
 
+# QA Feedback
 @app.route('/api/verify',methods=['POST'])
 def verify_user():
-	if(request.method == 'POST'):
+	if request.method == 'POST' :
 		return qa_agent.verify_user(request)
 
 
 @app.route('/api/dbData',methods=['POST'])
 def fetch_dbdata():
-	if(request.method == 'POST'):
+	if request.method == 'POST' :
 		return qa_agent.fetch_dbdata()
 
 @app.route('/api/updateRow',methods=['POST'])
 def updateRow():
-	if(request.method == 'POST'):
+	if request.method == 'POST' :
 		return qa_agent.updateRow(request)
+
+
+# Chat Feedback
+@app.route('/api/chatDbData', methods=['POST'])
+def ChatFeedbacks():
+	if request.method == 'POST':
+		return qa_agent.ChatFeedbacks( request )
 
 
 # For Getting UISettings JSON
 
 @app.route('/api/uiSettings',methods=['GET'])
 def uiSettings():
-	with open('./src/uiSettings.json','r') as fp:
-		return jsonify( json.load(fp) )
+	return qa_agent.uiSettings()
 
 @app.route('/api/saveSettings',methods=['POST'])
 def saveSettings():
-	with open('./src/uiSettings.json','w') as fp:
-		json.dump(request.get_json(force=True),fp,indent=4)
-	return jsonify('success')
+	return qa_agent.SaveuiSettings( request )
 
 
 if __name__ == '__main__':
