@@ -264,6 +264,15 @@ class QaAgent(object):
 			if ses.startswith('session:') :
 				ses_res_pkl = r.get(ses)
 				ses_res = pickle.loads(ses_res_pkl)
+
+				for session in ses_res.get('history', []):
+					if 'inference_output' in session and session['inference_output'] != None:
+						for i,el in enumerate(session['inference_output']):
+							try:
+								session['inference_output'][i]['G'] = None
+							except:
+								session['inference_output']['G'] = None
+				
 				
 				session_list.append({
 					'session_id': ses[8:],
@@ -272,8 +281,15 @@ class QaAgent(object):
 					'feedbacks': [ row['feedback'] if 'feedback' in row else None for row in ses_res.get('history', [])  ],
 					'history': ses_res.get('history', None)
 				})
+				
+		sessions = []
+		for session in session_list:
+			try:
+				sessions.append( json.dumps(session) )
+			except:
+				pass
 
-		return jsonify({ "msg": "success", "data": session_list })
+		return jsonify({ "msg": "success", "data": sessions })
 
 
 qa_agent = QaAgent()
