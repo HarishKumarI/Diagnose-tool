@@ -2,13 +2,8 @@
   "name": "diagnose-tool",
   "version": "0.1.0",
   "private": true,
-<<<<<<< HEAD
-  "host": "http://95.217.239.6:7229",
-  "proxy": "http://95.217.239.6:7230",
-=======
   "host": "http://127.0.0.1:3010",
   "proxy": "http://diagnose.cogniqa.ai",
->>>>>>> 0c47eb6b3fa27d2af6f5c255a07ae12e1e306a4d
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -16,6 +11,8 @@
     "d3": "^5.16.0",
     "jquery": "^3.5.0",
     "json2md": "^1.7.0",
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-json-view": "^1.19.1",

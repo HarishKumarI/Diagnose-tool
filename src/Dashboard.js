@@ -49,7 +49,9 @@ class Dashboard extends React.Component{
             else 
                 $('#userInfo').show()
         }
-        
+
+        // console.log( this.state.uisettings )
+
         return(
             <div >
 

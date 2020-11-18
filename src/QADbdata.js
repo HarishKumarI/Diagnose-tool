@@ -79,10 +79,10 @@ class ReviewForm extends React.Component{
                 answerElement =  ( field === "answer" || field === 'text' ) ? 
                         <div  style={{textAlign:"left"}} 
                             dangerouslySetInnerHTML={{ __html: converter.makeHtml( json2md( this.strToJSON( this.state[field] ) )).replace(/<a href="/g,'<a target="_blank" href="') }} /> 
-                        : <ReactJson  style={{ textAlign: 'initial', backgroundColor: 'none' }} 
+                        :   <ReactJson  style={{ textAlign: 'initial', backgroundColor: 'none' }} 
                                 src={ this.strToJSON( this.state[field] ) } theme="colors" displayDataTypes={false} 
                                 displayObjectSize={ false } onEdit={ false } onAdd={ false }
-                                onDelete={ false } collapsed={ true } sortKeys={ false } />
+                                onDelete={ false } collapsed={ true } sortKeys={ false } /> 
                 }
                 catch(error){ 
                     // console.log( this.state[field].replace(/'/g,'"'), field )
@@ -530,15 +530,15 @@ class DbData extends React.Component{
         
         
         if ( this.props.uiSettings !== undefined ){
-            let stateOptions = this.props.uiSettings.list.state.map((stateValue)=>
+            stateOptions = this.props.uiSettings.list.state.map((stateValue)=>
                     {return {key: stateValue,text:stateValue,value:stateValue } })
             stateOptions.push({key: 'showall',text:'showall',value: undefined })
 
-            let issuetypeOptions = this.props.uiSettings.list.issue_type.map((issueType)=>
+            issuetypeOptions = this.props.uiSettings.list.issue_type.map((issueType)=>
                     {return {key: issueType,text:issueType,value:issueType } })
             issuetypeOptions.push({key: 'showall',text:'showall',value: undefined })
                 
-            let ownerOptions = this.props.uiSettings.list.owner.map((owner)=>
+            ownerOptions = this.props.uiSettings.list.owner.map((owner)=>
                     {return {key: owner,text:owner,value:owner } })
             ownerOptions.push({key: 'showall',text:'showall',value: undefined })
         }
@@ -716,4 +716,4 @@ class DbData extends React.Component{
 }
 
 
-export { DbData }
+export { DbData, DataInsights }

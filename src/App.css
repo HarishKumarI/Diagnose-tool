@@ -4,7 +4,6 @@
   min-height: 100vh;    
 }
 
-
 .Title{
   color:#767a82;
   display: flex;
@@ -95,7 +94,7 @@
 .dataTable{
   clear: both;
   margin-top: 0px;
-  width: 90vw;
+  /* width: 90vw; */
   border: 1px solid rgb(151, 148, 148);
   word-break: keep-all;
   border-radius: 4px;
@@ -152,6 +151,7 @@
 
 .controls{
   width: 90vw;
+  margin: 10px 0;
 }
 
 .controls .ui.secondary.menu{
@@ -169,12 +169,51 @@
   color: white;
 } 
 
+.positive{
+  background-color: #365436;
+}
+
+.negative{
+  background-color: #c1383838;
+}
+
+.anchor_btn, .anchor_btn:hover{
+  padding: 8px 10px;
+  background-color: rgb(22,120,195);
+  color: whitesmoke;
+  border-radius: 5px;
+  font-weight: bolder;
+  text-decoration: none;
+}
+
+
+.MesssageData_row, .MesssageData_row div{
+  margin: 10px;
+}
+
+.pagination{
+  width: 100%;
+  justify-content: center;
+  margin: 8px 0 !important;
+}
+
+.pagination a{
+  outline: none;
+}
+
+.pagination .active{
+  font-size: 16px;
+  border-color: rgb(255, 255, 255) !important;
+  background-color: #424242 !important;
+  color: red !important;
+}
+
 
 /* styleing for settings component */
 
 .settingsTab{
   margin-top: 30px;
-  color: white;
+  color: rgb(54, 39, 39);
   width: 90vw;
   padding: 15px;
 }

@@ -136,6 +136,24 @@
         "domain": "Cars",
         "type":"Chat",
         "db_ip": "localhost",
-        "db_port": "6379"
+        "db_port": "6379",
+		"list": {
+			"issue_type": [
+				"INFO_REPEATED"
+			],
+			"owner": [
+				"Komal",
+				"Rahul"
+			],
+			"state": [
+				"Open",
+				"In Analysis",
+				"Fix Planned",
+				"Fixed",
+				"Closed",
+				"Deferred",
+				"Won't Fix"
+			]
+		}
     }
 }
