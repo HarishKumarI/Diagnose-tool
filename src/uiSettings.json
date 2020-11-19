@@ -137,6 +137,7 @@
         "type":"Chat",
         "db_ip": "localhost",
         "db_port": "6379",
+        "rerunlink": "http://49.206.16.34:7050/debug/",
 		"list": {
 			"issue_type": [
 				"INFO_REPEATED"

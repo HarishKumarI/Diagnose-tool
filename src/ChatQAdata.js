@@ -6,29 +6,24 @@ import $ from 'jquery'
 import { DataInsights } from './QADbdata'
 import { Table, Dropdown,Pagination, Loader, Progress } from 'semantic-ui-react'
 
-// import * as d3 from 'd3'
-// import * as json2md from 'json2md'
-// import * as showdown from 'showdown' 
+import * as json2md from 'json2md'
+import * as showdown from 'showdown' 
 
 import ReactJson from 'react-json-view'
 
 
-// var converter = new showdown.Converter({'noHeaderId':'true'})
+var converter = new showdown.Converter({'noHeaderId':'true'})
 
 function MesssageData( props ){
     const { data } = props
-    console.log( data )
-    return  <div>
-                <div className="MesssageData_row" style={{ display: 'flex',  }}>
-                    <div> <b>Msg Id: </b> { data.msg_id } </div>  <span style={{ margin: '0 15px' }}></span>
-                    <div> <b>Msg Rank: </b> { data.msg_rank } </div>           
-                </div>
+    // console.log( Object.keys( data ), Object.keys( data.response ) )
+    return  <div style={{ padding: '0 30px' }}> 
                 <div className="MesssageData_row">
                     <div> <b>Feedback Text:</b> </div>
                     <div style={{ padding: '5px 15px' }}> { data.feedback_text }  </div>
                 </div>
                 <div className="MesssageData_row">
-                    <div><b>Inference Output:</b></div>
+                    <div><b>Query Inference Output:</b></div>
                     <div>
                         <ReactJson  style={{ textAlign: 'initial', backgroundColor: 'none' }} 
                             src={ data.inference_output ? data.inference_output : {} } theme="colors" displayDataTypes={false} 
@@ -37,7 +32,7 @@ function MesssageData( props ){
                     </div>
                 </div>
                 <div className="MesssageData_row">
-                    <div><b>Payload:</b></div>
+                    <div><b>Query Payload:</b></div>
                     <div>
                         <ReactJson  style={{ textAlign: 'initial', backgroundColor: 'none' }} 
                             src={ data.payload ? data.payload : {} } theme="colors" displayDataTypes={false} 
@@ -45,6 +40,29 @@ function MesssageData( props ){
                             onDelete={ false } collapsed={ true } sortKeys={ false } />
                     </div>
                 </div>
+                {  data.response !== undefined && data.response !== null ?
+                    <>
+                        <div className="MesssageData_row">
+                            <div><b>Response Inference Output:</b></div>
+                            <div>
+                                <ReactJson  style={{ textAlign: 'initial', backgroundColor: 'none' }} 
+                                    src={ data.response.inference_output ? data.response.inference_output : {} } theme="colors" displayDataTypes={false} 
+                                    displayObjectSize={ false } onEdit={ false } onAdd={ false }
+                                    onDelete={ false } collapsed={ false } sortKeys={ false } 
+                                />
+                            </div>
+                        </div>
+                        <div className="MesssageData_row">
+                            <div><b>Response Payload:</b></div>
+                            <div>
+                                <ReactJson  style={{ textAlign: 'initial', backgroundColor: 'none' }} 
+                                    src={ data.response.payload ? data.response.payload : {} } theme="colors" displayDataTypes={false} 
+                                    displayObjectSize={ false } onEdit={ false } onAdd={ false }
+                                    onDelete={ false } collapsed={ false } sortKeys={ false } />
+                            </div>
+                        </div>
+                    </>
+                : null }
             </div>
 }
 
@@ -64,7 +82,6 @@ class SessionData extends React.Component{
             maxrows: 10,
             activePage: 1,
             loading: false,
-            sender: undefined,
             activeMsg: undefined
         }
 
@@ -74,7 +91,7 @@ class SessionData extends React.Component{
 
     componentDidMount(){
         let data = this.props.data
-        data.history = data.history.map( ( msg, idx ) => { return { idx, ...msg }} )
+        data.exchages = data.exchages.map( ( msg, idx ) => { return { idx, ...msg }} )
         this.setState({ session_data: data })
     }
 
@@ -91,6 +108,28 @@ class SessionData extends React.Component{
             pageno = this.state.activePage - 1
         
         this.setState({ activePage: pageno}) 
+    }
+
+    LeadingText( message ){
+        let text = ''
+        if( message.response !== undefined && message.response !== null ){
+            switch( message.response.payload.bot_response[0].type ){
+                case 'TEXT': 
+                    const md = json2md( message.response.payload.bot_response[0].content )
+                    const div = document.createElement('div')
+                    div.innerHTML = converter.makeHtml( md )
+                    const htmlText = div.innerText.replace('\n','')
+                    text = htmlText.length > 100 ? htmlText.substr(0, 100)+'  ...' : htmlText 
+                    break
+                case 'FORM':
+                case 'CARD':
+                case 'CAROUSEL':
+                    text = message.response.payload.bot_response[0].title
+                    break
+                default: text = ''
+            }
+        }
+        return text
     }
 
 
@@ -121,36 +160,49 @@ class SessionData extends React.Component{
         let count = 1
         
         if( session_data !== null ){
-            session_data.history.forEach( ( message, idx) => {
+            session_data.exchages.forEach( ( message, idx) => {
 
                 if( ( this.state.relevant === null || message.feedback === this.state.relevant || ( message.feedback === null && this.state.relevant ) )
-                    && ( this.state.sender === undefined || message.sender === this.state.sender)
                     && ( this.state.state === undefined  ) 
                     && ( this.state.issue_type === undefined )
                     && ( this.state.owner === undefined  )
                 ) {
 
-                    const bgColor = message.sender === 'USER' ? '' : `${ message.feedback === null || message.feedback ? '#365436' : '#c1383838' }`
+                    const bgColor = `${ message.feedback || message.feedback === null ? '#365436' : '#c1383838' }`
+                    let displaytext = message.response !== undefined && message.response !== null ? message.response.payload.bot_response.map( response => { return response.type } ) : []
+                    // let displaytext = ''
+                    const response_count = displaytext
+                    displaytext = Array.from( new Set( displaytext ) )
+                    if( displaytext.length > 4 )
+                        displaytext = displaytext.splice( 0, 4).join(' , ') + ' ...'
 
+                    displaytext = displaytext + '\n'
                     rows.push( 
                         <Fragment key={idx}>
                             <tr  style={{ cursor: 'pointer' }} 
                                 onClick={e => this.setState({ activeMsg: this.state.activeMsg !== idx ? idx : undefined }) } 
                             > 
                                 <td style={{ backgroundColor: bgColor, textAlign: 'center' }} >{ count }</td>
-                                <td style={{ backgroundColor: bgColor, textAlign: 'center', maxWidth: '100px !important' }} >{ message.sender }</td>
+                                {/* <td style={{ backgroundColor: bgColor, textAlign: 'center', maxWidth: '100px !important' }} >{ message.sender }</td> */}
                                 <td style={{ backgroundColor: bgColor, textAlign: 'center' }} >
                                     { 
-                                        message.sender === 'USER' ? '' :
-                                            message.feedback || message.feedback === null ? 
-                                                <span role="img" aria-label="positive feedback" >&#128077;</span> 
-                                            :   <span role="img" aria-label="negative feedback" >&#128078;</span> 
+                                        message.feedback || message.feedback === null  ? 
+                                            <span role="img" aria-label="positive feedback" >&#128077;</span> 
+                                        :  <span role="img" aria-label="negative feedback" >&#128078;</span> 
                                     }
                                 </td>
-                                <td style={{ backgroundColor: bgColor, width: 'max-content' }}> 
-                                    <div suppressContentEditableWarning
-                                        dangerouslySetInnerHTML={{ __html: message.sender === 'USER' ? message.message : `<b>Reply for :</b><br/> ${message.payload.question}` }}
-                                    />
+                                <td style={{ backgroundColor: bgColor, width: 'max-content' }}>
+                                    <div style={{ whiteSpace: 'pre-wrap', display: 'flex', width: '100%',  justifyContent: 'space-between' }}> 
+                                        <div>
+                                            <div style={{ fontWeight: 'bolder' }} suppressHydrationWarning dangerouslySetInnerHTML={{ __html: message.message }} />
+                                            { displaytext }
+                                            <span >{ this.LeadingText( message )}</span>
+                                        </div>
+                                        <div title="No of Responses" 
+                                            style={{ border: '1px solid #4a4747', height: 'fit-content', width: 'fit-content', padding: '5px 8px', borderRadius: '3px', backgroundColor: '#484848' }}>
+                                            { response_count.length }
+                                        </div>
+                                    </div>
                                 </td>
                                 <td style={{ backgroundColor: bgColor, textAlign: 'center' }}> - </td>
                                 <td style={{ backgroundColor: bgColor, textAlign: 'center' }}> - </td>
@@ -170,9 +222,7 @@ class SessionData extends React.Component{
             })
         }
 
-        const relCount = session_data === null ? 0 : session_data.history.filter( x => ( x.feedback === true || x.feedback === null ) && x.sender !== 'USER' ).length
-        const msg_list = session_data === null ? [] : session_data.history.filter( x => x.sender !== 'USER' )
-
+        const relCount = session_data === null ? 0 :  session_data.exchages.filter( x => x.feedback === true || x.feedback === null ).length
 
         return( 
             
@@ -181,7 +231,7 @@ class SessionData extends React.Component{
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
                         <div> #{ session_data.id } </div>
                         <div > 
-                            <a href={ `http://49.206.16.34:7050/debug/${ session_data.session_id }` } 
+                            <a href={ `${uiSettings.rerunlink}${ session_data.session_id }` } 
                                 className="anchor_btn" target="_blank" rel="noopener noreferrer" > Open as Chat </a>
                         </div>
                     </div>
@@ -190,11 +240,10 @@ class SessionData extends React.Component{
                         <div> <b>Session Id:</b> { session_data.session_id } </div> <span style={{ margin: '0 5px' }}></span>
                         <div> <b>User ID:</b> { session_data.user_id} </div>
                     </div>
-
                     <DataInsights 
                         stateObj={ this.state }
                         relcount={ relCount  } 
-                        jsondata= { msg_list }
+                        jsondata= { session_data.exchages }
                         updatemaxRows={ latestmaxrows => this.setState({maxrows : latestmaxrows})} 
                     />
 
@@ -203,9 +252,9 @@ class SessionData extends React.Component{
                             <thead>
                                 <tr>
                                     <th style={{ textAlign: 'center' }}>#</th>
-                                    <th style={{ textAlign: 'center',  maxWidth: '100px !important' }}>
+                                    {/* <th style={{ textAlign: 'center',  maxWidth: '100px !important' }}>
                                         <Dropdown
-                                            text={`${(this.state.sender === undefined) ? "All States" : this.state.sender }`}  
+                                            text={`${(this.state.sender === undefined) ? "Sender" : this.state.sender }`}  
                                             icon='filter' >
                                             <Dropdown.Menu >
                                                 <Dropdown.Item onClick={() => {this.setState({ sender: 'USER' })} } text='USER' />
@@ -213,7 +262,7 @@ class SessionData extends React.Component{
                                                 <Dropdown.Item selected onClick={() => {this.setState({ sender: undefined})} } text='Show All' />
                                             </Dropdown.Menu>
                                         </Dropdown>
-                                    </th>
+                                    </th> */}
                                     <th style={{ textAlign: 'center' }}>
                                         <Dropdown
                                             text={ ( this.state.relevant ) ? 'Relevant' : ( this.state.relevant===null ) ? 'Relevancy' : 'Not Relevant'  }  
@@ -296,12 +345,10 @@ class ChatDbdata extends React.Component{
 
         this.state={
             sessions_data: [],
-            activeIndex: 0,
+            activeIndex: undefined,
             relevant: undefined,
             relevantCount: 0,
-            state: undefined,
-            owner: undefined,
-            issue_type: undefined,
+            user_id: undefined,
             maxrows: 20,
             startIndex: 0,
             activePage: 1,
@@ -315,6 +362,7 @@ class ChatDbdata extends React.Component{
 
         this.requestServer = this.requestServer.bind(this)
         this.handlepagination = this.handlepagination.bind(this)
+        this.updatefilter = this.updatefilter.bind(this)
     }
 
 
@@ -327,14 +375,46 @@ class ChatDbdata extends React.Component{
         $.post('/api/chatDbData', {}, res =>{
             // console.log( JSON.parse( res.data[0] ).created_at )
             let sessionsList = []
+
             res.data.forEach( ( session, idx) => { 
                 sessionsList.push({ id: idx, ...JSON.parse(session) })
             })
 
-            sessionsList.sort((a, b) => ( new Date( a.created_at ) < new Date( b.created_at ) ) ? 1 : -1  ) 
+            let newList = sessionsList
 
-            this.setState({ sessions_data: sessionsList , loading: false })
+            newList.forEach( ( session, idx) => {
+                // if( idx > 0) return null
+
+                session.exchages = []
+                if( session.history !== null ){
+                    session.history.forEach( ( msg, i) =>{
+                        if( msg.sender === 'USER' ){
+                            msg.response = null
+                            msg.feedback = null
+                            msg.feedback_text = null
+                            session.exchages.push(msg)
+                        }
+                        else{
+                            session.exchages[ session.exchages.length -1 ].feedback = msg.feedback
+                            session.exchages[ session.exchages.length -1 ].feedback_text = msg.feedback_text
+                            session.exchages[ session.exchages.length -1 ].response = msg
+                        }
+                    })
+                }
+            })
+
+            // console.log( newList )
+            // sessionsList.sort((a, b) => ( new Date( a.created_at ) < new Date( b.created_at ) ) ? 1 : -1  ) 
+            newList.sort((a, b) => ( new Date( a.created_at ) < new Date( b.created_at ) ) ? 1 : -1  ) 
+
+            this.setState({ sessions_data: newList , loading: false })
         })
+    }
+
+
+    updatefilter(event,data){
+        const { name, value } = data
+        this.setState({ [name]: value, activeIndex: undefined})
     }
 
 
@@ -351,54 +431,66 @@ class ChatDbdata extends React.Component{
     render(){
         // const relventtext = ( this.state.relevant ) ? 'Relevant' : ( this.state.relevant===undefined ) ? 'Relevancy' : 'Not Relevant' 
         // console.log( this.state.sessions_data.slice( 0, 20) )
-        let feedbacks = []
         let relevantCount = 0
         let msg_list = []
+        let user_idOptions = []
 
-        const rows = this.state.sessions_data.map( ( session, idx ) => {
-                        // session = JSON.parse( session ) 
+        let rows = []
+        let count = 1
+        
+        if( this.state.session_data !== null ){
+            this.state.sessions_data.forEach( ( session, idx ) => {
+                user_idOptions.push( session.user_id )
 
-                        // console.log( session.feedbacks, session.history ) 
+                // console.log( session.feedbacks, session.history ) 
 
-                        if( session.sender !== 'USER' ){
-                            relevantCount = relevantCount + session.feedbacks.filter( x => x === true || x === null).length  
-                            if( session.feedbacks !== null )    
-                                session.feedbacks.forEach( feedback => { feedbacks.push( feedback ) })
-                            if( session.history !== null )
-                                session.history.forEach( hist => msg_list.push( hist ) ) 
-                        }
+                if( session.sender !== 'USER' ){
+                    relevantCount = relevantCount + session.exchages.filter( x =>  x.feedback  || x.feedback === null ).length
+                    if( session.exchages !== null )
+                        session.exchages.forEach( exchange => msg_list.push( exchange ) ) 
+                }
 
-                        let positive_feedbacks = 0
-                        let botmsgslist = 0
-                        if( session.sender !== 'USER' ){
-                            positive_feedbacks = session === null ? 0  : session.history !== null ? session.history.filter( x => ( x.feedback  || x.feedback === null ) && x.sender !== 'USER' ).length : 0
-                            botmsgslist        = session === null ? [] : session.history !== null ? session.history.filter( x => !x.feedback && x.feedback !== null && x.sender !== 'USER' ) : []
-                        }
-                        
-                        return  <Fragment key={idx}>
-                                    <tr 
-                                        style={{ cursor: 'pointer' }}
-                                        onClick={e => this.setState({ activeIndex: this.state.activeIndex !== idx ? idx : undefined })}
-                                    >
-                                        <td style={{ textAlign: 'center' }}>{ idx+1 }</td>
-                                        <td style={{ textAlign: 'center' }}>{ session.session_id }</td>
-                                        <td style={{ textAlign: 'center' }}>{ session.user_id }</td>
-                                        <td style={{ textAlign: 'center' }}>{ positive_feedbacks }</td>
-                                        <td style={{ textAlign: 'center' }}>{ botmsgslist.length }</td>
-                                        <td style={{ textAlign: 'center' }}>{ session.history !== null ? session.history.length : 0 }</td>
-                                        <td style={{ textAlign: 'center' }}>{ (new Date(session.created_at) ).toLocaleString() }</td>
-                                    </tr>     
-                                    {   
-                                        this.state.activeIndex === idx ?
-                                            <tr>
-                                                <td colSpan="7" > <SessionData data={session} uiSettings={ this.state.uisettings } /> </td>
-                                            </tr>
-                                        :null
-                                    }       
-                                </Fragment>
-                    })
+                let positive_feedbacks = 0
+                let negative_feedbacks = 0
+                if( session.sender !== 'USER' ){
+                    positive_feedbacks = session === null ? 0  : session.exchages !== null ? session.exchages.filter( x =>  x.feedback  || x.feedback === null ).length : 0
+                    negative_feedbacks = session === null ? [] : session.exchages !== null ? session.exchages.filter( x => !x.feedback && x.feedback !== null  ).length : 0
+                }
 
-        // console.log( relevantCount, feedbacks, msg_list )
+                if(  this.state.user_id === undefined || session.user_id === this.state.user_id ) {
+
+                    rows.push( 
+                        <Fragment key={idx}>
+                            <tr 
+                                style={{ cursor: 'pointer' }}
+                                onClick={e => this.setState({ activeIndex: this.state.activeIndex !== idx ? idx : undefined })}
+                            >
+                                <td style={{ textAlign: 'center' }}>{ count }</td>
+                                <td style={{ textAlign: 'center' }}>{ session.session_id }</td>
+                                <td style={{ textAlign: 'center' }}>{ session.user_id }</td>
+                                <td style={{ textAlign: 'center' }}>{ positive_feedbacks }</td>
+                                <td style={{ textAlign: 'center' }}>{ negative_feedbacks }</td>
+                                <td style={{ textAlign: 'center' }}>{ session.exchages !== null ? session.exchages.length : 0 }</td>
+                                <td style={{ textAlign: 'center' }}>{ (new Date(session.created_at) ).toLocaleString() }</td>
+                            </tr>     
+                            {   
+                                this.state.activeIndex === idx ?
+                                    <tr>
+                                        <td colSpan="7" > <SessionData data={session} uiSettings={ this.state.uisettings } /> </td>
+                                    </tr>
+                                :null
+                            }       
+                        </Fragment>
+                    )
+                    count += 1
+                }
+            })
+        }
+
+        // console.log( relevantCount, msg_list.length )
+
+        user_idOptions = Array.from( new  Set( user_idOptions ) ).map( user_id => { return {key: user_id, text: user_id,value: user_id } } )
+        user_idOptions.push({key: 'showall',text:'showall',value: undefined })
 
         let date = new Date()
         date.setDate(date.getDate() )
@@ -424,34 +516,8 @@ class ChatDbdata extends React.Component{
                             stateObj={ this.state }
                             relcount={ relevantCount } 
                             jsondata= { msg_list }
-                            updatemaxRows={(latestmaxrows) => this.setState({maxrows : latestmaxrows})} 
+                            updatemaxRows={(latestmaxrows) => this.setState({maxrows : latestmaxrows, activePage: 0 })} 
                         />
-
-                        {/* <Menu secondary stackable className="rerunSet">
-                            <Menu.Item
-                                content={ ( this.state.bulkrun ) ? `Unselect` : `Bulk Re-run` }
-                                style={{ borderLeft: '1px solid #00000047'}}
-                                as={Button}
-                                onClick={(event) => this.setState({bulkrun: !this.state.bulkrun})}
-                            />
-                            { ( Object.keys(this.state.selectedQuestions).length > 0 ) ?
-                                    <Menu.Item
-                                        content="Run"
-                                        icon="play"
-                                        as={Button}
-                                        onClick={this.getBulkData}
-                                    />  
-                            : null}
-
-                            { ( this.state.progress ) ? 
-                                    <Menu.Item
-                                        content={ (this.state.progress === 100) ? 'Download' :`${parseInt(this.state.progress)}%` }
-                                        icon={ ( this.state.progress < 100 ) ? `spinner` : 'download' }
-                                        as={Button}
-                                        onClick={() => (this.state.progress === 100) ? this.downloadFile('tsv.tsv', this.TSVDataDump ) : null }
-                                    />
-                            : null }
-                        </Menu> */}
                     </div>
 
                     <div style={{ color: 'white',width: '100%'}}>
@@ -488,13 +554,21 @@ class ChatDbdata extends React.Component{
                                         : '#' } 
                                     </th>
                                     <th >Session Id</th>
-                                    <th>User Id</th>
+                                    <th>
+                                        <Dropdown 
+                                            text={`${(this.state.user_id === undefined) ? "User Id" : this.state.user_id }`}
+                                            className='icon'
+                                            name="user_id" 
+                                            icon="filter"
+                                            onChange={ this.updatefilter }
+                                            options={user_idOptions}
+                                            defaultValue={'showall'}
+                                        />
+                                    </th>
                                     <th>Positive Feedbacks</th>
                                     <th>Negative Feedbacks</th>
-                                    <th>No of Messages</th>
-                                    <th >
-                                        Create at
-                                    </th>
+                                    <th>Total No of Exchanges</th>
+                                    <th >Create at</th>
                                 </tr>
                             </thead>
                             

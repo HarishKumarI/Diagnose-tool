@@ -570,7 +570,7 @@ class DbData extends React.Component{
                             relcount={ this.relevantCount } 
                             jsondata= { dictData }
                             bulkrun = { this.state.bulkrun }
-                            updatemaxRows={(latestmaxrows) => this.setState({maxrows : latestmaxrows})} 
+                            updatemaxRows={(latestmaxrows) => this.setState({maxrows : latestmaxrows, activePage: 0 })} 
                         />
                         <Menu secondary stackable className="rerunSet">
                             <Menu.Item
