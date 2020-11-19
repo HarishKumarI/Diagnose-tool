@@ -150,7 +150,7 @@
 }
 
 .controls{
-  width: 90vw;
+  width: 80vw;
   margin: 10px 0;
 }
 
@@ -206,6 +206,23 @@
   border-color: rgb(255, 255, 255) !important;
   background-color: #424242 !important;
   color: red !important;
+}
+
+.switchbtn{
+  width: max-content;
+  height: fit-content;
+  margin: 10px 0;
+  padding: 8px 10px;
+  border-radius: 1px;
+  border: 2px solid transparent;
+  color: white;
+  background-color: #4E4A4A;
+  cursor: pointer;
+}
+
+.switchbtn_selected,.switchbtn:hover{
+  background-color: #797878;
+  border-color: rgb(4, 169, 219);
 }
 
 
@@ -305,5 +322,13 @@
   }
   100% {
     opacity: 0;
+  }
+}
+
+
+@media screen and (max-width: 900px) {
+  .controls{
+    width: 72vw !important;
+    border: 1px solid white;
   }
 }

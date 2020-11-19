@@ -11,8 +11,29 @@ import * as showdown from 'showdown'
 
 import ReactJson from 'react-json-view'
 
-
 var converter = new showdown.Converter({'noHeaderId':'true'})
+
+function LeadingText( message ){
+    let text = ''
+    if( message.response !== undefined && message.response !== null ){
+        switch( message.response.payload.bot_response[0].type ){
+            case 'TEXT': 
+                const md = json2md( message.response.payload.bot_response[0].content )
+                const div = document.createElement('div')
+                div.innerHTML = converter.makeHtml( md )
+                const htmlText = div.innerText.replace('\n','')
+                text = htmlText.length > 100 ? htmlText.substr(0, 100)+'  ...' : htmlText 
+                break
+            case 'FORM':
+            case 'CARD':
+            case 'CAROUSEL':
+                text = message.response.payload.bot_response[0].title
+                break
+            default: text = ''
+        }
+    }
+    return text
+}
 
 function MesssageData( props ){
     const { data } = props
@@ -67,6 +88,236 @@ function MesssageData( props ){
 }
 
 
+class MessagesTable extends React.Component{
+    constructor(props){
+        super(props)
+
+        this.state = {
+            data: [],
+            activePage: 1,
+            maxrows: 20,
+            state: undefined,
+            relevant: null,
+            issue_type: undefined,
+            owner: undefined,
+            uiSettings: undefined,
+            user_id: undefined,
+            fromdate: undefined,
+            todate: undefined,
+            activeMsg: undefined
+        }
+
+        this.handlepagination = this.handlepagination.bind(this)
+        this.updatefilter = this.updatefilter.bind(this)
+    }
+
+    componentDidMount(){
+        this.setState({ ...this.props })
+    }
+
+    updatefilter(event,data){
+        const { name, value } = data
+        this.setState({ [name]: value})
+    }
+
+    handlepagination(event) { 
+        let pageno = event.target.innerText
+        if( pageno === '>' ) 
+            pageno = this.state.activePage + 1
+        if( pageno === '<' )
+            pageno = this.state.activePage - 1
+        
+        this.setState({ activePage: pageno}) 
+    }
+    
+    render(){
+        const { uiSettings } = this.state
+        let stateOptions = []
+        let issuetypeOptions = []
+        let ownerOptions = []
+
+        if ( uiSettings !== undefined ){
+            stateOptions = uiSettings.list.state.map((stateValue)=>
+                    {return {key: stateValue,text:stateValue,value:stateValue } })
+            stateOptions.push({key: 'showall',text:'showall',value: undefined })
+
+            issuetypeOptions = uiSettings.list.issue_type.map((issueType)=>
+                    {return {key: issueType,text:issueType,value:issueType } })
+            issuetypeOptions.push({key: 'showall',text:'showall',value: undefined })
+                
+            ownerOptions = uiSettings.list.owner.map((owner)=>
+                    {return {key: owner,text:owner,value:owner } })
+            ownerOptions.push({key: 'showall',text:'showall',value: undefined })
+        }
+
+        let user_idOptions = []
+        let count  = 1
+        let rows = []
+
+        this.state.data.forEach( ( message, idx) => {
+
+                if( ( this.state.relevant === null || message.feedback === this.state.relevant || ( message.feedback === null && this.state.relevant ) )
+                    && ( this.state.user_id === undefined || this.state.user_id === message.user_id )
+                    && ( this.state.state === undefined  ) 
+                    && ( this.state.issue_type === undefined )
+                    && ( this.state.owner === undefined  )
+                ) {
+                    user_idOptions.push( message.user_id )
+
+                    const bgColor = `${ message.feedback || message.feedback === null ? '#365436' : '#c1383838' }`
+                    let displaytext = message.response !== undefined && message.response !== null ? message.response.payload.bot_response.map( response => { return response.type } ) : []
+                    // let displaytext = ''
+                    const response_count = displaytext
+                    displaytext = Array.from( new Set( displaytext ) )
+                    if( displaytext.length > 4 )
+                        displaytext = displaytext.splice( 0, 4).join(' , ') + ' ...'
+
+                    displaytext = displaytext + '\n'
+                    rows.push( 
+                        <Fragment key={idx}>
+                            <tr  style={{ cursor: 'pointer' }} 
+                                onClick={e => this.setState({ activeMsg: this.state.activeMsg !== idx ? idx : undefined }) } 
+                            >   
+                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }} >{ count }</td>
+                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }} >{ message.session_id }</td>
+                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }} >{ message.user_id }</td>
+                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }} >
+                                    { 
+                                        message.feedback || message.feedback === null  ? 
+                                            <span role="img" aria-label="positive feedback" >&#128077;</span> 
+                                        :  <span role="img" aria-label="negative feedback" >&#128078;</span> 
+                                    }
+                                </td>
+                                <td style={{ backgroundColor: bgColor, width: 'max-content' }}>
+                                    <div style={{ whiteSpace: 'pre-wrap', display: 'flex', width: '100%',  justifyContent: 'space-between' }}> 
+                                        <div>
+                                            <div style={{ fontWeight: 'bolder' }} suppressHydrationWarning dangerouslySetInnerHTML={{ __html: message.message }} />
+                                            { displaytext }
+                                            <span >{ LeadingText( message )}</span>
+                                        </div>
+                                        <div title="No of Responses" 
+                                            style={{ border: '1px solid #4a4747', height: 'fit-content', width: 'fit-content', padding: '5px 8px', borderRadius: '3px', backgroundColor: '#484848' }}>
+                                            { response_count.length }
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }}> - </td>
+                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }}> - </td>
+                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }}> - </td>
+                                <td style={{ backgroundColor: bgColor, textAlign: 'center', width: '180px' }}>{ (new Date(message.created_at) ).toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}) }</td>
+                            </tr>
+                            {
+                                this.state.activeMsg === idx ?
+                                    <tr key={idx+'_'}>
+                                        <td colSpan="7"> <MesssageData data={ message } /> </td>
+                                    </tr>
+                                : null
+                            }
+                        </Fragment>
+                    )
+                    count += 1
+                }
+        })
+
+
+        user_idOptions = Array.from( new  Set( user_idOptions ) ).map( user_id => { return {key: user_id, text: user_id,value: user_id } } )
+        user_idOptions.push({key: 'showall',text:'showall',value: undefined })
+
+
+        return(
+            <>
+                <div className="dataTable">
+                    <Table inverted>
+                        <thead>
+                            <tr>
+                                <th style={{ textAlign: 'center' }}>#</th>
+                                <th style={{ textAlign: 'center' }}>Session Id</th>
+                                <th>
+                                    <Dropdown 
+                                        text={`${(this.state.user_id === undefined) ? "User Id" : this.state.user_id }`}
+                                        className='icon'
+                                        name="user_id" 
+                                        icon="filter"
+                                        onChange={ this.updatefilter }
+                                        options={user_idOptions}
+                                        defaultValue={'showall'}
+                                    />
+                                </th>
+                                <th style={{ textAlign: 'center' }}>
+                                    <Dropdown
+                                        text={ ( this.state.relevant ) ? 'Relevant' : ( this.state.relevant===null ) ? 'Relevancy' : 'Not Relevant'  }  
+                                        icon='filter' >
+                                        <Dropdown.Menu >
+                                            <Dropdown.Item onClick={() => {this.setState({ relevant: true})} } text='Relevant' />
+                                            <Dropdown.Item onClick={() => {this.setState({ relevant: false})} } text='Not Relevant' />
+                                            <Dropdown.Item selected onClick={() => {this.setState({ relevant: null})} } text='Show All' />
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </th>
+                                <th style={{ width: 'max-content', textAlign: 'center' }}> 
+                                    Question
+                                </th>
+                                <th style={{ textAlign: 'center' }}>
+                                    <Dropdown 
+                                        text={`${(this.state.state === undefined) ? "All States" : this.state.state }`}
+                                        className='icon'
+                                        name="state" 
+                                        icon="filter"
+                                        onChange={ this.updatefilter }
+                                        options={stateOptions}
+                                        defaultValue={ 'showall' }
+                                    />
+                                </th>
+                                <th style={{ textAlign: 'center' }} >  
+                                    <Dropdown 
+                                        text={`${(this.state.issue_type === undefined) ? "Issue Type" : this.state.issue_type }`}
+                                        className='icon'
+                                        name="issue_type" 
+                                        icon="filter"
+                                        onChange={ this.updatefilter }
+                                        options={issuetypeOptions}
+                                        defaultValue={'showall'}
+                                    />
+                                </th>
+                                <th style={{ width: 'max-content', textAlign: 'center' }}> 
+                                    <Dropdown 
+                                        text={`${(this.state.owner === undefined) ? "Owner" : this.state.owner }`}
+                                        className='icon'
+                                        name="owner" 
+                                        icon="filter"
+                                        onChange={ this.updatefilter }
+                                        options={ownerOptions}
+                                        defaultValue={'showall'}
+
+                                    />
+                                </th>
+                                <th style={{ textAlign: 'center' }}>Created at</th>
+                            </tr>
+                        </thead>
+                        <tbody>                               
+                            { rows.slice( (this.state.activePage-1)*this.state.maxrows , (this.state.activePage-1)*this.state.maxrows + this.state.maxrows ) }
+                        </tbody>
+                    </Table>
+                </div>
+
+                { ( rows.length > this.state.maxrows ) ?
+                    <Pagination inverted
+                        defaultActivePage={1}
+                        firstItem={null}
+                        prevItem={'<'}
+                        nextItem={'>'}
+                        lastItem={null}
+                        onPageChange={this.handlepagination}
+                        pointing
+                        secondary
+                        totalPages={ Math.ceil(rows.length / this.state.maxrows) }
+                    />
+                : null } 
+            </>
+        )
+    }
+}
+
 class SessionData extends React.Component{
     constructor(props){
         super(props)
@@ -109,29 +360,6 @@ class SessionData extends React.Component{
         
         this.setState({ activePage: pageno}) 
     }
-
-    LeadingText( message ){
-        let text = ''
-        if( message.response !== undefined && message.response !== null ){
-            switch( message.response.payload.bot_response[0].type ){
-                case 'TEXT': 
-                    const md = json2md( message.response.payload.bot_response[0].content )
-                    const div = document.createElement('div')
-                    div.innerHTML = converter.makeHtml( md )
-                    const htmlText = div.innerText.replace('\n','')
-                    text = htmlText.length > 100 ? htmlText.substr(0, 100)+'  ...' : htmlText 
-                    break
-                case 'FORM':
-                case 'CARD':
-                case 'CAROUSEL':
-                    text = message.response.payload.bot_response[0].title
-                    break
-                default: text = ''
-            }
-        }
-        return text
-    }
-
 
     render(){
         const { session_data, activeMsg } = this.state
@@ -196,7 +424,7 @@ class SessionData extends React.Component{
                                         <div>
                                             <div style={{ fontWeight: 'bolder' }} suppressHydrationWarning dangerouslySetInnerHTML={{ __html: message.message }} />
                                             { displaytext }
-                                            <span >{ this.LeadingText( message )}</span>
+                                            <span >{ LeadingText( message )}</span>
                                         </div>
                                         <div title="No of Responses" 
                                             style={{ border: '1px solid #4a4747', height: 'fit-content', width: 'fit-content', padding: '5px 8px', borderRadius: '3px', backgroundColor: '#484848' }}>
@@ -241,6 +469,7 @@ class SessionData extends React.Component{
                         <div> <b>User ID:</b> { session_data.user_id} </div>
                     </div>
                     <DataInsights 
+                        style={{ width: '100%' }}
                         stateObj={ this.state }
                         relcount={ relCount  } 
                         jsondata= { session_data.exchages }
@@ -357,7 +586,8 @@ class ChatDbdata extends React.Component{
             fromdate: new Date("2020-10-10"),
             todate: new Date(),
             selectedQuestions : {},
-            uisettings: {}
+            uisettings: {},
+            mode: 'model1'
         }
 
         this.requestServer = this.requestServer.bind(this)
@@ -411,6 +641,22 @@ class ChatDbdata extends React.Component{
         })
     }
 
+    getMessagesData( sessionsList ){
+        let newList = []
+        sessionsList.forEach( session => {
+            session.exchages.forEach( msg=>{
+                newList.push({ 
+                    session_id: session.session_id,
+                    created_at: session.created_at,
+                    user_id: session.user_id,
+                    ...msg
+                })
+            })
+        })
+
+        return newList
+    }
+
 
     updatefilter(event,data){
         const { name, value } = data
@@ -442,8 +688,6 @@ class ChatDbdata extends React.Component{
             this.state.sessions_data.forEach( ( session, idx ) => {
                 user_idOptions.push( session.user_id )
 
-                // console.log( session.feedbacks, session.history ) 
-
                 if( session.sender !== 'USER' ){
                     relevantCount = relevantCount + session.exchages.filter( x =>  x.feedback  || x.feedback === null ).length
                     if( session.exchages !== null )
@@ -457,8 +701,10 @@ class ChatDbdata extends React.Component{
                     negative_feedbacks = session === null ? [] : session.exchages !== null ? session.exchages.filter( x => !x.feedback && x.feedback !== null  ).length : 0
                 }
 
-                if(  this.state.user_id === undefined || session.user_id === this.state.user_id ) {
-
+                if(  (this.state.user_id === undefined || session.user_id === this.state.user_id ) 
+                    && ( this.state.fromdate === undefined || this.state.todate === undefined || 
+                        ( this.state.fromdate <= new Date( session.created_at ) && this.state.todate >= new Date( session.created_at ))  ) 
+                ){
                     rows.push( 
                         <Fragment key={idx}>
                             <tr 
@@ -471,7 +717,7 @@ class ChatDbdata extends React.Component{
                                 <td style={{ textAlign: 'center' }}>{ positive_feedbacks }</td>
                                 <td style={{ textAlign: 'center' }}>{ negative_feedbacks }</td>
                                 <td style={{ textAlign: 'center' }}>{ session.exchages !== null ? session.exchages.length : 0 }</td>
-                                <td style={{ textAlign: 'center' }}>{ (new Date(session.created_at) ).toLocaleString() }</td>
+                                <td style={{ textAlign: 'center',width: '180px' }}>{ (new Date(session.created_at) ).toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}) }</td>
                             </tr>     
                             {   
                                 this.state.activeIndex === idx ?
@@ -486,6 +732,8 @@ class ChatDbdata extends React.Component{
                 }
             })
         }
+
+        const msgList = this.state.mode === 'mode2' ? this.getMessagesData( this.state.sessions_data ) : []
 
         // console.log( relevantCount, msg_list.length )
 
@@ -502,7 +750,6 @@ class ChatDbdata extends React.Component{
         date.setDate( date.getDate() +1 )  
         const toMinDate = date.toISOString().substr(0,10)
 
-
         return <Fragment>
                 { ( !this.state.loading ) ?
                 <div>
@@ -511,9 +758,11 @@ class ChatDbdata extends React.Component{
                         From :<input type="date" id="fromdate" name="fromdate" value={this.state.fromdate.toISOString().substr(0,10)} min={minDate} max={frommaxDate}  onChange={ (event)=> { this.setState({ fromdate : new Date( event.target.value) }) } } /> 
                         To:   <input type="date" id="todate"   name="todate"   value={this.state.todate.toISOString().substr(0,10)}   min={toMinDate} max={maxDate} onChange={ (event)=>this.setState({ todate: new Date( event.target.value ) }) } />
                     </div>
-                    <div> 
+                    <div style={{display: 'flex', justifyContent: 'space-between'}}>  
+                        <div className={ `${this.state.mode === 'mode1' ? 'switchbtn_selected' : '' } switchbtn` }  onClick={e=> this.setState({ mode: 'mode1' })}> Sessions </div>
+                        <div className={ `${this.state.mode === 'mode2' ? 'switchbtn_selected' : '' } switchbtn` }  onClick={e=> this.setState({ mode: 'mode2' })}> All Messages </div>
                         <DataInsights 
-                            stateObj={ this.state }
+                            maxrows={ this.state.maxrows }
                             relcount={ relevantCount } 
                             jsondata= { msg_list }
                             updatemaxRows={(latestmaxrows) => this.setState({maxrows : latestmaxrows, activePage: 0 })} 
@@ -528,74 +777,79 @@ class ChatDbdata extends React.Component{
                         { ( this.state.progress > 0) ?  <Progress attached="bottom"  percent={ this.state.progress } inverted color='green'   /> : null }
                     </div>
 
+                    { 
+                        this.state.mode === 'mode2' ? 
+                            <MessagesTable data={ msgList } uiSettings={ this.state.uisettings } 
+                                fromdate={ this.state.fromdate } todate={ this.state.todate } 
+                            />
+                    :   <div className="dataTable">
+                            <Table inverted>
+                                <thead style={{textAlign: 'center',height: '50px'}}>
+                                    <tr>
+                                        <th > 
+                                            { ( this.state.bulkrun ) ? 
+                                                <div >Select All:<br/> 
+                                                    <input type="checkbox" 
+                                                        id="selectAll"
+                                                        onChange={(event)=> { 
+                                                            let selectedList = undefined
+                                                            rows.forEach((row,index) => { $(`#row_${index}`).prop('checked',false) })
 
-                    <div className="dataTable">
-                        <Table inverted>
-                            <thead style={{textAlign: 'center',height: '50px'}}>
-                                <tr>
-                                    <th > 
-                                        { ( this.state.bulkrun ) ? 
-                                            <div >Select All:<br/> 
-                                                <input type="checkbox" 
-                                                    id="selectAll"
-                                                    onChange={(event)=> { 
-                                                        let selectedList = undefined
-                                                        rows.forEach((row,index) => { $(`#row_${index}`).prop('checked',false) })
+                                                            if(event.target.checked){
+                                                                selectedList = {}
+                                                                rows.forEach((row,index) => {$(`#row_${index}`).prop('checked',true) })
+                                                            }
 
-                                                        if(event.target.checked){
-                                                            selectedList = {}
-                                                            rows.forEach((row,index) => {$(`#row_${index}`).prop('checked',true) })
-                                                        }
-
-                                                        this.setState({ selectedQuestions : selectedList || {} }) 
-                                                    }}
-                                                /> 
-                                            </div> 
-                                        : '#' } 
-                                    </th>
-                                    <th >Session Id</th>
-                                    <th>
-                                        <Dropdown 
-                                            text={`${(this.state.user_id === undefined) ? "User Id" : this.state.user_id }`}
-                                            className='icon'
-                                            name="user_id" 
-                                            icon="filter"
-                                            onChange={ this.updatefilter }
-                                            options={user_idOptions}
-                                            defaultValue={'showall'}
-                                        />
-                                    </th>
-                                    <th>Positive Feedbacks</th>
-                                    <th>Negative Feedbacks</th>
-                                    <th>Total No of Exchanges</th>
-                                    <th >Create at</th>
-                                </tr>
-                            </thead>
-                            
-                            <tbody>
-                                { rows.slice( (this.state.activePage-1)*this.state.maxrows , (this.state.activePage-1)*this.state.maxrows + this.state.maxrows ) }
-
-                                <tr>
-                                    <td colSpan='7'style={{ padding: 0,textAlign: 'center' }} >
-                                        { ( rows.length > this.state.maxrows ) ?
-                                            <Pagination inverted
-                                                defaultActivePage={1}
-                                                firstItem={null}
-                                                prevItem={'<'}
-                                                nextItem={'>'}
-                                                lastItem={null}
-                                                onPageChange={this.handlepagination}
-                                                pointing
-                                                secondary
-                                                totalPages={ Math.ceil(rows.length / this.state.maxrows) }
+                                                            this.setState({ selectedQuestions : selectedList || {} }) 
+                                                        }}
+                                                    /> 
+                                                </div> 
+                                            : '#' } 
+                                        </th>
+                                        <th >Session Id</th>
+                                        <th>
+                                            <Dropdown 
+                                                text={`${(this.state.user_id === undefined) ? "User Id" : this.state.user_id }`}
+                                                className='icon'
+                                                name="user_id" 
+                                                icon="filter"
+                                                onChange={ this.updatefilter }
+                                                options={user_idOptions}
+                                                defaultValue={'showall'}
                                             />
-                                        : null } 
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </Table>
+                                        </th>
+                                        <th>Positive Feedbacks</th>
+                                        <th>Negative Feedbacks</th>
+                                        <th>Total No of Exchanges</th>
+                                        <th >Create at</th>
+                                    </tr>
+                                </thead>
+                                
+                                <tbody>
+                                    { rows.slice( (this.state.activePage-1)*this.state.maxrows , (this.state.activePage-1)*this.state.maxrows + this.state.maxrows ) }
 
-                    </div>
+                                    <tr>
+                                        <td colSpan='7'style={{ padding: 0,textAlign: 'center' }} >
+                                            { ( rows.length > this.state.maxrows ) ?
+                                                <Pagination inverted
+                                                    defaultActivePage={1}
+                                                    firstItem={null}
+                                                    prevItem={'<'}
+                                                    nextItem={'>'}
+                                                    lastItem={null}
+                                                    onPageChange={this.handlepagination}
+                                                    pointing
+                                                    secondary
+                                                    totalPages={ Math.ceil(rows.length / this.state.maxrows) }
+                                                />
+                                            : null } 
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </Table>
+
+                        </div>
+                    }
                     </div>
                 : 
                 <Loader style={{ marginTop: '50px' }} active inline size="massive" inverted > Fetching Data </Loader>

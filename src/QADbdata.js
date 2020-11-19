@@ -207,7 +207,7 @@ class ReviewForm extends React.Component{
 
 function DataInsights(props){
     return(
-        <div className="controls" >
+        <div className="controls" style={ props.style }  >
             <Menu secondary stackable>
                 <Menu.Item
                     content={ `Accuracy ${ Math.floor( props.relcount *100/( props.jsondata.length ) *100)/100 || 0 }%` }
@@ -222,7 +222,7 @@ function DataInsights(props){
                 />
 
                 <Dropdown 
-                    item text={`Maximum Rows ${props.stateObj.maxrows}`}
+                    item text={`Maximum Rows ${props.maxrows}`}
                     className='icon'
                 >
                     <Dropdown.Menu  onClick={(event) => props.updatemaxRows(event.target.innerText) }>
@@ -566,7 +566,7 @@ class DbData extends React.Component{
                     </div>
                     <div> 
                         <DataInsights 
-                            stateObj={ this.state }
+                            maxrows={ this.state.maxrows }
                             relcount={ this.relevantCount } 
                             jsondata= { dictData }
                             bulkrun = { this.state.bulkrun }
