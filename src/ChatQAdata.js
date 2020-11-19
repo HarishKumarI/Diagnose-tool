@@ -4,7 +4,7 @@ import $ from 'jquery'
 // import moment from 'moment'
 
 import { DataInsights } from './QADbdata'
-import { Table, Dropdown,Pagination, Loader, Progress } from 'semantic-ui-react'
+import { Table, Dropdown,Pagination, Loader, Progress, Icon } from 'semantic-ui-react'
 
 import * as json2md from 'json2md'
 import * as showdown from 'showdown' 
@@ -205,6 +205,11 @@ class MessagesTable extends React.Component{
                                 <td style={{ backgroundColor: bgColor, textAlign: 'center' }}> - </td>
                                 <td style={{ backgroundColor: bgColor, textAlign: 'center' }}> - </td>
                                 <td style={{ backgroundColor: bgColor, textAlign: 'center', width: '180px' }}>{ (new Date(message.created_at) ).toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}) }</td>
+                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }}>
+                                    <Icon name="external alternate" link={true} title="Open in Debug Interface" style={{ color: 'white' }} size="large"
+                                        onClick={e  => window.open( `${uiSettings.rerunlink}${ message.session_id }` ) } 
+                                    />
+                                </td>
                             </tr>
                             {
                                 this.state.activeMsg === idx ?
@@ -292,6 +297,7 @@ class MessagesTable extends React.Component{
                                     />
                                 </th>
                                 <th style={{ textAlign: 'center' }}>Created at</th>
+                                <th style={{ textAlign: 'center' }}>Open as Chat</th>
                             </tr>
                         </thead>
                         <tbody>                               
