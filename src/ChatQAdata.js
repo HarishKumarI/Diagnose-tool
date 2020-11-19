@@ -330,7 +330,7 @@ class SessionData extends React.Component{
             state: undefined,
             owner: undefined,
             issue_type: undefined,
-            maxrows: 10,
+            maxrows: 5,
             activePage: 1,
             loading: false,
             activeMsg: undefined
@@ -470,7 +470,7 @@ class SessionData extends React.Component{
                     </div>
                     <DataInsights 
                         style={{ width: '100%' }}
-                        stateObj={ this.state }
+                        maxrows={ this.state.maxrows }
                         relcount={ relCount  } 
                         jsondata= { session_data.exchages }
                         updatemaxRows={ latestmaxrows => this.setState({maxrows : latestmaxrows})} 
@@ -587,7 +587,7 @@ class ChatDbdata extends React.Component{
             todate: new Date(),
             selectedQuestions : {},
             uisettings: {},
-            mode: 'model1'
+            mode: 'mode1'
         }
 
         this.requestServer = this.requestServer.bind(this)
@@ -759,8 +759,8 @@ class ChatDbdata extends React.Component{
                         To:   <input type="date" id="todate"   name="todate"   value={this.state.todate.toISOString().substr(0,10)}   min={toMinDate} max={maxDate} onChange={ (event)=>this.setState({ todate: new Date( event.target.value ) }) } />
                     </div>
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>  
-                        <div className={ `${this.state.mode === 'mode1' ? 'switchbtn_selected' : '' } switchbtn` }  onClick={e=> this.setState({ mode: 'mode1' })}> Sessions </div>
-                        <div className={ `${this.state.mode === 'mode2' ? 'switchbtn_selected' : '' } switchbtn` }  onClick={e=> this.setState({ mode: 'mode2' })}> All Messages </div>
+                        <div className={ `${this.state.mode === 'mode1' ? 'switchbtn_selected' : '' } switchbtn` } title="List All Sessions" onClick={e=> this.setState({ mode: 'mode1' })}> Sessions </div>
+                        <div className={ `${this.state.mode === 'mode2' ? 'switchbtn_selected' : '' } switchbtn` } title="List All Messages" onClick={e=> this.setState({ mode: 'mode2' })}> All Messages </div>
                         <DataInsights 
                             maxrows={ this.state.maxrows }
                             relcount={ relevantCount } 
