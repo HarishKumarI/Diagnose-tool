@@ -1,7 +1,6 @@
 import React,{ Fragment } from 'react'
 
 import $ from 'jquery'
-// import moment from 'moment'
 
 import { DataInsights } from './QADbdata'
 import { Table, Dropdown,Pagination, Loader, Progress, Icon } from 'semantic-ui-react'
@@ -115,10 +114,17 @@ class MessagesTable extends React.Component{
         this.setState({ ...this.props })
     }
 
+    componentDidUpdate(){
+        if( this.state.fromdate !== this.props.fromdate || this.state.todate !== this.props.todate || this.state.maxrows !== this.props.maxrows ){
+            this.setState({...this.props})
+        }
+    }
+
     updatefilter(event,data){
         const { name, value } = data
         this.setState({ [name]: value})
     }
+
 
     handlepagination(event) { 
         let pageno = event.target.innerText
@@ -774,7 +780,7 @@ class ChatDbdata extends React.Component{
                             maxrows={ this.state.maxrows }
                             relcount={ relevantCount } 
                             jsondata= { msg_list }
-                            updatemaxRows={(latestmaxrows) => this.setState({maxrows : latestmaxrows, activePage: 0 })} 
+                            updatemaxRows={(latestmaxrows) => this.setState({maxrows : latestmaxrows, activePage: 1 })} 
                         />
                     </div>
 
@@ -789,7 +795,7 @@ class ChatDbdata extends React.Component{
                     { 
                         this.state.mode === 'mode2' ? 
                             <MessagesTable data={ msgList } uiSettings={ this.state.uisettings } 
-                                fromdate={ this.state.fromdate } todate={ this.state.todate } 
+                                fromdate={ this.state.fromdate } todate={ this.state.todate } maxrows={this.state.maxrows}
                             />
                     :   <div className="dataTable">
                             <Table inverted>
@@ -841,7 +847,7 @@ class ChatDbdata extends React.Component{
                                         <td colSpan='7'style={{ padding: 0,textAlign: 'center' }} >
                                             { ( rows.length > this.state.maxrows ) ?
                                                 <Pagination inverted
-                                                    defaultActivePage={1}
+                                                    defaultActivePage={ this.state.activePage }
                                                     firstItem={null}
                                                     prevItem={'<'}
                                                     nextItem={'>'}
