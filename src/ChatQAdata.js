@@ -133,7 +133,7 @@ class MessagesTable extends React.Component{
         if( pageno === '<' )
             pageno = this.state.activePage - 1
         
-        this.setState({ activePage: pageno}) 
+        this.setState({ activePage: parseInt( pageno ) }) 
     }
     
     render(){
@@ -234,7 +234,7 @@ class MessagesTable extends React.Component{
         user_idOptions = Array.from( new  Set( user_idOptions ) ).map( user_id => { return {key: user_id, text: user_id,value: user_id } } )
         user_idOptions.push({key: 'showall',text:'showall',value: undefined })
 
-
+        console.log( this.state.maxrows )
         return(
             <>
                 <div className="dataTable">
@@ -370,7 +370,7 @@ class SessionData extends React.Component{
         if( pageno === '<' )
             pageno = this.state.activePage - 1
         
-        this.setState({ activePage: pageno}) 
+        this.setState({ activePage: parseInt( pageno ) }) 
     }
 
     render(){
@@ -488,7 +488,7 @@ class SessionData extends React.Component{
                         maxrows={ this.state.maxrows }
                         relcount={ relCount  } 
                         jsondata= { session_data.exchages }
-                        updatemaxRows={ latestmaxrows => this.setState({maxrows : latestmaxrows})} 
+                        updatemaxRows={ latestmaxrows => this.setState({maxrows : parseInt( latestmaxrows ), activePage: 1 })} 
                     />
 
                     <div className="dataTable">
@@ -685,8 +685,8 @@ class ChatDbdata extends React.Component{
             pageno = this.state.activePage + 1
         if( pageno === '<' )
             pageno = this.state.activePage - 1
-        
-        this.setState({ activePage: pageno}) 
+
+        this.setState({ activePage: parseInt(pageno) }) 
     }
 
     render(){
@@ -764,7 +764,7 @@ class ChatDbdata extends React.Component{
         date = new Date(this.state.fromdate)
         date.setDate( date.getDate() +1 )  
         const toMinDate = date.toISOString().substr(0,10)
-
+        
         return <Fragment>
                 { ( !this.state.loading ) ?
                 <div>
@@ -780,7 +780,7 @@ class ChatDbdata extends React.Component{
                             maxrows={ this.state.maxrows }
                             relcount={ relevantCount } 
                             jsondata= { msg_list }
-                            updatemaxRows={(latestmaxrows) => this.setState({maxrows : latestmaxrows, activePage: 1 })} 
+                            updatemaxRows={(latestmaxrows) => this.setState({maxrows : parseInt(latestmaxrows), activePage: 1 })} 
                         />
                     </div>
 
