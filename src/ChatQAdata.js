@@ -400,9 +400,12 @@ class SessionData extends React.Component{
                     && ( this.state.state === undefined  ) 
                     && ( this.state.issue_type === undefined )
                     && ( this.state.owner === undefined  )
+                    && ( this.state.fromdate === undefined || this.state.todate === undefined || 
+                    ( this.state.fromdate.toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) <= new Date( message.created_at ).toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) 
+                        && this.state.todate.toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) >= new Date( message.created_at ).toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) )  ) 
                 ) {
 
-                    const bgColor = `${ message.feedback || message.feedback === null ? '#365436' : '#c1383838' }`
+                    const bgColor = `${ message.feedback ? '#365436' : message.feedback === null ? '' : '#c1383838' }`
                     let displaytext = message.response !== undefined && message.response !== null ? message.response.payload.bot_response.map( response => { return response.type } ) : []
                     // let displaytext = ''
                     const response_count = displaytext
@@ -589,7 +592,7 @@ class ChatDbdata extends React.Component{
             activePage: 1,
             loading: false,
             progress: undefined,
-            fromdate: new Date("2020-10-10"),
+            fromdate: new Date(),
             todate: new Date(),
             selectedQuestions : {},
             uisettings: {},
@@ -692,25 +695,26 @@ class ChatDbdata extends React.Component{
         
         if( this.state.session_data !== null ){
             this.state.sessions_data.forEach( ( session, idx ) => {
-                user_idOptions.push( session.user_id )
-
-                if( session.sender !== 'USER' ){
-                    relevantCount = relevantCount + session.exchages.filter( x =>  x.feedback  || x.feedback === null ).length
-                    if( session.exchages !== null )
-                        session.exchages.forEach( exchange => msg_list.push( exchange ) ) 
-                }
-
-                let positive_feedbacks = 0
-                let negative_feedbacks = 0
-                if( session.sender !== 'USER' ){
-                    positive_feedbacks = session === null ? 0  : session.exchages !== null ? session.exchages.filter( x =>  x.feedback  || x.feedback === null ).length : 0
-                    negative_feedbacks = session === null ? [] : session.exchages !== null ? session.exchages.filter( x => !x.feedback && x.feedback !== null  ).length : 0
-                }
-
+                
                 if(  (this.state.user_id === undefined || session.user_id === this.state.user_id ) 
                     && ( this.state.fromdate === undefined || this.state.todate === undefined || 
-                        ( this.state.fromdate <= new Date( session.created_at ) && this.state.todate >= new Date( session.created_at ))  ) 
+                        ( this.state.fromdate.toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) <= new Date( session.created_at ).toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) 
+                            && this.state.todate.toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) >= new Date( session.created_at ).toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) )  ) 
                 ){
+                    user_idOptions.push( session.user_id )
+
+                    if( session.sender !== 'USER' ){
+                        relevantCount = relevantCount + session.exchages.filter( x =>  x.feedback  || x.feedback === null ).length
+                        if( session.exchages !== null )
+                            session.exchages.forEach( exchange => msg_list.push( exchange ) ) 
+                    }
+
+                    let positive_feedbacks = 0
+                    let negative_feedbacks = 0
+                    if( session.sender !== 'USER' ){
+                        positive_feedbacks = session === null ? 0  : session.exchages !== null ? session.exchages.filter( x =>  x.feedback  ).length : 0
+                        negative_feedbacks = session === null ? [] : session.exchages !== null ? session.exchages.filter( x => !x.feedback && x.feedback !== null  ).length : 0
+                    }
                     rows.push( 
                         <Fragment key={idx}>
                             <tr 
@@ -750,7 +754,6 @@ class ChatDbdata extends React.Component{
         date.setDate(date.getDate() )
         const maxDate = ( date ).toISOString().substr(0,10)
         const minDate = ( new Date("2020-03-10") ).toISOString().substr(0,10)
-        date.setDate(date.getDate() -1)
         const frommaxDate = date.toISOString().substr(0,10)
         date = new Date(this.state.fromdate)
         date.setDate( date.getDate() +1 )  
@@ -824,7 +827,7 @@ class ChatDbdata extends React.Component{
                                                 defaultValue={'showall'}
                                             />
                                         </th>
-                                        <th>Positive Feedbacks</th>
+                                        <th>Explicit Positive Feedbacks</th>
                                         <th>Negative Feedbacks</th>
                                         <th>Total No of Exchanges</th>
                                         <th >Create at</th>
