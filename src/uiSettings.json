@@ -139,9 +139,6 @@
         "db_port": "6379",
         "rerunlink": "http://49.206.16.34:7050/debug/",
 		"list": {
-			"issue_type": [
-				"INFO_REPEATED"
-			],
 			"owner": [
 				"Komal",
 				"Rahul"
@@ -156,7 +153,7 @@
 				"Won't Fix"
 			]
 		},
-        "editable": [],
+        "editable": ["notes", "issue_type"],
         "fields": {
             "default": [],
             "hide": [],
