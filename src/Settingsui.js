@@ -187,8 +187,6 @@ class SettingsPanel extends React.Component{
                         <th> Rerun-Link </th>
                         <td colSpan="2"> 
                             <input type="text" 
-                                style={{ color: 'white', backgroundColor: 'transparent',
-                                            width: '100%',padding: '8px', borderRadius: '5px' }}
                                 value={this.state.rerunlink || ''} 
                                 onChange={(event)=>{ this.setState({ rerunlink: event.target.value }) }} />
                         </td>

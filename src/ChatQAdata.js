@@ -3,7 +3,7 @@ import React,{ Fragment } from 'react'
 import $ from 'jquery'
 
 import { DataInsights } from './QADbdata'
-import { Table, Dropdown,Pagination, Loader, Progress, Icon } from 'semantic-ui-react'
+import { Table, Dropdown,Pagination, Loader, Progress, Icon, TextArea, Button } from 'semantic-ui-react'
 
 import * as json2md from 'json2md'
 import * as showdown from 'showdown' 
@@ -11,6 +11,114 @@ import * as showdown from 'showdown'
 import ReactJson from 'react-json-view'
 
 var converter = new showdown.Converter({'noHeaderId':'true'})
+
+class ReviewForm extends React.Component{
+    constructor(props){
+        super(props)
+
+        this.updatefilter = this.updatefilter.bind(this)
+        this.updateDevFeedback = this.updateDevFeedback.bind(this)
+    }
+
+    updatefilter(e, data){
+        const { name, value } = data
+        const { message, session_data } = this.props
+
+        message.bot_developer_feedback[ name ] = value
+        session_data.history[ message.bot_developer_feedback.index ].developer_feedback = message.bot_developer_feedback
+        // console.log( name, value, message.bot_developer_feedback, session_data.history[ message.bot_developer_feedback.index ].developer_feedback )
+    }
+
+    updateDevFeedback(e){   
+        const history = this.props.session_data.history.map( msg=>{
+            try{
+                delete msg.developer_feedback['index']
+                delete msg['bot_developer_feedback']
+                delete msg['idx']
+            }
+            catch(err){
+                try{
+                    delete msg['bot_developer_feedback']
+                    delete msg['idx']
+                }
+                catch(err){ try{ delete msg['idx'] } catch(err){} }
+            }
+
+            return msg
+        })
+
+        // console.log( { session_id: this.props.session_data.session_id, history: history })
+        $.post('/api/dev_feedback', JSON.stringify({ session_id: this.props.session_data.session_id, history }) , res => {
+            console.log( res )
+        })
+    }
+
+    render(){
+
+        const { uiSettings, message } = this.props
+
+        let changebleFields = [ <tr key="_"><td colSpan="8">#comments to bot response </td></tr> ]
+            
+        Object.keys( uiSettings.list ).forEach( ( field, idx) => {
+            if( field === 'owner' )
+                return null
+            
+            const rowTitle = field.replace(/_/g,' ')
+            
+            let selectedIndex = 0
+            const options = uiSettings.list[field].map((option,index)=>{
+                if ( message.bot_developer_feedback[field] === option) selectedIndex = index
+                return {
+                    key: option,
+                    text: option,
+                    value: option
+                }
+            })
+            changebleFields.push(
+                <tr key={idx}>    
+                    <th style={{ width: '120px',wordBreak:'break-word',fontWeight: 'bold', textAlign: 'center' }}>{ rowTitle }: </th>
+                    <td colSpan="7">
+                        {/* { ( isAdmin || field === 'issue_type' ) ? */}
+                            <Dropdown 
+                                // text={`${this.state[field]}`}
+                                className='icon'
+                                name={ field }  
+                                onChange={ this.updatefilter }
+                                options={options}
+                                defaultValue={options[selectedIndex].value}
+                            />
+                        {/* :  this.state[field]  }  */}
+                    </td>
+                </tr>
+            )
+        })
+
+        uiSettings.editable.forEach( ( field, idx) => {
+            const rowTitle = field.replace(/_/g,' ')
+
+            changebleFields.push(
+                <tr key={`${idx}_`}>    
+                    <th style={{ width: '120px',wordBreak:'break-word',fontWeight: 'bold', textAlign: 'center' }} > { rowTitle } : </th>
+                    <td colSpan="7" style={{ padding: '15px' }} > 
+                    {/* { ( isAdmin ) ? */}
+                            <TextArea 
+                                name={ field }
+                                placeholder={ `Type your ${field.replace(/_/g,' ')} ...` } 
+                                defaultValue={ message.bot_developer_feedback[field] }
+                                onChange={ this.updatefilter }
+                            />
+                        {/* : this.state[field] } */}
+                    </td>
+                </tr>
+            )
+        })
+
+        changebleFields.push( <tr key="__"><td style={{ textAlign: 'center', border: 'none'}} colSpan="8"> <Button content=" Update Row " primary onClick={ this.updateDevFeedback } /> </td></tr> )        
+
+        return changebleFields
+    }
+}
+
 
 function LeadingText( message ){
     let text = ''
@@ -94,6 +202,7 @@ class MessagesTable extends React.Component{
         this.state = {
             data: [],
             activePage: 1,
+            sessions_data: undefined,
             maxrows: 20,
             state: undefined,
             relevant: null,
@@ -103,7 +212,8 @@ class MessagesTable extends React.Component{
             user_id: undefined,
             fromdate: undefined,
             todate: undefined,
-            activeMsg: undefined
+            activeMsg: undefined,
+            activeReview: undefined
         }
 
         this.handlepagination = this.handlepagination.bind(this)
@@ -115,7 +225,9 @@ class MessagesTable extends React.Component{
     }
 
     componentDidUpdate(){
-        if( this.state.fromdate !== this.props.fromdate || this.state.todate !== this.props.todate || this.state.maxrows !== this.props.maxrows ){
+        if( this.state.fromdate !== this.props.fromdate || this.state.todate !== this.props.todate 
+            || this.state.maxrows !== this.props.maxrows || this.state.sessions_data !== this.props.sessions_data 
+        ){
             this.setState({...this.props})
         }
     }
@@ -145,12 +257,8 @@ class MessagesTable extends React.Component{
         if ( uiSettings !== undefined ){
             stateOptions = uiSettings.list.state.map((stateValue)=>
                     {return {key: stateValue,text:stateValue,value:stateValue } })
-            stateOptions.push({key: 'showall',text:'showall',value: undefined })
-
-            issuetypeOptions = uiSettings.list.issue_type.map((issueType)=>
-                    {return {key: issueType,text:issueType,value:issueType } })
-            issuetypeOptions.push({key: 'showall',text:'showall',value: undefined })
-                
+            stateOptions.push({key: 'showall',text:'showall',value: undefined })        
+           
             ownerOptions = uiSettings.list.owner.map((owner)=>
                     {return {key: owner,text:owner,value:owner } })
             ownerOptions.push({key: 'showall',text:'showall',value: undefined })
@@ -159,6 +267,7 @@ class MessagesTable extends React.Component{
         let user_idOptions = []
         let count  = 1
         let rows = []
+        let issuetypes = []
 
         this.state.data.forEach( ( message, idx) => {
 
@@ -168,6 +277,17 @@ class MessagesTable extends React.Component{
                     && ( this.state.issue_type === undefined )
                     && ( this.state.owner === undefined  )
                 ) {
+                    let issue_type = ''
+                    try{
+                        issue_type =  message.bot_developer_feedback.issue_type
+                        if ( issue_type.length === 0 )
+                            issue_type = '-'
+                    }
+                    catch(err){  }
+
+                    if( !issuetypes.includes( issue_type ) )
+                        issuetypes.push( issue_type )
+
                     user_idOptions.push( message.user_id )
 
                     const bgColor = `${ message.feedback || message.feedback === null ? '#365436' : '#c1383838' }`
@@ -181,20 +301,30 @@ class MessagesTable extends React.Component{
                     displaytext = displaytext + '\n'
                     rows.push( 
                         <Fragment key={idx}>
-                            <tr  style={{ cursor: 'pointer' }} 
-                                onClick={e => this.setState({ activeMsg: this.state.activeMsg !== idx ? idx : undefined }) } 
-                            >   
-                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }} >{ count }</td>
-                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }} >{ message.session_id }</td>
-                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }} >{ message.user_id }</td>
-                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }} >
+                            <tr  style={{ cursor: 'pointer' }} >   
+                                <td onClick={e => this.setState({ activeMsg: this.state.activeMsg !== idx ? idx : undefined, activeReview: undefined  }) }  
+                                    style={{ backgroundColor: bgColor, textAlign: 'center' }} >
+                                    { count }
+                                </td>
+                                <td onClick={e => this.setState({ activeMsg: this.state.activeMsg !== idx ? idx : undefined, activeReview: undefined  }) }  
+                                    style={{ backgroundColor: bgColor, textAlign: 'center' }} >
+                                    { message.session_id }
+                                </td>
+                                <td onClick={e => this.setState({ activeMsg: this.state.activeMsg !== idx ? idx : undefined, activeReview: undefined  }) }  
+                                    style={{ backgroundColor: bgColor, textAlign: 'center' }} >
+                                    { message.user_id }
+                                </td>
+                                <td onClick={e => this.setState({ activeMsg: this.state.activeMsg !== idx ? idx : undefined, activeReview: undefined  }) }  
+                                    style={{ backgroundColor: bgColor, textAlign: 'center' }} >
                                     { 
                                         message.feedback || message.feedback === null  ? 
                                             <span role="img" aria-label="positive feedback" >&#128077;</span> 
                                         :  <span role="img" aria-label="negative feedback" >&#128078;</span> 
                                     }
                                 </td>
-                                <td style={{ backgroundColor: bgColor, width: 'max-content' }}>
+                                <td onClick={e => this.setState({ activeMsg: this.state.activeMsg !== idx ? idx : undefined, activeReview: undefined  }) }  
+                                    style={{ backgroundColor: bgColor, width: 'max-content' }}
+                                    >
                                     <div style={{ whiteSpace: 'pre-wrap', display: 'flex', width: '100%',  justifyContent: 'space-between' }}> 
                                         <div>
                                             <div style={{ fontWeight: 'bolder' }} suppressHydrationWarning dangerouslySetInnerHTML={{ __html: message.message }} />
@@ -207,9 +337,17 @@ class MessagesTable extends React.Component{
                                         </div>
                                     </div>
                                 </td>
-                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }}> - </td>
-                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }}> - </td>
-                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }}> - </td>
+                                <td onClick={e => this.setState({ activeReview: this.state.activeReview !== idx ? idx : undefined, activeMsg: undefined  }) } 
+                                    style={{ backgroundColor: bgColor, textAlign: 'center' }} title="click to edit"
+                                > 
+                                    { message.bot_developer_feedback ? message.bot_developer_feedback.state : '-' }
+                                </td>
+                                <td onClick={e => this.setState({ activeReview: this.state.activeReview !== idx ? idx : undefined, activeMsg: undefined  }) } 
+                                    style={{ backgroundColor: bgColor, textAlign: 'center' }} title="click to edit"
+                                > 
+                                    { message.bot_developer_feedback ? message.bot_developer_feedback.issue_type : '-' }
+                                </td>
+                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }} > - </td>
                                 <td style={{ backgroundColor: bgColor, textAlign: 'center', width: '180px' }}>{ (new Date(message.created_at) ).toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}) }</td>
                                 <td style={{ backgroundColor: bgColor, textAlign: 'center' }}>
                                     <Icon name="external alternate" link={true} title="Open in Debug Interface" style={{ color: 'white' }} size="large"
@@ -224,6 +362,11 @@ class MessagesTable extends React.Component{
                                     </tr>
                                 : null
                             }
+                            {
+                                this.state.activeReview === idx? 
+                                    <ReviewForm uiSettings={ uiSettings } message={ message } session_data={ this.state.sessions_data[ message.idx ] } />
+                                : null
+                            }
                         </Fragment>
                     )
                     count += 1
@@ -231,10 +374,16 @@ class MessagesTable extends React.Component{
         })
 
 
+        issuetypes = Array.from( new Set( issuetypes ) )
+        issuetypeOptions = issuetypes.map( issue_type => { return {key: issue_type, text: issue_type,value: issue_type } } )
+        // issuetypeOptions = uiSettings.list.issue_type.map((issueType)=>
+        //         {return {key: issueType,text:issueType,value:issueType } })
+        issuetypeOptions.push({key: 'showall',text:'showall',value: undefined })
+            
+
         user_idOptions = Array.from( new  Set( user_idOptions ) ).map( user_id => { return {key: user_id, text: user_id,value: user_id } } )
         user_idOptions.push({key: 'showall',text:'showall',value: undefined })
 
-        console.log( this.state.maxrows )
         return(
             <>
                 <div className="dataTable">
@@ -345,7 +494,8 @@ class SessionData extends React.Component{
             maxrows: 5,
             activePage: 1,
             loading: false,
-            activeMsg: undefined
+            activeMsg: undefined,
+            activeReview: undefined
         }
 
         this.handlepagination = this.handlepagination.bind(this)
@@ -374,7 +524,7 @@ class SessionData extends React.Component{
     }
 
     render(){
-        const { session_data, activeMsg } = this.state
+        const { session_data, activeMsg, activeReview } = this.state
         const { uiSettings } = this.props
 
         let stateOptions = []
@@ -386,25 +536,49 @@ class SessionData extends React.Component{
                     {return {key: stateValue,text:stateValue,value:stateValue } })
             stateOptions.push({key: 'showall',text:'showall',value: undefined })
 
-            issuetypeOptions = uiSettings.list.issue_type.map((issueType)=>
-                    {return {key: issueType,text:issueType,value:issueType } })
+
+            let issuetypes = []
+            if( session_data !== null ){
+                issuetypes = session_data.history.map( msg => {
+                    let issue_type = '-'
+                    
+                    try{
+                        issue_type =  msg.developer_feedback.issue_type
+                        if ( issue_type.length === 0 )
+                            issue_type = '-'
+                    }
+                    catch(err){  }
+
+                    return issue_type
+                })
+            }
+
+            issuetypes = Array.from( new Set( issuetypes ) )
+
+            issuetypeOptions = issuetypes.map( issue_type => { return {key: issue_type, text: issue_type,value: issue_type } } )
+
+            // issuetypeOptions = uiSettings.list.issue_type.map((issueType)=>
+            //         {return {key: issueType,text:issueType,value:issueType } })
             issuetypeOptions.push({key: 'showall',text:'showall',value: undefined })
+
+
                 
             ownerOptions = uiSettings.list.owner.map((owner)=>
                     {return {key: owner,text:owner,value:owner } })
             ownerOptions.push({key: 'showall',text:'showall',value: undefined })
         }
 
-
         let rows = []
         let count = 1
         
         if( session_data !== null ){
             session_data.exchages.forEach( ( message, idx) => {
+                const issue_type = message.developer_feedback.issue_type.length === 0 ? '-' : message.developer_feedback.issue_type
+                const dev_issue_type = message.bot_developer_feedback.issue_type.length === 0 ? '-' : message.bot_developer_feedback.issue_type
 
                 if( ( this.state.relevant === null || message.feedback === this.state.relevant || ( message.feedback === null && this.state.relevant ) )
                     && ( this.state.state === undefined  ) 
-                    && ( this.state.issue_type === undefined )
+                    && ( this.state.issue_type === undefined || this.state.issue_type === issue_type || this.state.issue_type === dev_issue_type )
                     && ( this.state.owner === undefined  )
                     && ( this.state.fromdate === undefined || this.state.todate === undefined || 
                     ( this.state.fromdate.toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) <= new Date( message.created_at ).toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) 
@@ -422,19 +596,22 @@ class SessionData extends React.Component{
                     displaytext = displaytext + '\n'
                     rows.push( 
                         <Fragment key={idx}>
-                            <tr  style={{ cursor: 'pointer' }} 
-                                onClick={e => this.setState({ activeMsg: this.state.activeMsg !== idx ? idx : undefined }) } 
-                            > 
-                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }} >{ count }</td>
+                            <tr  style={{ cursor: 'pointer' }} > 
+                                <td onClick={e => this.setState({ activeMsg: this.state.activeMsg !== idx ? idx : undefined, activeReview: undefined }) }  
+                                    style={{ backgroundColor: bgColor, textAlign: 'center' }} >
+                                    { count }
+                                </td>
                                 {/* <td style={{ backgroundColor: bgColor, textAlign: 'center', maxWidth: '100px !important' }} >{ message.sender }</td> */}
-                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }} >
+                                <td onClick={e => this.setState({ activeMsg: this.state.activeMsg !== idx ? idx : undefined, activeReview: undefined }) } 
+                                    style={{ backgroundColor: bgColor, textAlign: 'center' }} >
                                     { 
                                         message.feedback || message.feedback === null  ? 
                                             <span role="img" aria-label="positive feedback" >&#128077;</span> 
                                         :  <span role="img" aria-label="negative feedback" >&#128078;</span> 
                                     }
                                 </td>
-                                <td style={{ backgroundColor: bgColor, width: 'max-content' }}>
+                                <td onClick={e => this.setState({ activeMsg: this.state.activeMsg !== idx ? idx : undefined, activeReview: undefined }) } 
+                                    style={{ backgroundColor: bgColor, width: 'max-content' }}>
                                     <div style={{ whiteSpace: 'pre-wrap', display: 'flex', width: '100%',  justifyContent: 'space-between' }}> 
                                         <div>
                                             <div style={{ fontWeight: 'bolder' }} suppressHydrationWarning dangerouslySetInnerHTML={{ __html: message.message }} />
@@ -447,15 +624,33 @@ class SessionData extends React.Component{
                                         </div>
                                     </div>
                                 </td>
-                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }}> - </td>
-                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }}> - </td>
-                                <td style={{ backgroundColor: bgColor, textAlign: 'center' }}> - </td>
+                                <td onClick={e => this.setState({ activeReview: this.state.activeReview !== idx ? idx : undefined, activeMsg: undefined  })} 
+                                    style={{ backgroundColor: bgColor, textAlign: 'center' }} title="click to edit" > 
+                                    { message.bot_developer_feedback.state.length === 0 ? '-' : message.bot_developer_feedback.state }
+                                </td>
+                                <td onClick={e => this.setState({ activeReview: this.state.activeReview !== idx ? idx : undefined, activeMsg: undefined  })} 
+                                    style={{ backgroundColor: bgColor, textAlign: 'center', whiteSpace: 'break-spaces' }} title="click to edit"> 
+                                    {   
+                                        // issue_type 
+                                        // +'\n'+
+                                        dev_issue_type 
+                                    }
+                                </td>
+                                <td onClick={e => this.setState({ activeReview: this.state.activeReview !== idx ? idx : undefined, activeMsg: undefined  })} 
+                                    style={{ backgroundColor: bgColor, textAlign: 'center' }}> 
+                                    -  
+                                </td>
                             </tr>
                             {
                                 activeMsg === idx ?
                                     <tr key={idx+'_'}>
                                         <td colSpan="7"> <MesssageData data={ message } /> </td>
                                     </tr>
+                                : null
+                            }
+                            {
+                                activeReview === idx? 
+                                    <ReviewForm uiSettings={ uiSettings } message={ message } session_data={ session_data } />
                                 : null
                             }
                         </Fragment>
@@ -637,12 +832,16 @@ class ChatDbdata extends React.Component{
                             msg.response = null
                             msg.feedback = null
                             msg.feedback_text = null
+                            msg.developer_feedback = msg.developer_feedback === undefined ? { issue_type: '', notes:'', state:'' } : msg.developer_feedback
+                            msg.developer_feedback.index = i
                             session.exchages.push(msg)
                         }
                         else{
                             session.exchages[ session.exchages.length -1 ].feedback = msg.feedback
                             session.exchages[ session.exchages.length -1 ].feedback_text = msg.feedback_text
                             session.exchages[ session.exchages.length -1 ].response = msg
+                            session.exchages[ session.exchages.length -1 ].bot_developer_feedback = msg.developer_feedback === undefined ? { issue_type: '', notes:'', state:'' } : msg.developer_feedback
+                            session.exchages[ session.exchages.length -1 ].bot_developer_feedback.index = i
                         }
                     })
                 }
@@ -658,13 +857,14 @@ class ChatDbdata extends React.Component{
 
     getMessagesData( sessionsList ){
         let newList = []
-        sessionsList.forEach( session => {
+        sessionsList.forEach( ( session, idx) => {
             session.exchages.forEach( msg=>{
                 newList.push({ 
                     session_id: session.session_id,
                     created_at: session.created_at,
                     user_id: session.user_id,
-                    ...msg
+                    ...msg,
+                    idx: idx
                 })
             })
         })
@@ -741,7 +941,7 @@ class ChatDbdata extends React.Component{
                                         <td colSpan="7" > <SessionData data={session} uiSettings={ this.state.uisettings } /> </td>
                                     </tr>
                                 :null
-                            }       
+                            }
                         </Fragment>
                     )
                     count += 1
@@ -794,7 +994,7 @@ class ChatDbdata extends React.Component{
 
                     { 
                         this.state.mode === 'mode2' ? 
-                            <MessagesTable data={ msgList } uiSettings={ this.state.uisettings } 
+                            <MessagesTable data={ msgList } uiSettings={ this.state.uisettings } sessions_data={ this.state.sessions_data }
                                 fromdate={ this.state.fromdate } todate={ this.state.todate } maxrows={this.state.maxrows}
                             />
                     :   <div className="dataTable">
