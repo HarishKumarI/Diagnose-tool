@@ -319,6 +319,24 @@ def ChatFeedbacks():
 		return qa_agent.ChatFeedbacks( request )
 
 
+@app.route('/api/dev_feedback', methods=['POST'])
+def developerFeedback():
+    if request.method == 'POST':
+        r = redis.Redis(host='localhost', port=6379, db=0)
+        data = request.get_json(force=True)
+        session_id = data['session_id']
+        history_value = data['history']
+        res = r.get('session:'+session_id)    # replace with cookie
+        result = pickle.loads(res)
+        result['history'] = history_value
+        try:
+            r.set('session:'+sessionId, pickle.dumps( result ) )
+            return jsonify({ "msg": 'success' })
+        except:
+            return jsonify({"msg":'error'})
+    else:
+        return jsonify({})
+
 # For Getting UISettings JSON
 
 @app.route('/api/uiSettings',methods=['GET'])
@@ -329,6 +347,7 @@ def uiSettings():
 def saveSettings():
 	return qa_agent.SaveuiSettings( request )
 
+        
 
 if __name__ == '__main__':
 	app.run('0.0.0.0',debug=False, port=7230,threaded=False,processes=1)

@@ -264,6 +264,15 @@ class QaAgent(object):
 			if ses.startswith('session:') :
 				ses_res_pkl = r.get(ses)
 				ses_res = pickle.loads(ses_res_pkl)
+
+				for session in ses_res.get('history', []):
+					if 'inference_output' in session and session['inference_output'] != None:
+						for i,el in enumerate(session['inference_output']):
+							try:
+								session['inference_output'][i]['G'] = None
+							except:
+								session['inference_output']['G'] = None
+				
 				
 				session_list.append({
 					'session_id': ses[8:],
@@ -272,8 +281,15 @@ class QaAgent(object):
 					'feedbacks': [ row['feedback'] if 'feedback' in row else None for row in ses_res.get('history', [])  ],
 					'history': ses_res.get('history', None)
 				})
+				
+		sessions = []
+		for session in session_list:
+			try:
+				sessions.append( json.dumps(session) )
+			except:
+				pass
 
-		return jsonify({ "msg": "success", "data": session_list })
+		return jsonify({ "msg": "success", "data": sessions })
 
 
 qa_agent = QaAgent()
@@ -303,6 +319,24 @@ def ChatFeedbacks():
 		return qa_agent.ChatFeedbacks( request )
 
 
+@app.route('/api/dev_feedback', methods=['POST'])
+def developerFeedback():
+    if request.method == 'POST':
+        r = redis.Redis(host='localhost', port=6379, db=0)
+        data = request.get_json(force=True)
+        session_id = data['session_id']
+        history_value = data['history']
+        res = r.get('session:'+session_id)    # replace with cookie
+        result = pickle.loads(res)
+        result['history'] = history_value
+        try:
+            r.set('session:'+sessionId, pickle.dumps( result ) )
+            return jsonify({ "msg": 'success' })
+        except:
+            return jsonify({"msg":'error'})
+    else:
+        return jsonify({})
+
 # For Getting UISettings JSON
 
 @app.route('/api/uiSettings',methods=['GET'])
@@ -313,6 +347,7 @@ def uiSettings():
 def saveSettings():
 	return qa_agent.SaveuiSettings( request )
 
+        
 
 if __name__ == '__main__':
 	app.run('0.0.0.0',debug=False, port=7230,threaded=False,processes=1)
