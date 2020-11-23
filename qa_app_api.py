@@ -330,7 +330,7 @@ def developerFeedback():
         result = pickle.loads(res)
         result['history'] = history_value
         try:
-            r.set('session:'+sessionId, pickle.dumps( result ) )
+            r.set('session:'+session_id, pickle.dumps( result ) )
             return jsonify({ "msg": 'success' })
         except:
             return jsonify({"msg":'error'})
