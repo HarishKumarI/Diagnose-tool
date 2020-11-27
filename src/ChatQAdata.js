@@ -574,7 +574,7 @@ class SessionData extends React.Component{
         if( session_data !== null ){
             session_data.exchages.forEach( ( message, idx) => {
                 const issue_type = message.developer_feedback.issue_type.length === 0 ? '-' : message.developer_feedback.issue_type
-                const dev_issue_type = message.bot_developer_feedback.issue_type.length === 0 ? '-' : message.bot_developer_feedback.issue_type
+                const dev_issue_type = message.bot_developer_feedback === undefined ? '-' : message.bot_developer_feedback.issue_type.length === 0 ? '-' : message.bot_developer_feedback.issue_type
 
                 if( ( this.state.relevant === null || message.feedback === this.state.relevant || ( message.feedback === null && this.state.relevant ) )
                     && ( this.state.state === undefined  ) 
@@ -626,7 +626,7 @@ class SessionData extends React.Component{
                                 </td>
                                 <td onClick={e => this.setState({ activeReview: this.state.activeReview !== idx ? idx : undefined, activeMsg: undefined  })} 
                                     style={{ backgroundColor: bgColor, textAlign: 'center' }} title="click to edit" > 
-                                    { message.bot_developer_feedback.state.length === 0 ? '-' : message.bot_developer_feedback.state }
+                                    { message.bot_developer_feedback === undefined ? '-' : message.bot_developer_feedback.state.length === 0 ? '-' : message.bot_developer_feedback.state }
                                 </td>
                                 <td onClick={e => this.setState({ activeReview: this.state.activeReview !== idx ? idx : undefined, activeMsg: undefined  })} 
                                     style={{ backgroundColor: bgColor, textAlign: 'center', whiteSpace: 'break-spaces' }} title="click to edit"> 
