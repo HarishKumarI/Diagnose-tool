@@ -53,45 +53,43 @@ class Dashboard extends React.Component{
         return(
             <div >
 
-                { ( this.state.userdata.name !== "" && this.state.userdata.name !== undefined  ) ?
-                    ( document.body.getBoundingClientRect().height <= document.body.scrollHeight  ) ?
-                    <div className="userInfo" id="userInfo">
-                        <Dropdown 
-                            icon="user" text={`${this.state.userdata.name}`} 
-                        >
-                        <Dropdown.Menu id="dropdownmenu" onClick = {(event) => {
-                                const selectedValue = event.target.innerText
-                                if( selectedValue === 'Logout' ) window.location = '/'
-                                else this.setState({ uicomponent: selectedValue}) 
-                            }}  >
-                            <Dropdown.Item icon="folder" text="Dashboard"/>
-                            { 
-                                ( Object.keys(this.state.uisettings).includes('Admin') ) ?
-                                    Object.keys(this.state.uisettings.Admin).includes(  this.state.user_id ) ?
-                                        <Dropdown.Item icon="settings" text="Settings"/>
+                { this.state.isvalid ?
+                    this.state.userdata.name !== "" && this.state.userdata.name !== undefined ?
+                        ( document.body.getBoundingClientRect().height <= document.body.scrollHeight  ) ?
+                        <div className="userInfo" id="userInfo">
+                            <Dropdown 
+                                icon="user" text={`${this.state.userdata.name}`} 
+                            >
+                            <Dropdown.Menu id="dropdownmenu" onClick = {(event) => {
+                                    const selectedValue = event.target.innerText
+                                    if( selectedValue === 'Logout' ) window.location = '/'
+                                    else this.setState({ uicomponent: selectedValue}) 
+                                }}  >
+                                <Dropdown.Item icon="folder" text="Dashboard"/>
+                                { 
+                                    ( Object.keys(this.state.uisettings).includes('Admin') ) ?
+                                        Object.keys(this.state.uisettings.Admin).includes(  this.state.user_id ) ?
+                                            <Dropdown.Item icon="settings" text="Settings"/>
+                                        : null
                                     : null
-                                : null
-                            }
-                            <Dropdown.Item icon="sign-out" text="Logout"/>
-                        </Dropdown.Menu>
-                        </Dropdown>
-                    </div>
-                    :null 
+                                }
+                                <Dropdown.Item icon="sign-out" text="Logout"/>
+                            </Dropdown.Menu>
+                            </Dropdown>
+                        </div>
+                        :null 
+                    : null 
                 : null }
 
-                { ( this.state.isvalid) ? 
+                { this.state.isvalid ? 
                     (this.state.uicomponent === 'Settings') ?
                         <SettingsUi uisettings={ this.state.uisettings }  />
                     :   <DbComponent uisettings={ this.state.uisettings } user_id={this.state.user_id} />
                     
                 :
                 <div style={{ marginTop: 20+'%', fontSize: 30+'px',color: 'white', width: 'max-content' }}>
-                        { ( this.state.userdata.name !== "" ) ?
-                            `Not a Registered User`
-                        : 
-                            ( this.state.msg.length <= 0 ) ?`Not a Registered User for Team` : this.state.msg
-                        }
-                        <br/> <br />
+                    Not a Registered User
+                    <br/> <br />
                     <a href="/" style={{ fontSize:'18px' }}>HomePage</a>
                 </div>
                 }
