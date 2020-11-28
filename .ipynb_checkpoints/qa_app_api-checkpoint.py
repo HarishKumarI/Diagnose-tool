@@ -226,7 +226,7 @@ class QaAgent(object):
 		# 	isvalid_user = False
 
 
-		return jsonify({ 'isvalid': isvalid_user, 'userdate': userdata,"userid": int(userid) })    
+		return jsonify({ 'isvalid': isvalid_user, 'userdata': userdata,"userid": int(userid) })    
 
 	def fetch_dbdata(self):
 
