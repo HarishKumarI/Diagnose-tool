@@ -188,7 +188,7 @@ class SettingsPanel extends React.Component{
                         <td colSpan="2"> 
                             <input type="text" 
                                 value={this.state.rerunlink || ''} 
-                                onChange={(event)=>{ this.setState({ rerunlink: event.target.value }) }} />
+                                onChange={(event)=>{ this.setState({ rerunlink: event.target.value }); $('#savebtn').css('visibility', 'visible') }} />
                         </td>
                     </tr>
                 

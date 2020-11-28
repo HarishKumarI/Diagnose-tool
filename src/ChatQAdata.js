@@ -270,12 +270,14 @@ class MessagesTable extends React.Component{
         let issuetypes = []
 
         this.state.data.forEach( ( message, idx) => {
-
-                if( ( this.state.relevant === null || message.feedback === this.state.relevant || ( message.feedback === null && this.state.relevant ) )
+                if( ( this.state.relevant === null || message.feedback === this.state.relevant )
                     && ( this.state.user_id === undefined || this.state.user_id === message.user_id )
                     && ( this.state.state === undefined  ) 
                     && ( this.state.issue_type === undefined )
                     && ( this.state.owner === undefined  )
+                    && ( this.state.fromdate === undefined || this.state.todate === undefined || 
+                        ( this.state.fromdate.date.toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) <= new Date( message.created_at ).toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) 
+                            && this.state.todate.date.toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) >= new Date( message.created_at ).toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) )  ) 
                 ) {
                     let issue_type = ''
                     try{
@@ -290,7 +292,7 @@ class MessagesTable extends React.Component{
 
                     user_idOptions.push( message.user_id )
 
-                    const bgColor = `${ message.feedback || message.feedback === null ? '#365436' : '#c1383838' }`
+                    const bgColor = `${ message.feedback ? '#365436' : message.feedback === null ? '' : '#c1383838' }`
                     let displaytext = message.response !== undefined && message.response !== null ? message.response.payload.bot_response.map( response => { return response.type } ) : []
                     // let displaytext = ''
                     const response_count = displaytext
@@ -317,9 +319,9 @@ class MessagesTable extends React.Component{
                                 <td onClick={e => this.setState({ activeMsg: this.state.activeMsg !== idx ? idx : undefined, activeReview: undefined  }) }  
                                     style={{ backgroundColor: bgColor, textAlign: 'center' }} >
                                     { 
-                                        message.feedback || message.feedback === null  ? 
+                                        message.feedback ? 
                                             <span role="img" aria-label="positive feedback" >&#128077;</span> 
-                                        :  <span role="img" aria-label="negative feedback" >&#128078;</span> 
+                                        :  message.feedback === null ? '' : <span role="img" aria-label="negative feedback" >&#128078;</span> 
                                     }
                                 </td>
                                 <td onClick={e => this.setState({ activeMsg: this.state.activeMsg !== idx ? idx : undefined, activeReview: undefined  }) }  
@@ -527,6 +529,7 @@ class SessionData extends React.Component{
         const { session_data, activeMsg, activeReview } = this.state
         const { uiSettings } = this.props
 
+
         let stateOptions = []
         let issuetypeOptions = []
         let ownerOptions = []
@@ -605,9 +608,9 @@ class SessionData extends React.Component{
                                 <td onClick={e => this.setState({ activeMsg: this.state.activeMsg !== idx ? idx : undefined, activeReview: undefined }) } 
                                     style={{ backgroundColor: bgColor, textAlign: 'center' }} >
                                     { 
-                                        message.feedback || message.feedback === null  ? 
+                                        message.feedback ? 
                                             <span role="img" aria-label="positive feedback" >&#128077;</span> 
-                                        :  <span role="img" aria-label="negative feedback" >&#128078;</span> 
+                                        : message.feedback === null ? '' : <span role="img" aria-label="negative feedback" >&#128078;</span> 
                                     }
                                 </td>
                                 <td onClick={e => this.setState({ activeMsg: this.state.activeMsg !== idx ? idx : undefined, activeReview: undefined }) } 
@@ -793,8 +796,8 @@ class ChatDbdata extends React.Component{
             activePage: 1,
             loading: false,
             progress: undefined,
-            fromdate: new Date(),
-            todate: new Date(),
+            fromdate: this.getDate(  ),
+            todate: this.getDate(  ),
             selectedQuestions : {},
             uisettings: {},
             mode: 'mode1'
@@ -805,6 +808,18 @@ class ChatDbdata extends React.Component{
         this.updatefilter = this.updatefilter.bind(this)
     }
 
+    getDate( date ){
+        var d = ''
+        if ( date !== null && date !== undefined )
+            d = new Date( date )
+        else 
+            d = new Date( )
+
+        return  { 
+                    string: `${d.getFullYear()}-${d.getMonth() < 10 ? `0${d.getMonth()}` : d.getMonth() + 1 }-${d.getDate() < 10 ? `0${d.getDate()}` : d.getDate() }`,
+                    date: d 
+                }
+    }
 
     componentDidMount(){
         this.requestServer()
@@ -904,8 +919,8 @@ class ChatDbdata extends React.Component{
                 
                 if(  (this.state.user_id === undefined || session.user_id === this.state.user_id ) 
                     && ( this.state.fromdate === undefined || this.state.todate === undefined || 
-                        ( this.state.fromdate.toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) <= new Date( session.created_at ).toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) 
-                            && this.state.todate.toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) >= new Date( session.created_at ).toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) )  ) 
+                        ( this.state.fromdate.date.toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) <= new Date( session.created_at ).toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) 
+                            && this.state.todate.date.toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) >= new Date( session.created_at ).toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) )  ) 
                 ){
                     user_idOptions.push( session.user_id )
 
@@ -956,22 +971,31 @@ class ChatDbdata extends React.Component{
         user_idOptions = Array.from( new  Set( user_idOptions ) ).map( user_id => { return {key: user_id, text: user_id,value: user_id } } )
         user_idOptions.push({key: 'showall',text:'showall',value: undefined })
 
-        let date = new Date()
-        date.setDate(date.getDate() )
-        const maxDate = ( date ).toISOString().substr(0,10)
-        const minDate = ( new Date("2020-03-10") ).toISOString().substr(0,10)
-        const frommaxDate = date.toISOString().substr(0,10)
-        date = new Date(this.state.fromdate)
-        date.setDate( date.getDate() +1 )  
-        const toMinDate = date.toISOString().substr(0,10)
-        
+        const maxDate = this.getDate(  )
+        const minDate = this.getDate( new Date("2020-03-10") )
+        const frommaxDate = this.getDate(  )
+        let date = new Date( this.state.fromdate.date )
+        const toMinDate = this.getDate( date )
+
+        // console.log( "minDate", minDate,
+        //              "frommaxDate", frommaxDate, 
+        //              "toMinDate", toMinDate, 
+        //              "maxDate", maxDate, 
+        //              "fromdate", this.state.fromdate, 
+        //              "todate", this.state.todate 
+        //             )
+
         return <Fragment>
                 { ( !this.state.loading ) ?
                 <div>
 
                     <div className="datepickers">
-                        From :<input type="date" id="fromdate" name="fromdate" value={this.state.fromdate.toISOString().substr(0,10)} min={minDate} max={frommaxDate}  onChange={ (event)=> { this.setState({ fromdate : new Date( event.target.value) }) } } /> 
-                        To:   <input type="date" id="todate"   name="todate"   value={this.state.todate.toISOString().substr(0,10)}   min={toMinDate} max={maxDate} onChange={ (event)=>this.setState({ todate: new Date( event.target.value ) }) } />
+                        From :<input type="date" id="fromdate" name="fromdate" value={this.state.fromdate.string} 
+                                min={minDate.string}   max={frommaxDate.string}  
+                                    onChange={ (event)=> {  this.setState({ fromdate : this.getDate( event.target.value), todate: new Date( event.target.value) > this.state.todate.date ? this.getDate( event.target.value) : this.state.todate }) } } /> 
+                        To:   <input type="date" id="todate"   name="todate"   value={this.state.todate.string}   
+                                min={toMinDate.string} max={maxDate.string} 
+                                    onChange={ (event)=>this.setState({ todate: this.getDate( event.target.value ) }) } />
                     </div>
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>  
                         <div className={ `${this.state.mode === 'mode1' ? 'switchbtn_selected' : '' } switchbtn` } title="List All Sessions" onClick={e=> this.setState({ mode: 'mode1' })}> Sessions </div>
