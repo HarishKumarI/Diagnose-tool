@@ -7,9 +7,39 @@
             "name": "Rahul"
         }
     },
+    "Cars": {
+        "db_ip": "localhost",
+        "db_port": "6379",
+        "domain": "Cars",
+        "editable": [
+            "notes",
+            "issue_type"
+        ],
+        "fields": {
+            "default": [],
+            "hide": [],
+            "show": []
+        },
+        "list": {
+            "owner": [
+                "Komal",
+                "Rahul"
+            ],
+            "state": [
+                "Open",
+                "In Analysis",
+                "Fix Planned",
+                "Fixed",
+                "Closed",
+                "Deferred",
+                "Won't Fix"
+            ]
+        },
+        "rerunlink": "http://carwale.cogniqa.ai/debug/",
+        "type": "Chat"
+    },
     "Covid": {
         "domain": "Covid",
-        "type":"QA",
         "editable": [
             "notes"
         ],
@@ -68,11 +98,11 @@
                 "Won't Fix"
             ]
         },
-        "rerunlink": "http://covid.cogniqa.ai"
+        "rerunlink": "http://covid.cogniqa.ai",
+        "type": "QA"
     },
     "University": {
         "domain": "University",
-        "type":"QA",
         "editable": [
             "notes"
         ],
@@ -130,34 +160,7 @@
                 "Won't Fix"
             ]
         },
-        "rerunlink": "http://univ.cogniqa.ai"
-    },
-    "Cars": {
-        "domain": "Cars",
-        "type":"Chat",
-        "db_ip": "localhost",
-        "db_port": "6379",
-        "rerunlink": "http://49.206.16.34:7050/debug/",
-		"list": {
-			"owner": [
-				"Komal",
-				"Rahul"
-			],
-			"state": [
-				"Open",
-				"In Analysis",
-				"Fix Planned",
-				"Fixed",
-				"Closed",
-				"Deferred",
-				"Won't Fix"
-			]
-		},
-        "editable": ["notes", "issue_type"],
-        "fields": {
-            "default": [],
-            "hide": [],
-            "show": []
-        }
+        "rerunlink": "http://univ.cogniqa.ai",
+        "type": "QA"
     }
 }
