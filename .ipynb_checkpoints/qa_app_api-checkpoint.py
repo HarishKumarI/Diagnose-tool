@@ -19,6 +19,15 @@ import pickle
 import logging
 import logging.handlers as handlers
 
+import pymongo
+
+mongo_uri = "mongodb://%s:%s@95.217.239.6:27777/admin"
+mongo_database_url = "mongodb://95.217.239.6:27777"
+mongo_common_db = "mydatabase"
+mongo_database_table = "nlg_templates"
+mongo_username = 'cognibot'
+mongo_pwd = 'h3lloai..'
+
 # logging.basicConfig(filename='demo.log', level=logging.DEBUG)
 
 # logger = logging.getLogger()
@@ -188,6 +197,7 @@ class QaAgent(object):
 	"""docstring for QaAgent"""
 	def __init__(self):
 		super().__init__()
+		self.mongo_client = pymongo.MongoClient(mongo_uri % (mongo_username, mongo_pwd))
 
 		self.uiSettingsJson = {}
 		with open('./src/uiSettings.json','r') as fp:
@@ -198,19 +208,25 @@ class QaAgent(object):
 		userid = json_data['userid']
 		isvalid_user = False
 		id_col = set(id_data['User ID'])
-		username = ""
+		userdata = None
 
-# 		print(userid)
-
-		if int(userid) in id_col:
-			if list(id_data.loc[id_data['User ID'] == int(userid)]['Tag'])[0] == 'CogniQA Staff':
-				isvalid_user = True
-			username = list(id_data.loc[id_data['User ID'] == int(userid)]['First Name'])[0]
-		else:
-			isvalid_user = False
+		rows = list( self.mongo_client['admin'].user_login.find({ "id": userid}) )
+        
+		if len( rows ) > 0 :
+			isvalid_user = True
+			userdata = rows[0]
+			del userdata['_id']
 
 
-		return jsonify({ 'isvalid': isvalid_user, 'username': username,"userid": int(userid) })    
+		# if int(userid) in id_col:
+		# 	if list(id_data.loc[id_data['User ID'] == int(userid)]['Tag'])[0] == 'CogniQA Staff':
+		# 		isvalid_user = True
+		# 	username = list(id_data.loc[id_data['User ID'] == int(userid)]['First Name'])[0]
+		# else:
+		# 	isvalid_user = False
+
+
+		return jsonify({ 'isvalid': isvalid_user, 'userdate': userdata,"userid": int(userid) })    
 
 	def fetch_dbdata(self):
 
@@ -350,4 +366,4 @@ def saveSettings():
         
 
 if __name__ == '__main__':
-	app.run('0.0.0.0',debug=False, port=7230,threaded=False,processes=1)
+	app.run('0.0.0.0',debug=True, port=7230,threaded=False,processes=1)

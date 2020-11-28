@@ -210,11 +210,12 @@ class QaAgent(object):
 		id_col = set(id_data['User ID'])
 		userdata = None
 
-# 		print(userid)
-		rows = list( mongo_client['admin'].user_login.find({ "id": user_id}) )
+		rows = list( self.mongo_client['admin'].user_login.find({ "id": userid}) )
+        
 		if len( rows ) > 0 :
 			isvalid_user = True
 			userdata = rows[0]
+			del userdata['_id']
 
 
 		# if int(userid) in id_col:
@@ -365,4 +366,4 @@ def saveSettings():
         
 
 if __name__ == '__main__':
-	app.run('0.0.0.0',debug=False, port=7230,threaded=False,processes=1)
+	app.run('0.0.0.0',debug=True, port=7230,threaded=False,processes=1)
