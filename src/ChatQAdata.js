@@ -270,10 +270,15 @@ class MessagesTable extends React.Component{
         let issuetypes = []
 
         this.state.data.forEach( ( message, idx) => {
+                const issue_type = message.developer_feedback === undefined ? '-' : message.developer_feedback.issue_type === undefined ? '-' : message.developer_feedback.issue_type
+                const dev_issue_type = message.bot_developer_feedback === undefined ? '-' : message.bot_developer_feedback.issue_type === undefined ? '-' : message.bot_developer_feedback.issue_type
+
+                const msg_state =   message.bot_developer_feedback === undefined ? '-' : message.bot_developer_feedback.state
+
                 if( ( this.state.relevant === null || message.feedback === this.state.relevant )
                     && ( this.state.user_id === undefined || this.state.user_id === message.user_id )
-                    && ( this.state.state === undefined  ) 
-                    && ( this.state.issue_type === undefined )
+                    && ( this.state.state === undefined || msg_state === this.state.state ) 
+                    && ( this.state.issue_type === undefined || this.state.issue_type === issue_type || this.state.issue_type === dev_issue_type )
                     && ( this.state.owner === undefined  )
                     && ( this.state.fromdate === undefined || this.state.todate === undefined || 
                         ( this.state.fromdate.date.toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) <= new Date( message.created_at ).toLocaleString('de-DE', { timeZone: 'Asia/Kolkata', hour12: true}).substr(0,10) 
@@ -574,13 +579,18 @@ class SessionData extends React.Component{
         let rows = []
         let count = 1
         
+        console.log( session_data )
+
         if( session_data !== null ){
             session_data.exchages.forEach( ( message, idx) => {
+
                 const issue_type = message.developer_feedback.issue_type.length === 0 ? '-' : message.developer_feedback.issue_type
                 const dev_issue_type = message.bot_developer_feedback === undefined ? '-' : message.bot_developer_feedback.issue_type.length === 0 ? '-' : message.bot_developer_feedback.issue_type
 
-                if( ( this.state.relevant === null || message.feedback === this.state.relevant || ( message.feedback === null && this.state.relevant ) )
-                    && ( this.state.state === undefined  ) 
+                const msg_state =   message.bot_developer_feedback === undefined ? '-' : message.bot_developer_feedback.state
+
+                if( ( this.state.relevant === null || message.feedback === this.state.relevant)
+                    && ( this.state.state === undefined || msg_state === this.state.state ) 
                     && ( this.state.issue_type === undefined || this.state.issue_type === issue_type || this.state.issue_type === dev_issue_type )
                     && ( this.state.owner === undefined  )
                     && ( this.state.fromdate === undefined || this.state.todate === undefined || 
@@ -816,7 +826,7 @@ class ChatDbdata extends React.Component{
             d = new Date( )
 
         return  { 
-                    string: `${d.getFullYear()}-${d.getMonth() < 10 ? `0${d.getMonth()}` : d.getMonth() + 1 }-${d.getDate() < 10 ? `0${d.getDate()}` : d.getDate() }`,
+                    string: `${ d.getFullYear() }-${ d.getMonth() < 10 ? '0'+String( d.getMonth() ) : d.getMonth() + 1  }-${d.getDate() < 10 ? '0'+String( d.getDate() ) : d.getDate() }`,
                     date: d 
                 }
     }
@@ -986,115 +996,114 @@ class ChatDbdata extends React.Component{
         //             )
 
         return <Fragment>
-                { ( !this.state.loading ) ?
-                <div>
+                { !this.state.loading  ?
+                    <>
 
-                    <div className="datepickers">
-                        From :<input type="date" id="fromdate" name="fromdate" value={this.state.fromdate.string} 
-                                min={minDate.string}   max={frommaxDate.string}  
-                                    onChange={ (event)=> {  this.setState({ fromdate : this.getDate( event.target.value), todate: new Date( event.target.value) > this.state.todate.date ? this.getDate( event.target.value) : this.state.todate }) } } /> 
-                        To:   <input type="date" id="todate"   name="todate"   value={this.state.todate.string}   
-                                min={toMinDate.string} max={maxDate.string} 
-                                    onChange={ (event)=>this.setState({ todate: this.getDate( event.target.value ) }) } />
-                    </div>
-                    <div style={{display: 'flex', justifyContent: 'space-between'}}>  
-                        <div className={ `${this.state.mode === 'mode1' ? 'switchbtn_selected' : '' } switchbtn` } title="List All Sessions" onClick={e=> this.setState({ mode: 'mode1' })}> Sessions </div>
-                        <div className={ `${this.state.mode === 'mode2' ? 'switchbtn_selected' : '' } switchbtn` } title="List All Messages" onClick={e=> this.setState({ mode: 'mode2' })}> All Messages </div>
-                        <DataInsights 
-                            maxrows={ this.state.maxrows }
-                            relcount={ relevantCount } 
-                            jsondata= { msg_list }
-                            updatemaxRows={(latestmaxrows) => this.setState({maxrows : parseInt(latestmaxrows), activePage: 1 })} 
-                        />
-                    </div>
-
-                    <div style={{ color: 'white',width: '100%'}}>
-                        <div style={{ margin: '10px 0',display: 'inline-block',width: 'inherit' }}> 
-                            <div style={{ float: 'left' }}> # Latest on Top </div> 
-                            {/* <div style={{ float: 'right' }}>Showing &nbsp; { `${rows.length} of ${this.state.data.length}` } </div>  */}
+                        <div className="datepickers">
+                            From :<input type="date" id="fromdate" name="fromdate" value={this.state.fromdate.string} 
+                                    min={minDate.string}   max={frommaxDate.string}  
+                                        onChange={ (event)=> {  this.setState({ fromdate : this.getDate( event.target.value), todate: new Date( event.target.value) > this.state.todate.date ? this.getDate( event.target.value) : this.state.todate }) } } /> 
+                            To:   <input type="date" id="todate"   name="todate"   value={this.state.todate.string}   
+                                    min={toMinDate.string} max={maxDate.string} 
+                                        onChange={ (event)=>this.setState({ todate: this.getDate( event.target.value ) }) } />
                         </div>
-                        { ( this.state.progress > 0) ?  <Progress attached="bottom"  percent={ this.state.progress } inverted color='green'   /> : null }
-                    </div>
-
-                    { 
-                        this.state.mode === 'mode2' ? 
-                            <MessagesTable data={ msgList } uiSettings={ this.state.uisettings } sessions_data={ this.state.sessions_data }
-                                fromdate={ this.state.fromdate } todate={ this.state.todate } maxrows={this.state.maxrows}
+                        <div style={{display: 'flex', justifyContent: 'space-between'}}>  
+                            <div className={ `${this.state.mode === 'mode1' ? 'switchbtn_selected' : '' } switchbtn` } title="List All Sessions" onClick={e=> this.setState({ mode: 'mode1' })}> Sessions </div>
+                            <div className={ `${this.state.mode === 'mode2' ? 'switchbtn_selected' : '' } switchbtn` } title="List All Messages" onClick={e=> this.setState({ mode: 'mode2' })}> All Messages </div>
+                            <DataInsights 
+                                maxrows={ this.state.maxrows }
+                                relcount={ relevantCount } 
+                                jsondata= { msg_list }
+                                updatemaxRows={(latestmaxrows) => this.setState({maxrows : parseInt(latestmaxrows), activePage: 1 })} 
                             />
-                    :   <div className="dataTable">
-                            <Table inverted>
-                                <thead style={{textAlign: 'center',height: '50px'}}>
-                                    <tr>
-                                        <th > 
-                                            { ( this.state.bulkrun ) ? 
-                                                <div >Select All:<br/> 
-                                                    <input type="checkbox" 
-                                                        id="selectAll"
-                                                        onChange={(event)=> { 
-                                                            let selectedList = undefined
-                                                            rows.forEach((row,index) => { $(`#row_${index}`).prop('checked',false) })
-
-                                                            if(event.target.checked){
-                                                                selectedList = {}
-                                                                rows.forEach((row,index) => {$(`#row_${index}`).prop('checked',true) })
-                                                            }
-
-                                                            this.setState({ selectedQuestions : selectedList || {} }) 
-                                                        }}
-                                                    /> 
-                                                </div> 
-                                            : '#' } 
-                                        </th>
-                                        <th >Session Id</th>
-                                        <th>
-                                            <Dropdown 
-                                                text={`${(this.state.user_id === undefined) ? "User Id" : this.state.user_id }`}
-                                                className='icon'
-                                                name="user_id" 
-                                                icon="filter"
-                                                onChange={ this.updatefilter }
-                                                options={user_idOptions}
-                                                defaultValue={'showall'}
-                                            />
-                                        </th>
-                                        <th>Explicit Positive Feedbacks</th>
-                                        <th>Negative Feedbacks</th>
-                                        <th>Total No of Exchanges</th>
-                                        <th >Create at</th>
-                                    </tr>
-                                </thead>
-                                
-                                <tbody>
-                                    { rows.slice( (this.state.activePage-1)*this.state.maxrows , (this.state.activePage-1)*this.state.maxrows + this.state.maxrows ) }
-
-                                    <tr>
-                                        <td colSpan='7'style={{ padding: 0,textAlign: 'center' }} >
-                                            { ( rows.length > this.state.maxrows ) ?
-                                                <Pagination inverted
-                                                    defaultActivePage={ this.state.activePage }
-                                                    firstItem={null}
-                                                    prevItem={'<'}
-                                                    nextItem={'>'}
-                                                    lastItem={null}
-                                                    onPageChange={this.handlepagination}
-                                                    pointing
-                                                    secondary
-                                                    totalPages={ Math.ceil(rows.length / this.state.maxrows) }
-                                                />
-                                            : null } 
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </Table>
-
                         </div>
-                    }
-                    </div>
-                : 
-                <Loader style={{ marginTop: '50px' }} active inline size="massive" inverted > Fetching Data </Loader>
-            }
+
+                        <div style={{ color: 'white',width: '100%'}}>
+                            <div style={{ margin: '10px 0',display: 'inline-block',width: 'inherit' }}> 
+                                <div style={{ float: 'left' }}> # Latest on Top </div> 
+                                {/* <div style={{ float: 'right' }}>Showing &nbsp; { `${rows.length} of ${this.state.data.length}` } </div>  */}
+                            </div>
+                            { ( this.state.progress > 0) ?  <Progress attached="bottom"  percent={ this.state.progress } inverted color='green'   /> : null }
+                        </div>
+
+                        { 
+                            this.state.mode === 'mode2' ? 
+                                <MessagesTable data={ msgList } uiSettings={ this.state.uisettings } sessions_data={ this.state.sessions_data }
+                                    fromdate={ this.state.fromdate } todate={ this.state.todate } maxrows={this.state.maxrows}
+                                />
+                        :   <div className="dataTable">
+                                <Table inverted>
+                                    <thead style={{textAlign: 'center',height: '50px'}}>
+                                        <tr>
+                                            <th > 
+                                                {   this.state.bulkrun  ? 
+                                                    <div >Select All:<br/> 
+                                                        <input type="checkbox" 
+                                                            id="selectAll"
+                                                            onChange={event => { 
+                                                                let selectedList = undefined
+                                                                rows.forEach((row,index) => { $(`#row_${index}`).prop('checked',false) })
+
+                                                                if(event.target.checked){
+                                                                    selectedList = {}
+                                                                    rows.forEach((row,index) => {$(`#row_${index}`).prop('checked',true) })
+                                                                }
+
+                                                                this.setState({ selectedQuestions : selectedList || {} }) 
+                                                            }}
+                                                        /> 
+                                                    </div> 
+                                                : '#' } 
+                                            </th>
+                                            <th >Session Id</th>
+                                            <th>
+                                                <Dropdown 
+                                                    text={`${(this.state.user_id === undefined) ? "User Id" : this.state.user_id }`}
+                                                    className='icon'
+                                                    name="user_id" 
+                                                    icon="filter"
+                                                    onChange={ this.updatefilter }
+                                                    options={user_idOptions}
+                                                    defaultValue={'showall'}
+                                                />
+                                            </th>
+                                            <th>Explicit Positive Feedbacks</th>
+                                            <th>Negative Feedbacks</th>
+                                            <th>Total No of Exchanges</th>
+                                            <th >Create at</th>
+                                        </tr>
+                                    </thead>
+                                    
+                                    <tbody>
+                                        { rows.slice( (this.state.activePage-1)*this.state.maxrows , (this.state.activePage-1)*this.state.maxrows + this.state.maxrows ) }
+
+                                        <tr>
+                                            <td colSpan='7'style={{ padding: 0,textAlign: 'center' }} >
+                                                {  rows.length > this.state.maxrows  ?
+                                                    <Pagination inverted
+                                                        defaultActivePage={ this.state.activePage }
+                                                        firstItem={null}
+                                                        prevItem={'<'}
+                                                        nextItem={'>'}
+                                                        lastItem={null}
+                                                        onPageChange={this.handlepagination}
+                                                        pointing
+                                                        secondary
+                                                        totalPages={ Math.ceil(rows.length / this.state.maxrows) }
+                                                    />
+                                                : null } 
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </Table>
+
+                            </div>
+                        }
+                    </>
+                :   <Loader style={{ marginTop: '50px' }} active inline size="massive" inverted > Fetching Data </Loader>
+                }
         </Fragment>
-    }
+}
 }
 
 export default ChatDbdata
