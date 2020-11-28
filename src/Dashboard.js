@@ -12,7 +12,7 @@ class Dashboard extends React.Component{
         this.state = {
             user_id : 0,
             isvalid: false,
-            username: "",
+            userdata: {},
             uicomponent: "",
             uisettings: {},
             msg: ""
@@ -50,16 +50,14 @@ class Dashboard extends React.Component{
                 $('#userInfo').show()
         }
 
-        // console.log( this.state.uisettings )
-
         return(
             <div >
 
-                { ( this.state.username !== "" && this.state.username !== undefined  ) ?
+                { ( this.state.userdata.name !== "" && this.state.userdata.name !== undefined  ) ?
                     ( document.body.getBoundingClientRect().height <= document.body.scrollHeight  ) ?
                     <div className="userInfo" id="userInfo">
                         <Dropdown 
-                            icon="user" text={`${this.state.username}`} 
+                            icon="user" text={`${this.state.userdata.name}`} 
                         >
                         <Dropdown.Menu id="dropdownmenu" onClick = {(event) => {
                                 const selectedValue = event.target.innerText
@@ -88,7 +86,7 @@ class Dashboard extends React.Component{
                     
                 :
                 <div style={{ marginTop: 20+'%', fontSize: 30+'px',color: 'white', width: 'max-content' }}>
-                        { ( this.state.username !== "" ) ?
+                        { ( this.state.userdata.name !== "" ) ?
                             `Not a Registered User`
                         : 
                             ( this.state.msg.length <= 0 ) ?`Not a Registered User for Team` : this.state.msg

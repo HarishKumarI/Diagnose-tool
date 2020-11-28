@@ -32,14 +32,14 @@
   color: white;
   font-size: 20px;
   height: max-content;
-  width: 160px;
+  width: fit-content;
   background-color: #4b4949;
   border-bottom-left-radius: 8px;
   user-select: none;
 }
 
 .userInfo .ui.dropdown{
-    width: 160px;
+    width: fit-content;
     padding: 10px 0;
     text-align: center;
 }
@@ -49,6 +49,7 @@
 }
 
 .userInfo .ui.dropdown .menu{
+  width: 100%;
   clear: both;
   border: 1px solid rgb(75, 65, 65);
   border-right: none;
@@ -57,7 +58,7 @@
 }
 
 .userInfo .ui.dropdown .menu .item{
-  width: 160px;
+  width: 100%;
   color: white;
   border-bottom: 1px solid rgb(46, 42, 42);
 }
