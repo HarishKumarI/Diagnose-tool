@@ -12,7 +12,7 @@ class Dashboard extends React.Component{
         this.state = {
             user_id : 0,
             isvalid: false,
-            userdata: {},
+            userdata: { name: "" },
             uicomponent: "",
             uisettings: {},
             msg: ""
