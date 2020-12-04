@@ -1,4 +1,4 @@
-bind = ['0.0.0.0:7231']
+bind = ['0.0.0.0:7230']
 
 accesslog = './logs/gunicorn.log'
 accesslogformat = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
