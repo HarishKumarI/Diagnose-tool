@@ -259,6 +259,7 @@ class QaAgent(object):
 		return jsonify('success')
 	
 	def uiSettings(self):
+		print( 'testing' )
 		return jsonify(	self.uiSettingsJson )
 
 	def SaveuiSettings( self, request ):
