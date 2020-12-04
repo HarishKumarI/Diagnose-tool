@@ -1,0 +1,4 @@
+127.0.0.1 - - [04/Dec/2020:11:15:36 +0530] "GET /api/uiSettings HTTP/1.1" 200 1627 "-" "PostmanRuntime/7.26.8"
+127.0.0.1 - - [04/Dec/2020:11:25:12 +0530] "GET /api/uiSettings HTTP/1.1" 200 1627 "-" "PostmanRuntime/7.26.8"
+127.0.0.1 - - [04/Dec/2020:11:26:11 +0530] "GET /api/uiSettings HTTP/1.1" 200 1627 "-" "PostmanRuntime/7.26.8"
+127.0.0.1 - - [04/Dec/2020:11:28:03 +0530] "GET /api/uiSettings HTTP/1.1" 200 1627 "-" "PostmanRuntime/7.26.8"

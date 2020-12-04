@@ -16,8 +16,8 @@ CORS(app)
 import redis
 import pickle
 
-import logging
-import logging.handlers as handlers
+# import logging
+# import logging.handlers as handlers
 
 import pymongo
 
@@ -209,7 +209,6 @@ class QaAgent(object):
 		isvalid_user = False
 		id_col = set(id_data['User ID'])
 		userdata = None
-
 		rows = list( self.mongo_client['admin'].user_login.find({ "id": userid}) )
         
 		if len( rows ) > 0 :
