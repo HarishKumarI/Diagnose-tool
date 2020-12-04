@@ -259,7 +259,6 @@ class QaAgent(object):
 		return jsonify('success')
 	
 	def uiSettings(self):
-		print( 'testing' )
 		return jsonify(	self.uiSettingsJson )
 
 	def SaveuiSettings( self, request ):
@@ -366,4 +365,4 @@ def saveSettings():
         
 
 if __name__ == '__main__':
-	app.run('0.0.0.0',debug=True, port=7230,threaded=False,processes=1)
+	app.run('0.0.0.0',debug=False, port=7230,threaded=False,processes=1)
